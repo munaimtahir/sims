@@ -42,10 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',  # For number formatting
-    
-    # Third-party apps
+      # Third-party apps
     'crispy_forms',              # For better form rendering
-    'crispy_bootstrap4',         # Bootstrap 4 support for forms
+    'crispy_bootstrap5',         # Bootstrap 5 support for forms
     'import_export',             # For CSV/Excel import/export
     'rest_framework',            # For API endpoints
     'django_filters',            # For advanced filtering
