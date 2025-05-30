@@ -3,12 +3,14 @@
 	"tasks": [
 		{
 			"args": [
-				"test_setup.py"
+				"manage.py",
+				"runserver",
+				"127.0.0.1:8000"
 			],
-			"command": "py",
-			"group": "test",
-			"isBackground": false,
-			"label": "Test Django Setup",
+			"command": "python",
+			"group": "build",
+			"isBackground": true,
+			"label": "Start SIMS Server",
 			"problemMatcher": [],
 			"type": "shell"
 		}

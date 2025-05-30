@@ -161,3 +161,623 @@ INFO 2025-05-30 12:38:44,668 autoreload 8752 23284 D:\PMC\sims_project\sims\user
 INFO 2025-05-30 12:38:45,479 autoreload 16908 11764 Watching for file changes with StatReloader
 INFO 2025-05-30 12:38:45,479 autoreload 16864 22920 Watching for file changes with StatReloader
 INFO 2025-05-30 12:38:45,563 wsgi 16908 10300 SIMS WSGI application initialized successfully
+INFO 2025-05-30 12:40:13,889 basehttp 16908 18260 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 12:40:13,906 basehttp 16908 18260 "GET /users/dashboard/ HTTP/1.1" 302 0
+ERROR 2025-05-30 12:40:14,063 log 16908 18260 Internal Server Error: /users/admin-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 182, in get
+    return admin_dashboard(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 92, in admin_dashboard
+    return render(request, 'users/admin_dashboard.html', context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/admin_dashboard.html
+ERROR 2025-05-30 12:40:14,067 basehttp 16908 18260 "GET /users/admin-dashboard/ HTTP/1.1" 500 115477
+INFO 2025-05-30 12:40:17,203 basehttp 16908 18260 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-30 12:40:29,873 basehttp 16908 17776 "GET /admin/rotations/department/add/ HTTP/1.1" 200 27832
+WARNING 2025-05-30 12:40:29,946 basehttp 16908 20608 "GET /static/admin/css/rotation_admin.css HTTP/1.1" 404 2011
+INFO 2025-05-30 12:40:30,002 basehttp 16908 17776 "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-05-30 12:40:30,055 basehttp 16908 17776 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-05-30 12:40:30,067 basehttp 16908 17776 "GET /static/admin/css/widgets.css HTTP/1.1" 200 11991
+WARNING 2025-05-30 12:40:30,198 basehttp 16908 20356 "GET /static/admin/js/rotation_admin.js HTTP/1.1" 404 2005
+INFO 2025-05-30 12:40:30,206 basehttp 16908 17776 "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-05-30 12:40:30,210 basehttp 16908 20740 "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-05-30 12:40:30,225 basehttp 16908 18216 "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-05-30 12:40:30,228 basehttp 16908 20740 "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-05-30 12:40:30,234 basehttp 16908 17776 "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-05-30 12:40:30,234 basehttp 16908 6380 "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-05-30 12:40:30,243 basehttp 16908 18216 "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-05-30 12:40:30,253 basehttp 16908 17776 "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-05-30 12:40:30,266 basehttp 16908 17776 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-05-30 12:40:30,281 basehttp 16908 17776 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-05-30 12:40:30,314 basehttp 16908 20740 "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-05-30 12:40:33,777 basehttp 16908 20740 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-30 12:42:04,895 basehttp 16908 3120 "GET /admin/rotations/department/add/ HTTP/1.1" 200 27832
+INFO 2025-05-30 12:42:04,917 basehttp 16908 3120 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 12:42:04,925 basehttp 16908 3120 "GET /static/admin/css/rotation_admin.css HTTP/1.1" 404 2011
+WARNING 2025-05-30 12:42:05,090 basehttp 16908 22912 "GET /static/admin/js/rotation_admin.js HTTP/1.1" 404 2005
+INFO 2025-05-30 14:06:00,845 basehttp 16908 18348 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 14:06:00,859 basehttp 16908 18348 "GET /users/dashboard/ HTTP/1.1" 302 0
+ERROR 2025-05-30 14:06:01,037 log 16908 18348 Internal Server Error: /users/admin-dashboard/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 182, in get
+    return admin_dashboard(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 92, in admin_dashboard
+    return render(request, 'users/admin_dashboard.html', context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/admin_dashboard.html
+ERROR 2025-05-30 14:06:01,046 basehttp 16908 18348 "GET /users/admin-dashboard/ HTTP/1.1" 500 115502
+INFO 2025-05-30 14:06:08,038 basehttp 16908 18348 "GET /admin/rotations/department/add/ HTTP/1.1" 200 27832
+WARNING 2025-05-30 14:06:08,052 basehttp 16908 5592 "GET /static/admin/css/rotation_admin.css HTTP/1.1" 404 2011
+INFO 2025-05-30 14:06:08,059 basehttp 16908 18348 "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+WARNING 2025-05-30 14:06:08,065 basehttp 16908 18348 "GET /static/admin/js/rotation_admin.js HTTP/1.1" 404 2005
+INFO 2025-05-30 14:06:08,353 basehttp 16908 10960 "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-05-30 14:07:19,892 basehttp 16908 12904 "GET /admin/rotations/hospital/ HTTP/1.1" 200 19948
+INFO 2025-05-30 14:07:19,906 basehttp 16908 12904 "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+WARNING 2025-05-30 14:07:19,913 basehttp 16908 12904 "GET /static/admin/css/rotation_admin.css HTTP/1.1" 404 2011
+INFO 2025-05-30 14:07:20,049 basehttp 16908 3604 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:20,057 basehttp 16908 3604 "GET /static/admin/js/rotation_admin.js HTTP/1.1" 404 2005
+INFO 2025-05-30 14:07:20,219 basehttp 16908 24124 "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-05-30 14:07:20,221 basehttp 16908 10324 "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-05-30 14:07:20,222 basehttp 16908 23312 "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-05-30 14:07:29,787 basehttp 16908 13548 "GET /admin/logbook/skill/ HTTP/1.1" 200 21108
+INFO 2025-05-30 14:07:29,806 basehttp 16908 13548 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:29,812 basehttp 16908 13548 "GET /static/admin/css/logbook_admin.css HTTP/1.1" 404 2008
+WARNING 2025-05-30 14:07:29,998 basehttp 16908 9392 "GET /static/admin/js/logbook_admin.js HTTP/1.1" 404 2002
+INFO 2025-05-30 14:07:35,342 basehttp 16908 18740 "GET /admin/logbook/logbookentry/ HTTP/1.1" 200 21764
+INFO 2025-05-30 14:07:35,360 basehttp 16908 18740 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:35,366 basehttp 16908 18740 "GET /static/admin/css/logbook_admin.css HTTP/1.1" 404 2008
+WARNING 2025-05-30 14:07:35,469 basehttp 16908 3104 "GET /static/admin/js/logbook_admin.js HTTP/1.1" 404 2002
+INFO 2025-05-30 14:07:38,522 basehttp 16908 3484 "GET /admin/logbook/diagnosis/ HTTP/1.1" 200 21110
+WARNING 2025-05-30 14:07:38,534 basehttp 16908 24152 "GET /static/admin/css/logbook_admin.css HTTP/1.1" 404 2008
+INFO 2025-05-30 14:07:38,543 basehttp 16908 3484 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:38,548 basehttp 16908 3484 "GET /static/admin/js/logbook_admin.js HTTP/1.1" 404 2002
+INFO 2025-05-30 14:07:40,921 basehttp 16908 20836 "GET /admin/logbook/logbookreview/ HTTP/1.1" 200 20743
+INFO 2025-05-30 14:07:40,941 basehttp 16908 20836 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:40,946 basehttp 16908 20836 "GET /static/admin/css/logbook_admin.css HTTP/1.1" 404 2008
+WARNING 2025-05-30 14:07:41,150 basehttp 16908 19284 "GET /static/admin/js/logbook_admin.js HTTP/1.1" 404 2002
+INFO 2025-05-30 14:07:44,524 basehttp 16908 17576 "GET /admin/logbook/logbookreview/add/ HTTP/1.1" 200 34632
+INFO 2025-05-30 14:07:44,542 basehttp 16908 17576 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+WARNING 2025-05-30 14:07:44,549 basehttp 16908 17576 "GET /static/admin/css/logbook_admin.css HTTP/1.1" 404 2008
+INFO 2025-05-30 14:07:44,550 basehttp 16908 24524 "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-05-30 14:07:44,569 basehttp 16908 24524 "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+WARNING 2025-05-30 14:07:44,576 basehttp 16908 24524 "GET /static/admin/js/logbook_admin.js HTTP/1.1" 404 2002
+INFO 2025-05-30 14:07:44,834 basehttp 16908 22524 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-05-30 14:07:44,849 basehttp 16908 22524 "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-05-30 14:07:56,774 basehttp 16908 22204 "GET /admin/auth/group/ HTTP/1.1" 200 18315
+INFO 2025-05-30 14:07:56,791 basehttp 16908 22204 "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-05-30 14:08:03,700 basehttp 16908 24032 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-30 14:08:03,708 basehttp 16908 24032 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-05-30 14:23:11,810 basehttp 16908 24048 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-30 14:23:11,821 basehttp 16908 24048 "GET /static/admin/css/base.css HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:11,824 basehttp 16908 24048 "GET /static/admin/css/dark_mode.css HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:11,826 basehttp 16908 24048 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:11,828 basehttp 16908 24048 "GET /static/admin/css/responsive.css HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:11,829 basehttp 16908 24048 "GET /static/admin/js/theme.js HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:11,830 basehttp 16908 24048 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 304 0
+INFO 2025-05-30 14:23:14,226 basehttp 16908 24048 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 14:23:14,243 basehttp 16908 24048 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:23:14,526 basehttp 16908 24048 "GET /users/admin-dashboard/ HTTP/1.1" 200 18380
+INFO 2025-05-30 14:23:48,158 basehttp 16908 24032 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 14:23:48,176 basehttp 16908 24032 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:23:48,209 basehttp 16908 24032 "GET /users/admin-dashboard/ HTTP/1.1" 200 18380
+INFO 2025-05-30 14:23:52,715 basehttp 16908 24032 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:23:52,736 basehttp 16908 24032 "GET /users/admin-dashboard/ HTTP/1.1" 200 18380
+ERROR 2025-05-30 14:24:03,908 log 16908 1960 Internal Server Error: /users/profile/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/profile.html
+ERROR 2025-05-30 14:24:03,912 basehttp 16908 1960 "GET /users/profile/ HTTP/1.1" 500 89158
+ERROR 2025-05-30 14:27:42,642 log 16908 18424 Internal Server Error: /users/profile/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/profile.html
+ERROR 2025-05-30 14:27:42,645 basehttp 16908 18424 "GET /users/profile/ HTTP/1.1" 500 89158
+INFO 2025-05-30 14:33:35,784 basehttp 16908 9016 "GET / HTTP/1.1" 200 59
+WARNING 2025-05-30 14:33:35,852 log 16908 9016 Not Found: /favicon.ico
+WARNING 2025-05-30 14:33:35,854 basehttp 16908 9016 "GET /favicon.ico HTTP/1.1" 404 3810
+INFO 2025-05-30 14:33:39,616 basehttp 16908 9016 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:34:00,729 basehttp 16908 17064 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:34:16,438 basehttp 16908 17064 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:34:49,271 basehttp 16908 8816 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:35:59,205 basehttp 16908 4148 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:37:32,359 basehttp 16908 8152 "GET / HTTP/1.1" 200 59
+WARNING 2025-05-30 14:37:37,151 log 16908 6032 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-30 14:37:37,152 basehttp 16908 6032 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3921
+INFO 2025-05-30 14:37:57,855 basehttp 16908 15760 "GET / HTTP/1.1" 200 59
+WARNING 2025-05-30 14:37:57,891 log 16908 15760 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-30 14:37:57,892 basehttp 16908 15760 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3921
+INFO 2025-05-30 14:37:59,062 basehttp 16908 15760 "GET / HTTP/1.1" 200 59
+WARNING 2025-05-30 14:37:59,089 log 16908 15760 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-30 14:37:59,090 basehttp 16908 15760 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 3921
+INFO 2025-05-30 14:38:52,517 basehttp 16908 17944 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:39:43,792 basehttp 16908 18532 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:41:39,334 basehttp 16908 23956 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:44:04,230 basehttp 16908 11288 "GET / HTTP/1.1" 200 59
+INFO 2025-05-30 14:44:43,301 basehttp 16908 20768 "GET /?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598283290 HTTP/1.1" 200 59
+INFO 2025-05-30 14:44:50,481 basehttp 16908 23280 "GET /admin/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598290455 HTTP/1.1" 302 0
+INFO 2025-05-30 14:44:50,576 basehttp 16908 23280 "GET /admin/login/?next=/admin/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748598290455 HTTP/1.1" 200 4322
+WARNING 2025-05-30 14:44:58,637 log 16908 22324 Not Found: /accounts/login/
+WARNING 2025-05-30 14:44:58,638 basehttp 16908 22324 "GET /accounts/login/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598298622 HTTP/1.1" 404 3899
+WARNING 2025-05-30 14:45:05,523 log 16908 7012 Not Found: /users/dashboard/admin/
+WARNING 2025-05-30 14:45:05,524 basehttp 16908 7012 "GET /users/dashboard/admin/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598305511 HTTP/1.1" 404 12111
+INFO 2025-05-30 14:45:10,330 basehttp 16908 3908 "GET /admin HTTP/1.1" 301 0
+INFO 2025-05-30 14:45:10,581 basehttp 16908 23720 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:45:10,591 basehttp 16908 23720 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+INFO 2025-05-30 14:45:10,637 basehttp 16908 23720 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-05-30 14:45:10,641 basehttp 16908 23344 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-05-30 14:45:10,642 basehttp 16908 23720 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-05-30 14:45:10,644 basehttp 16908 23344 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-05-30 14:45:10,648 basehttp 16908 23344 "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-05-30 14:45:10,658 basehttp 16908 23344 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-05-30 14:45:10,661 basehttp 16908 23720 "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-05-30 14:45:22,193 basehttp 16908 15580 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:45:22,224 basehttp 16908 15580 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-30 14:45:22,236 basehttp 16908 15580 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-05-30 14:45:22,249 basehttp 16908 16524 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-05-30 14:45:22,251 basehttp 16908 15580 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-05-30 14:45:25,401 basehttp 16908 24364 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 14:45:25,412 basehttp 16908 24364 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:45:25,431 basehttp 16908 24364 "GET /users/admin-dashboard/ HTTP/1.1" 200 18381
+ERROR 2025-05-30 14:46:22,153 log 16908 1304 Internal Server Error: /users/profile/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/profile.html
+ERROR 2025-05-30 14:46:22,160 basehttp 16908 1304 "GET /users/profile/ HTTP/1.1" 500 89158
+INFO 2025-05-30 14:46:31,185 basehttp 16908 12444 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:46:31,209 basehttp 16908 12444 "GET /users/admin-dashboard/ HTTP/1.1" 200 18381
+INFO 2025-05-30 14:46:35,122 basehttp 16908 12444 "GET / HTTP/1.1" 302 0
+INFO 2025-05-30 14:46:35,135 basehttp 16908 12444 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:46:35,161 basehttp 16908 12444 "GET /users/admin-dashboard/ HTTP/1.1" 200 18381
+WARNING 2025-05-30 14:46:39,666 base 16908 8252 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-30 14:46:39,685 log 16908 8252 Method Not Allowed: /users/logout/
+WARNING 2025-05-30 14:46:39,686 basehttp 16908 8252 "GET /users/logout/ HTTP/1.1" 405 0
+WARNING 2025-05-30 14:46:41,559 base 16908 8252 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-30 14:46:41,571 log 16908 8252 Method Not Allowed: /users/logout/
+WARNING 2025-05-30 14:46:41,572 basehttp 16908 8252 "GET /users/logout/ HTTP/1.1" 405 0
+INFO 2025-05-30 14:46:48,108 basehttp 16908 8252 "GET /users/create/ HTTP/1.1" 200 31517
+INFO 2025-05-30 14:46:59,800 basehttp 16908 1636 "GET /users/list/ HTTP/1.1" 200 26955
+WARNING 2025-05-30 14:46:59,838 log 16908 1636 Not Found: /users/api/stats/
+WARNING 2025-05-30 14:46:59,838 basehttp 16908 1636 "GET /users/api/stats/ HTTP/1.1" 404 12016
+INFO 2025-05-30 14:47:32,474 basehttp 16908 19044 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 14:47:32,495 basehttp 16908 19044 "GET /users/admin-dashboard/ HTTP/1.1" 200 18381
+ERROR 2025-05-30 14:47:37,938 log 16908 19044 Internal Server Error: /cases/statistics/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\cases\views.py", line 388, in case_statistics_view
+    ).order_by('-average_score')[:10],
+      ~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\query.py", line 1718, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 2288, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\db\models\sql\query.py", line 1802, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'average_score' into field. Choices are: approved_cases, average_self_score, average_submission_time, average_supervisor_score, completion_rate, complex_cases, draft_cases, highly_complex_cases, id, last_updated, moderate_cases, overdue_cases, pending_cases, pg, pg_id, simple_cases, total_cases
+ERROR 2025-05-30 14:47:37,950 basehttp 16908 19044 "GET /cases/statistics/ HTTP/1.1" 500 94611
+ERROR 2025-05-30 14:47:40,729 log 16908 19732 Internal Server Error: /users/activity-log/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/activity_log.html
+ERROR 2025-05-30 14:47:40,731 basehttp 16908 19732 "GET /users/activity-log/ HTTP/1.1" 500 89317
+ERROR 2025-05-30 14:47:42,867 log 16908 19732 Internal Server Error: /users/reports/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PMC\sims_project\sims\users\views.py", line 472, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 475, in get
+    return render(request, 'users/user_reports.html')
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'api_user_statistics' not found. 'api_user_statistics' is not a valid view function or pattern name.
+ERROR 2025-05-30 14:47:42,881 basehttp 16908 19732 "GET /users/reports/ HTTP/1.1" 500 178064
+ERROR 2025-05-30 14:47:45,075 log 16908 19732 Internal Server Error: /users/pgs/bulk-upload/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\PMC\sims_project\sims\users\views.py", line 439, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\contrib\auth\mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\PMC\sims_project\sims\users\views.py", line 442, in get
+    return render(request, 'users/pg_bulk_upload.html')
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/pg_bulk_upload.html
+ERROR 2025-05-30 14:47:45,081 basehttp 16908 19732 "GET /users/pgs/bulk-upload/ HTTP/1.1" 500 108671
+INFO 2025-05-30 14:47:47,180 basehttp 16908 19732 "GET /users/create/ HTTP/1.1" 200 31517
+INFO 2025-05-30 14:47:51,984 basehttp 16908 8512 "GET /users/list/ HTTP/1.1" 200 26955
+WARNING 2025-05-30 14:47:52,018 log 16908 8512 Not Found: /users/api/stats/
+WARNING 2025-05-30 14:47:52,018 basehttp 16908 8512 "GET /users/api/stats/ HTTP/1.1" 404 12016
+INFO 2025-05-30 14:50:00,587 basehttp 16908 17844 "GET /?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598600573 HTTP/1.1" 200 59
+WARNING 2025-05-30 14:50:08,641 log 16908 16096 Not Found: /users/admin_dashboard/
+WARNING 2025-05-30 14:50:08,641 basehttp 16908 16096 "GET /users/admin_dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598608631 HTTP/1.1" 404 12111
+WARNING 2025-05-30 14:50:12,921 log 16908 16096 Not Found: /accounts/login/
+WARNING 2025-05-30 14:50:12,922 basehttp 16908 16096 "GET /accounts/login/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598612910 HTTP/1.1" 404 3899
+INFO 2025-05-30 14:53:44,736 basehttp 16908 4536 "GET /users/list/ HTTP/1.1" 200 26955
+WARNING 2025-05-30 14:53:44,917 log 16908 4536 Not Found: /users/api/stats/
+WARNING 2025-05-30 14:53:44,917 basehttp 16908 4536 "GET /users/api/stats/ HTTP/1.1" 404 12016
+INFO 2025-05-30 14:53:48,872 basehttp 16908 6572 "GET /?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598828864 HTTP/1.1" 200 59
+INFO 2025-05-30 14:54:48,930 basehttp 16908 11588 "GET /admin/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598888923 HTTP/1.1" 302 0
+INFO 2025-05-30 14:54:48,948 basehttp 16908 11588 "GET /admin/login/?next=/admin/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748598888923 HTTP/1.1" 200 4322
+WARNING 2025-05-30 14:54:53,986 log 16908 2988 Not Found: /accounts/login/
+WARNING 2025-05-30 14:54:53,987 basehttp 16908 2988 "GET /accounts/login/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598893977 HTTP/1.1" 404 3899
+INFO 2025-05-30 14:55:00,769 basehttp 16908 20944 "GET /users/dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748598900761 HTTP/1.1" 302 0
+ERROR 2025-05-30 14:55:00,793 log 16908 20944 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 14:55:00,798 basehttp 16908 20944 "GET /users/login/?next=/users/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748598900761 HTTP/1.1" 500 88422
+WARNING 2025-05-30 14:55:15,637 log 16908 10280 Not Found: /accounts/login
+WARNING 2025-05-30 14:55:15,639 basehttp 16908 10280 "GET /accounts/login HTTP/1.1" 404 3819
+WARNING 2025-05-30 14:55:20,893 log 16908 6852 Not Found: /accounts/
+WARNING 2025-05-30 14:55:20,893 basehttp 16908 6852 "GET /accounts/ HTTP/1.1" 404 3804
+WARNING 2025-05-30 15:00:27,780 log 16908 22880 Not Found: /accounts/login/
+WARNING 2025-05-30 15:00:27,782 basehttp 16908 22880 "GET /accounts/login/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748599227739 HTTP/1.1" 404 3899
+INFO 2025-05-30 15:13:23,397 basehttp 16908 24556 "GET /admin/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600003338 HTTP/1.1" 302 0
+INFO 2025-05-30 15:13:23,450 basehttp 16908 24556 "GET /admin/login/?next=/admin/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600003338 HTTP/1.1" 200 4322
+WARNING 2025-05-30 15:14:44,991 log 16908 10156 Not Found: /accounts/login/
+WARNING 2025-05-30 15:14:44,992 basehttp 16908 10156 "GET /accounts/login/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600084977 HTTP/1.1" 404 3899
+INFO 2025-05-30 15:14:48,657 basehttp 16908 1944 "GET /users/dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600088650 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:14:48,684 log 16908 1944 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:14:48,690 basehttp 16908 1944 "GET /users/login/?next=/users/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600088650 HTTP/1.1" 500 88422
+INFO 2025-05-30 15:14:54,372 basehttp 16908 1944 "GET /users/profile/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600094364 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:14:54,391 log 16908 1944 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:14:54,393 basehttp 16908 1944 "GET /users/login/?next=/users/profile/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600094364 HTTP/1.1" 500 88410
+INFO 2025-05-30 15:15:04,994 basehttp 16908 21116 "GET /logbook/analytics/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600104984 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:15:05,011 log 16908 21116 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:15:05,013 basehttp 16908 21116 "GET /users/login/?next=/logbook/analytics/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600104984 HTTP/1.1" 500 88434
+INFO 2025-05-30 15:15:10,763 basehttp 16908 12380 "GET /certificates/dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600110757 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:15:10,783 log 16908 12380 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:15:10,785 basehttp 16908 12380 "GET /users/login/?next=/certificates/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600110757 HTTP/1.1" 500 88464
+INFO 2025-05-30 15:15:15,758 basehttp 16908 12380 "GET /rotations/dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600115751 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:15:15,775 log 16908 12380 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:15:15,776 basehttp 16908 12380 "GET /users/login/?next=/rotations/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600115751 HTTP/1.1" 500 88446
+WARNING 2025-05-30 15:15:21,113 log 16908 23836 Not Found: /users/users/
+WARNING 2025-05-30 15:15:21,114 basehttp 16908 23836 "GET /users/users/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600121104 HTTP/1.1" 404 12081
+INFO 2025-05-30 15:15:32,399 basehttp 16908 13852 "GET /users/profile/edit/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600132387 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:15:32,414 log 16908 13852 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:15:32,416 basehttp 16908 13852 "GET /users/login/?next=/users/profile/edit/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600132387 HTTP/1.1" 500 88440
+INFO 2025-05-30 15:16:28,746 basehttp 16908 20104 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-30 15:16:28,813 basehttp 16908 20104 "GET /users/admin-dashboard/ HTTP/1.1" 200 18381
+ERROR 2025-05-30 15:16:31,759 log 16908 20104 Internal Server Error: /users/profile/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 480, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'password_change' not found. 'password_change' is not a valid view function or pattern name.
+ERROR 2025-05-30 15:16:31,776 basehttp 16908 20104 "GET /users/profile/ HTTP/1.1" 500 161899
+INFO 2025-05-30 15:19:02,769 basehttp 16908 17012 "GET /admin/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600342735 HTTP/1.1" 302 0
+INFO 2025-05-30 15:19:02,794 basehttp 16908 17012 "GET /admin/login/?next=/admin/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600342735 HTTP/1.1" 200 4322
+INFO 2025-05-30 15:19:48,248 basehttp 16908 13148 "GET /?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600388242 HTTP/1.1" 200 59
+INFO 2025-05-30 15:19:52,688 basehttp 16908 13148 "GET /users/dashboard/?id=25b08912-a267-4967-a32b-26f5876aa7f5&vscodeBrowserReqId=1748600392677 HTTP/1.1" 302 0
+ERROR 2025-05-30 15:19:52,728 log 16908 13148 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-30 15:19:52,732 basehttp 16908 13148 "GET /users/login/?next=/users/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600392677 HTTP/1.1" 500 88422

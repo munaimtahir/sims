@@ -1,0 +1,509 @@
+{% extends 'base/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Edit Profile - SIMS{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'users:profile' %}">Profile</a></li>
+        <li class="breadcrumb-item active">Edit</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h2>
+            <i class="fas fa-user-edit me-2"></i>Edit Profile
+        </h2>
+        <p class="text-muted">Update your personal and professional information</p>
+    </div>
+    <div>
+        <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to Profile
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <form method="post" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+            
+            <!-- Basic Information -->
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-id-card me-2"></i>
+                    <h5 class="mb-0">Basic Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.first_name|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name|as_crispy_field }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.email|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {% if profile_form.phone_number %}
+                                {{ profile_form.phone_number|as_crispy_field }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Information -->
+            {% if profile_form %}
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-user-circle me-2"></i>
+                    <h5 class="mb-0">Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% if profile_form.date_of_birth %}
+                        <div class="col-md-6">
+                            {{ profile_form.date_of_birth|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if profile_form.national_id %}
+                        <div class="col-md-6">
+                            {{ profile_form.national_id|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if profile_form.address %}
+                    <div class="mb-3">
+                        {{ profile_form.address|as_crispy_field }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        {% if profile_form.emergency_contact_name %}
+                        <div class="col-md-6">
+                            {{ profile_form.emergency_contact_name|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if profile_form.emergency_contact_phone %}
+                        <div class="col-md-6">
+                            {{ profile_form.emergency_contact_phone|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if profile_form.bio %}
+                    <div class="mb-3">
+                        {{ profile_form.bio|as_crispy_field }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Professional Information -->
+            {% if user.role == 'pg' or user.role == 'supervisor' %}
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-stethoscope me-2"></i>
+                    <h5 class="mb-0">Professional Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% if form.specialty %}
+                        <div class="col-md-6">
+                            {{ form.specialty|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.year_of_study %}
+                        <div class="col-md-6">
+                            {{ form.year_of_study|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="row">
+                        {% if form.registration_number %}
+                        <div class="col-md-6">
+                            {{ form.registration_number|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                        
+                        {% if form.start_date %}
+                        <div class="col-md-6">
+                            {{ form.start_date|as_crispy_field }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if form.expected_completion %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.expected_completion|as_crispy_field }}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Profile Picture -->
+            {% if profile_form.profile_picture %}
+            <div class="card mb-4">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-camera me-2"></i>
+                    <h5 class="mb-0">Profile Picture</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-3 text-center">
+                            {% if user.profile.profile_picture %}
+                                <img src="{{ user.profile.profile_picture.url }}" 
+                                     alt="Current Profile Picture" 
+                                     class="rounded-circle mb-2" 
+                                     style="width: 100px; height: 100px; object-fit: cover;"
+                                     id="currentProfilePicture">
+                            {% else %}
+                                <div class="bg-gradient-primary rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center"
+                                     style="width: 100px; height: 100px;" id="currentProfilePicture">
+                                    <i class="fas fa-user fa-2x text-white"></i>
+                                </div>
+                            {% endif %}
+                            <small class="text-muted d-block">Current Picture</small>
+                        </div>
+                        <div class="col-md-9">
+                            {{ profile_form.profile_picture|as_crispy_field }}
+                            <small class="form-text text-muted">
+                                Supported formats: JPG, PNG, GIF. Maximum size: 2MB.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Form Actions -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <button type="submit" class="btn btn-primary" id="saveProfile">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary ms-2" onclick="resetForm()">
+                                <i class="fas fa-undo me-2"></i>Reset Changes
+                            </button>
+                        </div>
+                        <div>
+                            <a href="{% url 'users:profile' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- Profile Preview -->
+        <div class="card mb-4 sticky-top" style="top: 20px;">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-eye me-2"></i>Profile Preview
+                </h6>
+            </div>
+            <div class="card-body text-center">
+                <div class="profile-preview-picture mb-3">
+                        {% if user.profile.profile_picture %}
+                        <img src="{{ user.profile.profile_picture.url }}" 
+                             alt="Profile Picture Preview" 
+                             class="rounded-circle" 
+                             style="width: 80px; height: 80px; object-fit: cover;"
+                             id="profilePreview">
+                    {% else %}
+                        <div class="bg-gradient-primary rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                             style="width: 80px; height: 80px;" id="profilePreview">
+                            <i class="fas fa-user fa-lg text-white"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <h6 class="profile-preview-name">{{ user.get_full_name|default:user.username }}</h6>
+                <p class="text-muted small">{{ user.get_role_display }}</p>
+                
+                {% if user.email %}
+                <div class="d-flex align-items-center justify-content-center mb-2">
+                    <i class="fas fa-envelope text-muted me-2"></i>
+                    <small class="profile-preview-email">{{ user.email }}</small>
+                </div>
+                {% endif %}
+                
+                {% if user.profile.phone_number %}
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-phone text-muted me-2"></i>
+                    <small class="profile-preview-phone">{{ user.profile.phone_number }}</small>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Help & Tips -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>Tips & Guidelines
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="accordion" id="helpAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#profileTips">
+                                Profile Picture Tips
+                            </button>
+                        </h2>
+                        <div id="profileTips" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body small">
+                                <ul class="mb-0">
+                                    <li>Use a clear, professional photo</li>
+                                    <li>Face should be clearly visible</li>
+                                    <li>Maximum file size: 2MB</li>
+                                    <li>Supported formats: JPG, PNG, GIF</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#contactTips">
+                                Contact Information
+                            </button>
+                        </h2>
+                        <div id="contactTips" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body small">
+                                <ul class="mb-0">
+                                    <li>Keep your email address current</li>
+                                    <li>Phone number helps with urgent communications</li>
+                                    <li>Emergency contact is important for safety</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#professionalTips">
+                                Professional Info
+                            </button>
+                        </h2>
+                        <div id="professionalTips" class="accordion-collapse collapse" data-bs-parent="#helpAccordion">
+                            <div class="accordion-body small">
+                                <ul class="mb-0">
+                                    <li>Ensure specialty information is accurate</li>
+                                    <li>Keep registration numbers updated</li>
+                                    <li>Update year of study as you progress</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Reminder -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="fas fa-shield-alt me-2"></i>Security Reminder
+                </h6>
+            </div>
+            <div class="card-body">
+                <p class="small text-muted mb-3">
+                    Keep your profile information secure and up-to-date. 
+                    Only share personal details with authorized personnel.
+                </p>
+                <div class="d-grid">
+                    <a href="{% url 'password_change' %}" class="btn btn-outline-warning btn-sm">
+                        <i class="fas fa-key me-2"></i>Change Password
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Django template variables to JavaScript
+const djangoData = {
+    username: '{{ user.username|escapejs }}',
+    fullName: '{{ user.get_full_name|default:user.username|escapejs }}',
+    email: '{{ user.email|escapejs }}',
+    phoneNumber: '{{ user.profile.phone_number|default:""|escapejs }}',
+    hasProfilePicture: {% if user.profile.profile_picture %}true{% else %}false{% endif %},
+    profilePictureUrl: {% if user.profile.profile_picture %}'{{ user.profile.profile_picture.url|escapejs }}'{% else %}''{% endif %}
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Profile picture preview
+    const profilePictureInput = document.querySelector('input[type="file"][name="profile_picture"]');
+    if (profilePictureInput) {
+        profilePictureInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const profilePreview = document.getElementById('profilePreview');
+                    const currentProfilePicture = document.getElementById('currentProfilePicture');
+                    
+                    // Update preview images
+                    if (profilePreview && currentProfilePicture) {
+                        profilePreview.innerHTML = `<img src="${e.target.result}" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" alt="Preview">`;
+                        currentProfilePicture.innerHTML = `<img src="${e.target.result}" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" alt="Preview">`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    // Live preview of name changes
+    const firstNameInput = document.querySelector('input[name="first_name"]');
+    const lastNameInput = document.querySelector('input[name="last_name"]');
+    const namePreview = document.querySelector('.profile-preview-name');
+    
+    function updateNamePreview() {
+        if (firstNameInput && lastNameInput && namePreview) {
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+            const fullName = `${firstName} ${lastName}`.trim() || djangoData.username;
+            namePreview.textContent = fullName;
+        }
+    }
+    
+    if (firstNameInput) firstNameInput.addEventListener('input', updateNamePreview);
+    if (lastNameInput) lastNameInput.addEventListener('input', updateNamePreview);
+
+    // Live preview of email changes
+    const emailInput = document.querySelector('input[name="email"]');
+    const emailPreview = document.querySelector('.profile-preview-email');
+    
+    if (emailInput && emailPreview) {
+        emailInput.addEventListener('input', function() {
+            emailPreview.textContent = this.value || djangoData.email;
+        });
+    }
+
+    // Live preview of phone changes
+    const phoneInput = document.querySelector('input[name="phone_number"]');
+    const phonePreview = document.querySelector('.profile-preview-phone');
+    
+    if (phoneInput && phonePreview) {
+        phoneInput.addEventListener('input', function() {
+            phonePreview.textContent = this.value || djangoData.phoneNumber;
+        });
+    }
+
+    // Form validation
+    const form = document.getElementById('profileForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const saveButton = document.getElementById('saveProfile');
+            saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            saveButton.disabled = true;
+        });
+    }
+});
+
+// Reset form function
+function resetForm() {
+    if (confirm('Are you sure you want to reset all changes? This will restore the original values.')) {
+        document.getElementById('profileForm').reset();
+        
+        // Reset preview images
+        const profilePreview = document.getElementById('profilePreview');
+        const currentProfilePicture = document.getElementById('currentProfilePicture');
+        
+        if (djangoData.hasProfilePicture) {
+            if (profilePreview) {
+                profilePreview.innerHTML = '<img src="' + djangoData.profilePictureUrl + '" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;" alt="Profile Picture">';
+            }
+            if (currentProfilePicture) {
+                currentProfilePicture.innerHTML = '<img src="' + djangoData.profilePictureUrl + '" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;" alt="Profile Picture">';
+            }
+        } else {
+            if (profilePreview) {
+                profilePreview.innerHTML = '<i class="fas fa-user fa-lg text-white"></i>';
+            }
+            if (currentProfilePicture) {
+                currentProfilePicture.innerHTML = '<i class="fas fa-user fa-2x text-white"></i>';
+            }
+        }
+        
+        // Reset text previews
+        const namePreview = document.querySelector('.profile-preview-name');
+        const emailPreview = document.querySelector('.profile-preview-email');
+        const phonePreview = document.querySelector('.profile-preview-phone');
+        
+        if (namePreview) namePreview.textContent = djangoData.fullName;
+        if (emailPreview) emailPreview.textContent = djangoData.email;
+        if (phonePreview) phonePreview.textContent = djangoData.phoneNumber;
+    }
+}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+}
+
+.accordion-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.card-header {
+    background-color: rgba(0, 123, 255, 0.03);
+    border-bottom: 1px solid rgba(0, 123, 255, 0.125);
+}
+
+.profile-preview-picture {
+    transition: all 0.3s ease;
+}
+
+.profile-preview-picture:hover {
+    transform: scale(1.05);
+}
+</style>
+{% endblock %}
