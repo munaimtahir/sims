@@ -411,3 +411,30 @@ class UserFilterForm(forms.Form):
         initial='25',
         widget=forms.Select(attrs={'class': 'form-control form-control-sm'})
     )
+
+# Alias forms for backward compatibility with existing views
+UserProfileForm = ProfileEditForm
+
+class PGSearchForm(forms.Form):
+    """Search form for PG lists"""
+    
+    search = forms.CharField(
+        max_length=100,
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Search by name or username...'
+        })
+    )
+    
+    specialty = forms.ChoiceField(
+        choices=[('', 'All Specialties')] + list(SPECIALTY_CHOICES),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    year = forms.ChoiceField(
+        choices=[('', 'All Years')] + list(YEAR_CHOICES),
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )

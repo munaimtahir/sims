@@ -49,16 +49,12 @@ INSTALLED_APPS = [
     'rest_framework',            # For API endpoints
     'django_filters',            # For advanced filtering
     'widget_tweaks',             # For form widget customization
-    
-    # SIMS apps
+      # SIMS apps
     'sims.users',
     'sims.rotations',
     'sims.certificates',
-    'sims.workshops',
     'sims.logbook',
     'sims.cases',
-    'sims.analytics',
-    'sims.notifications',
 ]
 
 MIDDLEWARE = [
@@ -69,10 +65,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    # Custom middleware for SIMS
-    'sims.users.middleware.UserActivityMiddleware',  # Track user activity
-    'sims.users.middleware.RoleBasedAccessMiddleware',  # Role-based access control
 ]
 
 ROOT_URLCONF = 'sims_project.urls'
@@ -84,16 +76,11 @@ TEMPLATES = [
             BASE_DIR / 'templates',  # Global templates
         ],
         'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
+        'OPTIONS': {            'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                
-                # Custom context processors for SIMS
-                'sims.users.context_processors.user_role_context',
-                'sims.notifications.context_processors.notifications_context',
             ],
         },
     },
@@ -203,8 +190,8 @@ MESSAGE_TAGS = {
 }
 
 # Crispy Forms Configuration
-CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Django REST Framework Settings
 REST_FRAMEWORK = {

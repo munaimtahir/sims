@@ -449,11 +449,6 @@ class CertificateReviewAdmin(admin.ModelAdmin):
             obj.certificate.status = 'rejected'
             obj.certificate.save()
 
-# Customize admin site for certificates
-admin.site.register_view('certificates/dashboard/', 
-                        view=lambda request: HttpResponseRedirect('/admin/certificates/certificate/'),
-                        name='Certificates Dashboard')
-
 # Custom admin actions for certificate management
 def check_expiring_certificates(modeladmin, request, queryset):
     """Check for certificates expiring soon"""
@@ -489,9 +484,8 @@ class CertificateAdminConfig:
 for admin_class in [CertificateAdmin, CertificateReviewAdmin, CertificateTypeAdmin]:
     admin_class.Media = CertificateAdminConfig.Media
 
-# Register additional admin views for reporting
-@admin.register(Certificate)
-class CertificateReportAdmin(admin.ModelAdmin):
+# Additional reporting functionality for Certificate admin
+class CertificateReportAdmin:
     """Additional admin for certificate reporting"""
     
     def has_module_permission(self, request):

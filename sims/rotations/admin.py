@@ -448,7 +448,6 @@ class RotationEvaluationAdmin(admin.ModelAdmin):
                 )
             elif request.user.role == 'pg':
                 kwargs["queryset"] = Rotation.objects.filter(pg=request.user)
-        
         elif db_field.name == "evaluator":
             from sims.users.models import User
             kwargs["queryset"] = User.objects.filter(
@@ -456,11 +455,6 @@ class RotationEvaluationAdmin(admin.ModelAdmin):
             )
         
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-# Customize admin site for rotations
-admin.site.register_view('rotations/dashboard/', 
-                        view=lambda request: HttpResponseRedirect('/admin/rotations/rotation/'),
-                        name='Rotations Dashboard')
 
 # Add custom CSS for better admin interface
 class RotationAdminConfig:

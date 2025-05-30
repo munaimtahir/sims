@@ -258,8 +258,7 @@ class User(AbstractUser):
         }
         return role_classes.get(self.role, 'badge-secondary')
     
-    # Statistics methods (for analytics)
-    def get_documents_pending_count(self):
+    # Statistics methods (for analytics)    def get_documents_pending_count(self):
         """Get count of documents pending review (for supervisors)"""
         if not self.is_supervisor():
             return 0
@@ -268,7 +267,6 @@ class User(AbstractUser):
         # Import here to avoid circular imports
         from sims.certificates.models import Certificate
         from sims.rotations.models import Rotation
-        from sims.workshops.models import WorkshopCertificate
         from sims.logbook.models import LogbookEntry
         from sims.cases.models import ClinicalCase
         
@@ -276,7 +274,6 @@ class User(AbstractUser):
         for pg in self.get_assigned_pgs():
             count += Certificate.objects.filter(pg=pg, status='pending').count()
             count += Rotation.objects.filter(pg=pg, status='pending').count()
-            count += WorkshopCertificate.objects.filter(pg=pg, status='pending').count()
             count += LogbookEntry.objects.filter(pg=pg, status='pending').count()
             count += ClinicalCase.objects.filter(pg=pg, status='pending').count()
         
@@ -286,18 +283,15 @@ class User(AbstractUser):
         """Get count of documents submitted by this PG"""
         if not self.is_pg():
             return 0
-        
-        # Import here to avoid circular imports
+          # Import here to avoid circular imports
         from sims.certificates.models import Certificate
         from sims.rotations.models import Rotation
-        from sims.workshops.models import WorkshopCertificate
         from sims.logbook.models import LogbookEntry
         from sims.cases.models import ClinicalCase
         
         count = 0
         count += Certificate.objects.filter(pg=self).count()
         count += Rotation.objects.filter(pg=self).count()
-        count += WorkshopCertificate.objects.filter(pg=self).count()
         count += LogbookEntry.objects.filter(pg=self).count()
         count += ClinicalCase.objects.filter(pg=self).count()
         

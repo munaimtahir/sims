@@ -670,9 +670,9 @@ class LogbookReviewAdmin(admin.ModelAdmin):
 class LogbookStatisticsAdmin(admin.ModelAdmin):
     """Admin interface for logbook statistics"""
     
-    list_display = ('pg', 'total_entries', 'approved_entries', 'average_score',
+    list_display = ('pg', 'total_entries', 'approved_entries', 'average_review_score',
                    'last_entry_date', 'completion_rate', 'updated_at')
-    list_filter = ('last_entry_date', 'updated_at', 'pg__supervisor')
+    list_filter = ('last_entry_date', 'updated_at')
     search_fields = ('pg__username', 'pg__first_name', 'pg__last_name')
     readonly_fields = ('updated_at',)
     
@@ -683,11 +683,6 @@ class LogbookStatisticsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """Prevent deletion of statistics"""
         return request.user.is_superuser
-
-# Customize admin site for logbook
-admin.site.register_view('logbook/dashboard/', 
-                        view=lambda request: HttpResponseRedirect('/admin/logbook/logbookentry/'),
-                        name='Logbook Dashboard')
 
 # Custom admin actions for logbook management
 def check_overdue_entries(modeladmin, request, queryset):

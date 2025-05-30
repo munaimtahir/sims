@@ -70,32 +70,29 @@ class ClinicalCaseAdmin(admin.ModelAdmin):
     """Admin interface for clinical cases with role-based access control"""
     
     list_display = ('case_title', 'pg', 'category', 'patient_age', 'patient_gender',
-                   'status_indicator', 'supervisor', 'date', 'completion_score')
-    list_filter = ('status', 'category', 'patient_gender', 'date', 'created_at')
+                   'status_indicator', 'supervisor', 'date_encountered', 'status')
+    list_filter = ('status', 'category', 'patient_gender', 'date_encountered', 'created_at')
     search_fields = ('case_title', 'pg__username', 'pg__first_name', 'pg__last_name',
-                    'patient_initials', 'primary_diagnosis__name')
-    ordering = ('-date', '-created_at')
-    date_hierarchy = 'date'
-    
-    # Role-based field restrictions
+                    'primary_diagnosis__name')
+    ordering = ('-date_encountered', '-created_at')
+    date_hierarchy = 'date_encountered'
+      # Role-based field restrictions
     fieldsets = (
         ('Case Information', {
-            'fields': ('case_title', 'category', 'date', 'rotation')
+            'fields': ('case_title', 'category', 'date_encountered', 'rotation')
         }),
         ('Patient Details', {
-            'fields': ('patient_initials', 'patient_age', 'patient_gender', 
-                      'patient_history', 'presenting_complaints')
+            'fields': ('patient_age', 'patient_gender', 'chief_complaint')
         }),
         ('Clinical Details', {
-            'fields': ('primary_diagnosis', 'secondary_diagnoses', 
-                      'procedures_performed', 'investigations', 'treatment_plan')
+            'fields': ('primary_diagnosis', 'differential_diagnosis', 
+                      'physical_examination', 'management_plan')
         }),
         ('Learning & Assessment', {
-            'fields': ('learning_points', 'challenges_faced', 'skills_demonstrated',
-                      'competencies_achieved', 'reflection_notes')
+            'fields': ('learning_objectives', 'clinical_reasoning', 'learning_points')
         }),
         ('Documentation', {
-            'fields': ('attachments', 'additional_notes'),
+            'fields': ('case_files', 'case_images'),
             'classes': ('collapse',)
         }),
         ('Review Information', {
@@ -233,23 +230,24 @@ class ClinicalCaseAdmin(admin.ModelAdmin):
 class CaseReviewAdmin(admin.ModelAdmin):
     """Admin interface for case reviews"""
     
-    list_display = ('case', 'reviewer', 'review_date', 'overall_rating', 
-                   'recommendation_status', 'is_final')
-    list_filter = ('review_date', 'overall_rating', 'recommendation', 'is_final')
-    search_fields = ('case__case_title', 'reviewer__username', 'comments')
+    list_display = ('case', 'reviewer', 'review_date', 'overall_score', 
+                   'status')
+    list_filter = ('review_date', 'overall_score', 'status')
+    search_fields = ('case__case_title', 'reviewer__username', 'overall_feedback')
     ordering = ('-review_date',)
     date_hierarchy = 'review_date'
     
     fieldsets = (
         ('Review Information', {
-            'fields': ('case', 'reviewer', 'review_date', 'is_final')
+            'fields': ('case', 'reviewer', 'review_date', 'status')
         }),
         ('Assessment Scores', {
-            'fields': ('clinical_accuracy_score', 'documentation_quality_score',
-                      'learning_demonstration_score', 'professionalism_score')
+            'fields': ('clinical_knowledge_score', 'clinical_reasoning_score',
+                      'documentation_score', 'overall_score')
         }),
-        ('Overall Evaluation', {
-            'fields': ('overall_rating', 'recommendation', 'comments', 'areas_for_improvement')
+        ('Feedback', {
+            'fields': ('overall_feedback', 'clinical_reasoning_feedback', 
+                      'documentation_feedback', 'areas_for_improvement')
         }),
         ('Audit', {
             'fields': ('created_at', 'updated_at'),
@@ -313,10 +311,10 @@ class CaseStatisticsAdmin(admin.ModelAdmin):
     """Admin interface for case statistics - mostly read-only analytics"""
     
     list_display = ('pg', 'total_cases', 'approved_cases', 'completion_rate',
-                   'average_score', 'last_updated')
-    list_filter = ('last_updated', 'pg__rotation')
+                   'average_supervisor_score', 'last_updated')
+    list_filter = ('last_updated',)
     search_fields = ('pg__username', 'pg__first_name', 'pg__last_name')
-    ordering = ('-average_score', '-total_cases')
+    ordering = ('-average_supervisor_score', '-total_cases')
     
     fieldsets = (
         ('PG Information', {
@@ -324,18 +322,18 @@ class CaseStatisticsAdmin(admin.ModelAdmin):
         }),
         ('Case Statistics', {
             'fields': ('total_cases', 'approved_cases', 'pending_cases', 
-                      'revision_needed_cases')
+                      'draft_cases')
         }),
         ('Performance Metrics', {
-            'fields': ('average_score', 'completion_rate', 'improvement_trend')
+            'fields': ('average_self_score', 'average_supervisor_score', 'completion_rate')
         }),
         ('Timestamps', {
-            'fields': ('last_updated', 'created_at'),
+            'fields': ('last_updated',),
             'classes': ('collapse',)
         }),
     )
     
-    readonly_fields = ('created_at',)
+    readonly_fields = ('last_updated',)
     
     def get_queryset(self, request):
         """Filter statistics based on user role"""

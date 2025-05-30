@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"args": [
+				"test_setup.py"
+			],
+			"command": "py",
+			"group": "test",
+			"isBackground": false,
+			"label": "Test Django Setup",
+			"problemMatcher": [],
+			"type": "shell"
+		}
+	]
+}
