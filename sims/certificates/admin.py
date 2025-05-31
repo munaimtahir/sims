@@ -247,7 +247,10 @@ class CertificateAdmin(ImportExportModelAdmin):
         """Send notification about certificate changes"""
         try:
             from sims.notifications.models import Notification
-            
+        except ImportError:
+            Notification = None
+
+        if Notification is not None:
             # Notify PG
             if certificate.pg:
                 if action == 'uploaded':
@@ -277,10 +280,6 @@ class CertificateAdmin(ImportExportModelAdmin):
                     type='certificate',
                     related_object_id=certificate.id
                 )
-                
-        except ImportError:
-            # Notifications app not available
-            pass
     
     # Custom Actions
     def approve_certificates(self, request, queryset):

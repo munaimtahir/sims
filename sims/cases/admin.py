@@ -94,9 +94,8 @@ class ClinicalCaseAdmin(admin.ModelAdmin):
         ('Documentation', {
             'fields': ('case_files', 'case_images'),
             'classes': ('collapse',)
-        }),
-        ('Review Information', {
-            'fields': ('supervisor', 'status', 'supervisor_feedback', 'completion_score'),
+        }),        ('Review Information', {
+            'fields': ('supervisor', 'status', 'supervisor_feedback'),
             'classes': ('collapse',)
         }),
         ('Audit Trail', {
@@ -105,9 +104,9 @@ class ClinicalCaseAdmin(admin.ModelAdmin):
         }),
     )
     
-    readonly_fields = ('created_at', 'updated_at', 'completion_score')
+    readonly_fields = ('created_at', 'updated_at')
     
-    filter_horizontal = ('secondary_diagnoses', 'procedures_performed', 'competencies_achieved')
+    filter_horizontal = ('secondary_diagnoses', 'procedures_performed')
     
     def get_queryset(self, request):
         """Filter queryset based on user role"""

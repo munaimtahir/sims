@@ -22,7 +22,7 @@
                 {{ case.get_status_display }}
             </span>
             {% if case.category %}
-            <span class="badge me-2" style="background-color: {{ case.category.color_code }};">
+            <span class="badge me-2" style="background-color: {{ case.category.color_code|default:"'#6c757d'" }};">
                 {{ case.category.name }}
             </span>
             {% endif %}

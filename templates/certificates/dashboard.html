@@ -96,7 +96,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'certificates:certificate_create' %}" class="btn btn-primary w-100">
+                            <a href="{% url 'certificates:create' %}" class="btn btn-primary w-100">
                                 <i class="fas fa-plus me-2"></i>Add Certificate
                             </a>
                         </div>
@@ -106,7 +106,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'certificates:certificate_types' %}" class="btn btn-info w-100">
+                            <a href="{% url 'certificates:list' %}" class="btn btn-info w-100">
                                 <i class="fas fa-tags me-2"></i>Manage Types
                             </a>
                         </div>
@@ -131,9 +131,9 @@
                         <i class="fas fa-chart-pie me-2"></i>
                         Certificate Type Distribution
                     </h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="distributionChart" height="300"></canvas>
+                </div>                <div class="card-body">
+                    <canvas id="distributionChart" height="300" 
+                            data-distribution="{{ certificate_distribution_json|escapejs }}"></canvas>
                 </div>
             </div>
         </div>
@@ -153,10 +153,9 @@
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="fw-bold">CME Points</span>
                             <span class="text-muted">{{ cme_points|default:0 }} / 50</span>
-                        </div>
-                        <div class="progress" style="height: 10px;">
+                        </div>                        <div class="progress" style="height: 10px;">
                             <div class="progress-bar bg-primary" role="progressbar" 
-                                 style="width: {% widthratio cme_points 50 100 %}%"></div>
+                                 data-progress="{% widthratio cme_points 50 100 %}"></div>
                         </div>
                     </div>
                     
@@ -164,10 +163,9 @@
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="fw-bold">CPD Credits</span>
                             <span class="text-muted">{{ cpd_credits|default:0 }} / 30</span>
-                        </div>
-                        <div class="progress" style="height: 10px;">
+                        </div>                        <div class="progress" style="height: 10px;">
                             <div class="progress-bar bg-success" role="progressbar" 
-                                 style="width: {% widthratio cpd_credits 30 100 %}%"></div>
+                                 data-progress="{% widthratio cpd_credits 30 100 %}"></div>
                         </div>
                     </div>
 
@@ -175,13 +173,12 @@
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <span class="fw-bold">Compliance Rate</span>
                             <span class="text-muted">{{ compliance_rate|floatformat:1|default:0 }}%</span>
-                        </div>
-                        <div class="progress" style="height: 10px;">
+                        </div>                        <div class="progress" style="height: 10px;">
                             <div class="progress-bar 
                                 {% if compliance_rate >= 80 %}bg-success
                                 {% elif compliance_rate >= 60 %}bg-warning
                                 {% else %}bg-danger{% endif %}" 
-                                role="progressbar" style="width: {{ compliance_rate|default:0 }}%"></div>
+                                role="progressbar" data-progress="{{ compliance_rate|default:0 }}"></div>
                         </div>
                     </div>
                 </div>
@@ -276,12 +273,12 @@
                                         <td>{{ cert.created_at|date:"M d, Y" }}</td>
                                         <td>
                                             <div class="btn-group" role="group">
-                                                <a href="{% url 'certificates:certificate_detail' cert.pk %}" 
+                                                <a href="{% url 'certificates:detail' cert.pk %}" 
                                                    class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 {% if user.role != 'pg' and cert.status == 'pending' %}
-                                                <a href="{% url 'certificates:certificate_review' cert.pk %}" 
+                                                <a href="{% url 'certificates:review' cert.pk %}" 
                                                    class="btn btn-sm btn-outline-success">
                                                     <i class="fas fa-check"></i>
                                                 </a>
@@ -298,7 +295,7 @@
                             <i class="fas fa-certificate fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No Certificates Found</h5>
                             <p class="text-muted">Start by adding your first certificate.</p>
-                            <a href="{% url 'certificates:certificate_create' %}" class="btn btn-primary">
+                            <a href="{% url 'certificates:create' %}" class="btn btn-primary">
                                 <i class="fas fa-plus me-2"></i>Add Certificate
                             </a>
                         </div>
@@ -332,7 +329,7 @@
                                         {{ cert.expiry_date|timeuntil }} remaining
                                     </span>
                                 </p>
-                                <a href="{% url 'certificates:certificate_detail' cert.pk %}" 
+                                <a href="{% url 'certificates:detail' cert.pk %}" 
                                    class="btn btn-sm btn-outline-warning">
                                     View Details
                                 </a>
@@ -355,6 +352,12 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+    // Set progress bar widths from data attributes
+    $('.progress-bar[data-progress]').each(function() {
+        const progress = $(this).data('progress');
+        $(this).css('width', progress + '%');
+    });
+    
     initializeCharts();
 });
 
@@ -362,18 +365,14 @@ function initializeCharts() {
     // Certificate Distribution Chart
     const ctx = document.getElementById('distributionChart').getContext('2d');
     
+    // Get chart data from data attributes to avoid Django template conflicts
+    const chartElement = document.getElementById('distributionChart');
+    const certificateDistribution = JSON.parse(chartElement.getAttribute('data-distribution') || '[]');
+    
     const distributionData = {
-        labels: [
-            {% for dist in certificate_distribution %}
-            '{{ dist.certificate_type__name }}'{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        ],
+        labels: certificateDistribution.map(item => item.certificate_type__name),
         datasets: [{
-            data: [
-                {% for dist in certificate_distribution %}
-                {{ dist.count }}{% if not forloop.last %},{% endif %}
-                {% endfor %}
-            ],
+            data: certificateDistribution.map(item => item.count),
             backgroundColor: [
                 '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
                 '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'

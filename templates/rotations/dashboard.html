@@ -96,7 +96,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'rotations:rotation_create' %}" class="btn btn-primary w-100">
+                            <a href="{% url 'rotations:create' %}" class="btn btn-primary w-100">
                                 <i class="fas fa-plus me-2"></i>Plan Rotation
                             </a>
                         </div>
@@ -106,13 +106,12 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'rotations:evaluation_create' %}" class="btn btn-info w-100">
+                            <a href="{% url 'rotations:list' %}" class="btn btn-info w-100">
                                 <i class="fas fa-star me-2"></i>Add Evaluation
                             </a>
                         </div>
-                        <div class="col-md-3 mb-2">
-                            <a href="{% url 'rotations:calendar' %}" class="btn btn-secondary w-100">
-                                <i class="fas fa-calendar me-2"></i>Calendar View
+                        <div class="col-md-3 mb-2">                            <a href="{% url 'rotations:list' %}" class="btn btn-secondary w-100">
+                                <i class="fas fa-list me-2"></i>View All
                             </a>
                         </div>
                     </div>
@@ -181,23 +180,25 @@
                                             <br>
                                             <small class="text-muted">{{ rotation.duration_weeks }} weeks</small>
                                         </td>
-                                        <td>
-                                            {% with days_completed=rotation.get_progress_days total_days=rotation.get_total_days %}
+                                        <td>                                            {% with days_completed=rotation.get_progress_days total_days=rotation.get_total_days %}
+                                            {% widthratio days_completed total_days 100 as progress_percentage %}
                                             <div class="progress mb-1" style="height: 8px;">
                                                 <div class="progress-bar bg-success" role="progressbar" 
-                                                     style="width: {% widthratio days_completed total_days 100 %}%"></div>
+                                                     data-progress="{{ progress_percentage }}"
+                                                     aria-valuenow="{{ progress_percentage }}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="100"></div>
                                             </div>
                                             <small class="text-muted">{{ days_completed }}/{{ total_days }} days</small>
                                             {% endwith %}
                                         </td>
                                         <td>
-                                            <div class="btn-group" role="group">
-                                                <a href="{% url 'rotations:rotation_detail' rotation.pk %}" 
+                                            <div class="btn-group" role="group">                                                <a href="{% url 'rotations:detail' rotation.pk %}" 
                                                    class="btn btn-sm btn-outline-primary">
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 {% if user.role != 'pg' %}
-                                                <a href="{% url 'rotations:evaluation_create' %}?rotation={{ rotation.pk }}" 
+                                                <a href="{% url 'rotations:detail' rotation.pk %}" 
                                                    class="btn btn-sm btn-outline-success">
                                                     <i class="fas fa-star"></i>
                                                 </a>
@@ -247,8 +248,7 @@
                                     <span class="text-info">
                                         in {{ rotation.start_date|timeuntil }}
                                     </span>
-                                </p>
-                                <a href="{% url 'rotations:rotation_detail' rotation.pk %}" 
+                                </p>                                <a href="{% url 'rotations:detail' rotation.pk %}" 
                                    class="btn btn-sm btn-outline-info">
                                     View Details
                                 </a>
@@ -321,8 +321,7 @@
                                 <span class="text-danger">
                                     {{ rotation.end_date|timesince }} overdue
                                 </span>
-                            </p>
-                            <a href="{% url 'rotations:rotation_detail' rotation.pk %}" 
+                            </p>                            <a href="{% url 'rotations:detail' rotation.pk %}" 
                                class="btn btn-sm btn-outline-danger">
                                 Review
                             </a>
@@ -422,6 +421,12 @@
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+    // Set progress bar widths from data attributes
+    $('.progress-bar[data-progress]').each(function() {
+        const progress = $(this).data('progress');
+        $(this).css('width', progress + '%');
+    });
+    
     // Load additional rotation data
     loadRotationStats();
     
@@ -431,7 +436,7 @@ $(document).ready(function() {
 
 function loadRotationStats() {
     $.ajax({
-        url: '{% url "rotations:rotation_quick_stats" %}',
+        url: '{% url "rotations:quick_stats_api" %}',
         method: 'GET',
         success: function(data) {
             console.log('Rotation stats loaded successfully', data);

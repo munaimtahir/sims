@@ -359,8 +359,8 @@ const djangoData = {
     fullName: '{{ user.get_full_name|default:user.username|escapejs }}',
     email: '{{ user.email|escapejs }}',
     phoneNumber: '{{ user.profile.phone_number|default:""|escapejs }}',
-    hasProfilePicture: {% if user.profile.profile_picture %}true{% else %}false{% endif %},
-    profilePictureUrl: {% if user.profile.profile_picture %}'{{ user.profile.profile_picture.url|escapejs }}'{% else %}''{% endif %}
+    hasProfilePicture: {{ user.profile.profile_picture|yesno:"true,false" }},
+    profilePictureUrl: "{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url|escapejs }}{% endif %}"
 };
 
 document.addEventListener('DOMContentLoaded', function() {

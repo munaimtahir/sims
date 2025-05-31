@@ -125,7 +125,7 @@
 </div>
 
 <!-- Performance Metrics -->
-{% if user.role == 'admin' or user.role == 'supervisor' %}
+{% if user.role in 'admin,supervisor' %}
 <div class="row mb-4">
     <div class="col-12">
         <div class="card">

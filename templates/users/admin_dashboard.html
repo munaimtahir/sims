@@ -93,9 +93,8 @@
                         <i class="fas fa-chart-pie me-2"></i>
                         Specialty Distribution
                     </h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="specialtyChart" height="300"></canvas>
+                </div>                <div class="card-body">
+                    <canvas id="specialtyChart" height="300" data-specialty-stats="{{ specialty_stats_json|escapejs }}"></canvas>
                 </div>
             </div>
         </div>
@@ -119,12 +118,11 @@
                         </a>
                         <a href="{% url 'users:user_reports' %}" class="btn btn-info">
                             <i class="fas fa-chart-bar me-2"></i>View Reports
-                        </a>
-                        <a href="{% url 'users:activity_log' %}" class="btn btn-warning">
+                        </a>                        <a href="{% url 'users:activity_log' %}" class="btn btn-warning">
                             <i class="fas fa-history me-2"></i>Activity Log
                         </a>
-                        <a href="{% url 'cases:case_statistics' %}" class="btn btn-secondary">
-                            <i class="fas fa-analytics me-2"></i>System Analytics
+                        <a href="{% url 'users:admin_analytics' %}" class="btn btn-secondary">
+                            <i class="fas fa-chart-line me-2"></i>Admin Analytics
                         </a>
                     </div>
                 </div>
@@ -210,61 +208,121 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+
 <script>
 $(document).ready(function() {
     // Initialize specialty distribution chart
-    const ctx = document.getElementById('specialtyChart').getContext('2d');
-    
-    // Prepare data from Django context
-    const specialtyData = {
-        labels: [
-            {% for stat in specialty_stats %}
-            '{{ stat.specialty|default:"Unspecified" }}'{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        ],
-        datasets: [{
-            data: [
-                {% for stat in specialty_stats %}
-                {{ stat.count }}{% if not forloop.last %},{% endif %}
-                {% endfor %}
-            ],
-            backgroundColor: [
-                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
-                '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'
-            ],
-            borderWidth: 2,
-            borderColor: '#fff'
-        }]
-    };
+    const canvas = document.getElementById('specialtyChart');
+    if (canvas) {
+        // Get data from HTML data attribute
+        const specialtyStatsJson = canvas.getAttribute('data-specialty-stats');
+        
+        if (specialtyStatsJson) {
+            try {
+                const specialtyStats = JSON.parse(specialtyStatsJson);
+                
+                if (specialtyStats && specialtyStats.length > 0) {
+                    const ctx = canvas.getContext('2d');
+                    const chartData = {
+                        labels: specialtyStats.map(stat => stat.specialty),
+                        datasets: [{
+                            data: specialtyStats.map(stat => stat.count),
+                            backgroundColor: [
+                                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
+                                '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'
+                            ],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    };
 
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: specialtyData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} (${percentage}%)`;
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true
+                                    }
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed;
+                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                            const percentage = ((value / total) * 100).toFixed(1);
+                                            return label + ': ' + value + ' (' + percentage + '%)';
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    }
+                    });
+                } else {
+                    // Show message when no data available
+                    canvas.parentElement.innerHTML = '<p class="text-center text-muted py-4">No specialty data available</p>';
                 }
+            } catch (e) {
+                console.error('Error parsing specialty data:', e);
+                canvas.parentElement.innerHTML = '<p class="text-center text-muted py-4">Error loading chart data</p>';
             }
+        } else {
+            canvas.parentElement.innerHTML = '<p class="text-center text-muted py-4">No specialty data available</p>';
         }
-    });
+    }
 });
 </script>
 {% endblock %}
+
+<style>
+/* FMU Branding and Modern UI for Admin Dashboard */
+body {
+    background: linear-gradient(135deg, #2c5282 0%, #3182ce 50%, #4299e1 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.card {
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(44, 82, 130, 0.08);
+    border: none;
+}
+.card-title {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+.card-text {
+    font-size: 1rem;
+}
+.page-footer {
+    background: rgba(44, 82, 130, 0.95);
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 40px;
+    width: 100%;
+}
+@media (max-width: 768px) {
+    .card-title { font-size: 1.1rem; }
+    .card-text { font-size: 0.9rem; }
+}
+</style>
+
+<footer class="page-footer">
+    <div class="container">
+        <p class="mb-0">
+            © 2025 SIMS - Postgraduate Medical Training System. All rights reserved. |
+            <a href="/admin/">Admin</a> |
+            SIMS v2.1.0 |
+            Faisalabad Medical University
+        </p>
+    </div>
+</footer>

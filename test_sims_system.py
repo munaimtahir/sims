@@ -55,6 +55,7 @@ def test_analytics_views():
     print("\n📊 Testing Analytics Views...")
     
     try:
+        from django.urls import reverse
         from sims.logbook.views import LogbookAnalyticsView, LogbookDashboardView
         from sims.certificates.views import CertificateDashboardView
         from sims.rotations.views import RotationDashboardView

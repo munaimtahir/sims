@@ -13,7 +13,11 @@ from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import User
 from .forms import UserProfileForm, PGSearchForm, SupervisorAssignmentForm
-from sims.certificates.models import Certificate
+from .decorators import (
+    admin_required, supervisor_required, pg_required,
+    AdminRequiredMixin, SupervisorRequiredMixin, PGRequiredMixin,
+    SupervisorOrAdminRequiredMixin, supervisor_or_admin_required
+)
 import json
 
 # Authentication Views
@@ -56,11 +60,9 @@ def logout_view(request):
     return redirect('users:login')
 
 # Dashboard Views
-@login_required
+@admin_required
 def admin_dashboard(request):
     """Admin dashboard with system overview"""
-    if not request.user.is_admin():
-        raise PermissionDenied("Only admins can access this dashboard")
     
     # Get statistics
     total_users = User.objects.filter(is_archived=False).count()
@@ -80,6 +82,16 @@ def admin_dashboard(request):
         is_archived=False
     ).values('specialty').annotate(count=Count('id')).order_by('-count')[:10]
     
+    # Convert to JSON for JavaScript consumption
+    import json
+    specialty_stats_json = json.dumps([
+        {
+            'specialty': item['specialty'] or 'Unspecified',
+            'count': item['count']
+        }
+        for item in specialty_stats
+    ])
+    
     context = {
         'total_users': total_users,
         'total_pgs': total_pgs,
@@ -87,15 +99,14 @@ def admin_dashboard(request):
         'new_users_this_month': new_users_this_month,
         'recent_users': recent_users,
         'specialty_stats': specialty_stats,
+        'specialty_stats_json': specialty_stats_json,
         'dashboard_type': 'admin'
     }
     return render(request, 'users/admin_dashboard.html', context)
 
-@login_required
+@supervisor_required
 def supervisor_dashboard(request):
     """Supervisor dashboard with assigned PGs overview"""
-    if not request.user.is_supervisor():
-        raise PermissionDenied("Only supervisors can access this dashboard")
     
     # Get assigned PGs
     assigned_pgs = request.user.get_assigned_pgs()
@@ -122,11 +133,9 @@ def supervisor_dashboard(request):
     }
     return render(request, 'users/supervisor_dashboard.html', context)
 
-@login_required
+@pg_required
 def pg_dashboard(request):
     """PG dashboard with personal progress overview"""
-    if not request.user.is_pg():
-        raise PermissionDenied("Only PGs can access this dashboard")
     
     # Get document counts
     documents_submitted = request.user.get_documents_submitted_count()
@@ -136,9 +145,9 @@ def pg_dashboard(request):
     
     # Get recent submissions
     recent_submissions = []
-    
-    # Get progress statistics
-    # Import here to avoid circular imports    from sims.certificates.models import Certificate
+      # Get progress statistics
+    # Import here to avoid circular imports
+    from sims.certificates.models import Certificate
     from sims.rotations.models import Rotation
     from sims.logbook.models import LogbookEntry
     from sims.cases.models import ClinicalCase
@@ -175,21 +184,21 @@ class DashboardRedirectView(LoginRequiredMixin, View):
             return redirect('users:profile')
 
 
-class AdminDashboardView(LoginRequiredMixin, View):
+class AdminDashboardView(AdminRequiredMixin, View):
     """Admin dashboard class-based view"""
     
     def get(self, request, *args, **kwargs):
         return admin_dashboard(request)
 
 
-class SupervisorDashboardView(LoginRequiredMixin, View):
+class SupervisorDashboardView(SupervisorRequiredMixin, View):
     """Supervisor dashboard class-based view"""
     
     def get(self, request, *args, **kwargs):
         return supervisor_dashboard(request)
 
 
-class PGDashboardView(LoginRequiredMixin, View):
+class PGDashboardView(PGRequiredMixin, View):
     """PG dashboard class-based view"""
     
     def get(self, request, *args, **kwargs):
@@ -207,16 +216,11 @@ class ProfileView(LoginRequiredMixin, DetailView):
         return self.request.user
 
 
-class ProfileDetailView(LoginRequiredMixin, DetailView):
+class ProfileDetailView(SupervisorOrAdminRequiredMixin, DetailView):
     """View another user's profile (admin/supervisor only)"""
     model = User
     template_name = 'users/profile_detail.html'
     context_object_name = 'profile_user'
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not (request.user.is_admin() or request.user.is_supervisor()):
-            raise PermissionDenied("Only admins and supervisors can view other profiles")
-        return super().dispatch(request, *args, **kwargs)
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -231,29 +235,19 @@ class ProfileEditView(LoginRequiredMixin, UpdateView):
 
 
 # User Management Views (Admin only)
-class UserListView(LoginRequiredMixin, ListView):
+class UserListView(AdminRequiredMixin, ListView):
     """List all users (admin only)"""
     model = User
     template_name = 'users/user_list.html'
     context_object_name = 'users'
     paginate_by = 20
     
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can view user lists")
-        return super().dispatch(request, *args, **kwargs)
-    
     def get_queryset(self):
         return User.objects.filter(is_archived=False).order_by('last_name', 'first_name')
 
 
-class UserCreateView(LoginRequiredMixin, View):
+class UserCreateView(AdminRequiredMixin, View):
     """Create new user (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can create users")
-        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         return render(request, 'users/user_create.html')
@@ -263,26 +257,16 @@ class UserCreateView(LoginRequiredMixin, View):
         return redirect('users:user_list')
 
 
-class UserEditView(LoginRequiredMixin, UpdateView):
+class UserEditView(AdminRequiredMixin, UpdateView):
     """Edit user (admin only)"""
     model = User
     fields = ['first_name', 'last_name', 'email', 'role', 'specialty', 'year', 'is_active']
     template_name = 'users/user_edit.html'
     success_url = reverse_lazy('users:user_list')
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can edit users")
-        return super().dispatch(request, *args, **kwargs)
 
 
-class UserDeleteView(LoginRequiredMixin, View):
+class UserDeleteView(AdminRequiredMixin, View):
     """Archive user (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can delete users")
-        return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk)
@@ -292,13 +276,8 @@ class UserDeleteView(LoginRequiredMixin, View):
         return redirect('users:user_list')
 
 
-class UserActivateView(LoginRequiredMixin, View):
+class UserActivateView(AdminRequiredMixin, View):
     """Activate/deactivate user (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can activate/deactivate users")
-        return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk)
@@ -314,13 +293,8 @@ class UserDeactivateView(UserActivateView):
     pass
 
 
-class UserArchiveView(LoginRequiredMixin, View):
+class UserArchiveView(AdminRequiredMixin, View):
     """Archive user (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can archive users")
-        return super().dispatch(request, *args, **kwargs)
     
     def post(self, request, pk):
         user = get_object_or_404(User, pk=pk)
@@ -331,16 +305,11 @@ class UserArchiveView(LoginRequiredMixin, View):
 
 
 # Supervisor Management Views
-class SupervisorListView(LoginRequiredMixin, ListView):
+class SupervisorListView(AdminRequiredMixin, ListView):
     """List all supervisors (admin only)"""
     model = User
     template_name = 'users/supervisor_list.html'
     context_object_name = 'supervisors'
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can view supervisor lists")
-        return super().dispatch(request, *args, **kwargs)
     
     def get_queryset(self):
         return User.objects.filter(role='supervisor', is_archived=False)
@@ -358,13 +327,8 @@ class SupervisorPGsView(LoginRequiredMixin, DetailView):
         return super().dispatch(request, *args, **kwargs)
 
 
-class AssignSupervisorView(LoginRequiredMixin, View):
+class AssignSupervisorView(AdminRequiredMixin, View):
     """Assign supervisor to PG (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can assign supervisors")
-        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         form = SupervisorAssignmentForm()
@@ -380,17 +344,15 @@ class AssignSupervisorView(LoginRequiredMixin, View):
 
 
 # PG Management Views  
-@login_required
+@supervisor_or_admin_required
 def pg_list_view(request):
-    """List PGs for supervisors"""
+    """List PGs for supervisors and admins"""
     if request.user.is_supervisor():
         # Supervisors see only their assigned PGs
         pgs = request.user.get_assigned_pgs()
     elif request.user.is_admin():
         # Admins see all PGs
         pgs = User.objects.filter(role='pg', is_archived=False)
-    else:
-        raise PermissionDenied("Only supervisors and admins can view PG lists")
     
     # Search functionality
     form = PGSearchForm(request.GET)
@@ -430,13 +392,8 @@ class PGListView(LoginRequiredMixin, View):
         return pg_list_view(request)
 
 
-class PGBulkUploadView(LoginRequiredMixin, View):
+class PGBulkUploadView(AdminRequiredMixin, View):
     """Bulk upload PGs (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can bulk upload PGs")
-        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         return render(request, 'users/pg_bulk_upload.html')
@@ -463,41 +420,26 @@ class PGProgressView(LoginRequiredMixin, DetailView):
 
 
 # Reports and Analytics Views
-class UserReportsView(LoginRequiredMixin, View):
+class UserReportsView(AdminRequiredMixin, View):
     """User reports (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can view reports")
-        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         return render(request, 'users/user_reports.html')
 
 
-class UserExportView(LoginRequiredMixin, View):
+class UserExportView(AdminRequiredMixin, View):
     """Export user data (admin only)"""
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can export data")
-        return super().dispatch(request, *args, **kwargs)
     
     def get(self, request):
         # Implementation for data export
         return JsonResponse({'status': 'success'})
 
 
-class ActivityLogView(LoginRequiredMixin, ListView):
+class ActivityLogView(AdminRequiredMixin, ListView):
     """Activity log view (admin only)"""
     template_name = 'users/activity_log.html'
     context_object_name = 'activities'
     paginate_by = 50
-    
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_admin():
-            raise PermissionDenied("Only admins can view activity logs")
-        return super().dispatch(request, *args, **kwargs)
     
     def get_queryset(self):
         # Placeholder - would need an ActivityLog model
@@ -555,3 +497,200 @@ class UserStatsAPIView(LoginRequiredMixin, View):
         }
         
         return JsonResponse(stats)
+
+# Analytics Views
+@admin_required
+def admin_analytics_view(request):
+    """Admin analytics with system-wide statistics"""
+    
+    # System overview stats
+    total_users = User.objects.filter(is_archived=False).count()
+    active_users = User.objects.filter(is_active=True, is_archived=False).count()
+    total_pgs = User.objects.filter(role='pg', is_archived=False).count()
+    total_supervisors = User.objects.filter(role='supervisor', is_archived=False).count()
+      # Monthly user registration stats
+    from django.db.models import Count
+    from django.utils import timezone
+    from datetime import datetime, timedelta
+    import json
+    
+    # Specialty distribution
+    specialty_distribution = User.objects.filter(
+        role__in=['pg', 'supervisor'],
+        is_archived=False
+    ).values('specialty').annotate(count=Count('id')).order_by('-count')
+    
+    # Convert to JSON for JavaScript consumption
+    specialty_stats_json = json.dumps([
+        {
+            'specialty': item['specialty'] or 'Unspecified',
+            'count': item['count']
+        }
+        for item in specialty_distribution
+    ])
+    
+    # Progress tracking statistics
+    context = {
+        'total_users': total_users,
+        'active_users': active_users,
+        'total_pgs': total_pgs,
+        'total_supervisors': total_supervisors,
+        'specialty_distribution': list(specialty_distribution),
+        'specialty_stats_json': specialty_stats_json,
+        'analytics_type': 'admin'
+    }
+    return render(request, 'users/admin_analytics.html', context)
+
+
+@supervisor_required
+def supervisor_analytics_view(request):
+    """Supervisor analytics with assigned PGs statistics"""
+    
+    # Get assigned PGs
+    assigned_pgs = request.user.get_assigned_pgs()
+    assigned_pgs_count = assigned_pgs.count()
+    
+    # PG progress statistics
+    pg_progress_stats = []
+    for pg in assigned_pgs:
+        try:
+            from sims.certificates.models import Certificate
+            from sims.logbook.models import LogbookEntry
+            from sims.rotations.models import Rotation
+            
+            pg_stats = {
+                'pg': pg,
+                'certificates': Certificate.objects.filter(pg=pg).count(),
+                'logbook_entries': LogbookEntry.objects.filter(pg=pg).count(),
+                'rotations': Rotation.objects.filter(pg=pg).count(),
+                'completion_percentage': 0  # Calculate based on requirements
+            }
+            pg_progress_stats.append(pg_stats)
+        except ImportError:
+            pg_stats = {
+                'pg': pg,
+                'certificates': 0,
+                'logbook_entries': 0,
+                'rotations': 0,
+                'completion_percentage': 0
+            }
+            pg_progress_stats.append(pg_stats)
+    
+    # Monthly progress data for assigned PGs
+    from django.utils import timezone
+    current_month = timezone.now().month
+    current_year = timezone.now().year
+    
+    try:
+        from sims.logbook.models import LogbookEntry
+        monthly_entries = LogbookEntry.objects.filter(
+            pg__in=assigned_pgs,
+            created_at__month=current_month,
+            created_at__year=current_year
+        ).count()
+    except ImportError:
+        monthly_entries = 0
+    
+    try:
+        from sims.certificates.models import Certificate
+        monthly_certificates = Certificate.objects.filter(
+            pg__in=assigned_pgs,
+            created_at__month=current_month,
+            created_at__year=current_year
+        ).count()
+    except ImportError:
+        monthly_certificates = 0
+    
+    context = {
+        'assigned_pgs_count': assigned_pgs_count,
+        'pg_progress_stats': pg_progress_stats,
+        'monthly_entries': monthly_entries,
+        'monthly_certificates': monthly_certificates,
+        'analytics_type': 'supervisor'
+    }
+    return render(request, 'users/supervisor_analytics.html', context)
+
+
+@pg_required
+def pg_analytics_view(request):
+    """PG analytics with personal progress tracking"""
+    
+    # Personal progress statistics
+    try:
+        from sims.certificates.models import Certificate
+        my_certificates = Certificate.objects.filter(pg=request.user).count()
+        certificates_this_month = Certificate.objects.filter(
+            pg=request.user,
+            created_at__month=timezone.now().month,
+            created_at__year=timezone.now().year
+        ).count()
+    except ImportError:
+        my_certificates = 0
+        certificates_this_month = 0
+    
+    try:
+        from sims.logbook.models import LogbookEntry
+        my_logbook_entries = LogbookEntry.objects.filter(pg=request.user).count()
+        entries_this_month = LogbookEntry.objects.filter(
+            pg=request.user,
+            created_at__month=timezone.now().month,
+            created_at__year=timezone.now().year
+        ).count()
+        
+        # Monthly progress chart data (last 6 months)
+        from datetime import datetime, timedelta
+        six_months_ago = timezone.now().date() - timedelta(days=180)
+        monthly_progress = LogbookEntry.objects.filter(
+            pg=request.user,
+            created_at__date__gte=six_months_ago
+        ).extra(
+            select={'month': 'strftime("%%Y-%%m", created_at)'}
+        ).values('month').annotate(count=Count('id')).order_by('month')
+        
+    except ImportError:
+        my_logbook_entries = 0
+        entries_this_month = 0
+        monthly_progress = []
+    
+    try:
+        from sims.rotations.models import Rotation
+        my_rotations = Rotation.objects.filter(pg=request.user).count()
+        completed_rotations = Rotation.objects.filter(
+            pg=request.user, 
+            status='completed'
+        ).count()
+        current_rotation = Rotation.objects.filter(
+            pg=request.user, 
+            status='active'
+        ).first()
+    except ImportError:
+        my_rotations = 0
+        completed_rotations = 0
+        current_rotation = None
+    
+    try:
+        from sims.cases.models import ClinicalCase
+        my_cases = ClinicalCase.objects.filter(pg=request.user).count()
+    except ImportError:
+        my_cases = 0
+    
+    # Calculate overall completion percentage
+    # This would be based on program requirements
+    total_required = 100  # Placeholder - should come from program requirements
+    completed = my_certificates + completed_rotations
+    completion_percentage = min((completed / total_required) * 100, 100) if total_required > 0 else 0
+    
+    context = {
+        'my_certificates': my_certificates,
+        'certificates_this_month': certificates_this_month,
+        'my_logbook_entries': my_logbook_entries,
+        'entries_this_month': entries_this_month,
+        'my_rotations': my_rotations,
+        'completed_rotations': completed_rotations,
+        'current_rotation': current_rotation,
+        'my_cases': my_cases,
+        'completion_percentage': round(completion_percentage, 1),
+        'monthly_progress': list(monthly_progress),
+        'analytics_type': 'pg'
+    }
+    return render(request, 'users/pg_analytics.html', context)

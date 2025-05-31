@@ -444,37 +444,36 @@ class LogbookEntryAdmin(ImportExportModelAdmin):
         """Send notification about entry changes"""
         try:
             from sims.notifications.models import Notification
-            
-            # Notify supervisor for new submissions
-            if action == 'submitted' and entry.pg.supervisor:
-                Notification.objects.create(
-                    user=entry.pg.supervisor,
-                    title="New Logbook Entry for Review",
-                    message=f"{entry.pg.get_full_name()} has submitted a new logbook entry: {entry.case_title or 'Untitled'}",
-                    type='logbook',
-                    related_object_id=entry.id
-                )
-            
-            # Notify PG for status changes
-            elif action in ['approved', 'needs_revision'] and entry.pg:
-                if action == 'approved':
-                    title = "Logbook Entry Approved"
-                    message = f"Your logbook entry '{entry.case_title or 'Untitled'}' has been approved."
-                else:
-                    title = "Logbook Entry Needs Revision"
-                    message = f"Your logbook entry '{entry.case_title or 'Untitled'}' requires revision."
-                
-                Notification.objects.create(
-                    user=entry.pg,
-                    title=title,
-                    message=message,
-                    type='logbook',
-                    related_object_id=entry.id
-                )
-                
         except ImportError:
             # Notifications app not available
-            pass
+            return
+
+        # Notify supervisor for new submissions
+        if action == 'submitted' and entry.pg and getattr(entry.pg, 'supervisor', None):
+            Notification.objects.create(
+                user=entry.pg.supervisor,
+                title="New Logbook Entry for Review",
+                message=f"{entry.pg.get_full_name()} has submitted a new logbook entry: {entry.case_title or 'Untitled'}",
+                type='logbook',
+                related_object_id=entry.id
+            )
+
+        # Notify PG for status changes
+        elif action in ['approved', 'needs_revision'] and entry.pg:
+            if action == 'approved':
+                title = "Logbook Entry Approved"
+                message = f"Your logbook entry '{entry.case_title or 'Untitled'}' has been approved."
+            else:
+                title = "Logbook Entry Needs Revision"
+                message = f"Your logbook entry '{entry.case_title or 'Untitled'}' requires revision."
+
+            Notification.objects.create(
+                user=entry.pg,
+                title=title,
+                message=message,
+                type='logbook',
+                related_object_id=entry.id
+            )
     
     # Custom Actions
     def approve_entries(self, request, queryset):

@@ -51,11 +51,15 @@ urlpatterns = [
     path('pgs/', views.PGListView.as_view(), name='pg_list'),
     path('pgs/bulk-upload/', views.PGBulkUploadView.as_view(), name='pg_bulk_upload'),
     path('pg/<int:pk>/progress/', views.PGProgressView.as_view(), name='pg_progress'),
-    
-    # Reports and Analytics
+      # Reports and Analytics
     path('reports/', views.UserReportsView.as_view(), name='user_reports'),
     path('reports/export/', views.UserExportView.as_view(), name='user_export'),
     path('activity-log/', views.ActivityLogView.as_view(), name='activity_log'),
+    
+    # Role-based Analytics
+    path('analytics/admin/', views.admin_analytics_view, name='admin_analytics'),
+    path('analytics/supervisor/', views.supervisor_analytics_view, name='supervisor_analytics'),
+    path('analytics/pg/', views.pg_analytics_view, name='pg_analytics'),
     
     # AJAX/API endpoints
     path('api/users/search/', views.UserSearchAPIView.as_view(), name='user_search_api'),

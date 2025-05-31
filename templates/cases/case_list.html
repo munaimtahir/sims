@@ -180,7 +180,7 @@
                             </div>
                             {% if case.category %}
                             <div class="mb-2">
-                                <span class="badge" style="background-color: {{ case.category.color_code }};">
+                                <span class="badge" style="background-color: '{{ case.category.color_code|default_if_none:'#6c757d' }}';">
                                     {{ case.category.name }}
                                 </span>
                             </div>

@@ -285,7 +285,10 @@ class RotationAdmin(ImportExportModelAdmin):
         """Send notification about rotation changes"""
         try:
             from sims.notifications.models import Notification
-            
+        except (ImportError, ModuleNotFoundError):
+            Notification = None
+
+        if Notification:
             # Notify PG
             if rotation.pg:
                 Notification.objects.create(
@@ -295,7 +298,7 @@ class RotationAdmin(ImportExportModelAdmin):
                     type='rotation',
                     related_object_id=rotation.id
                 )
-            
+
             # Notify supervisor
             if rotation.supervisor and rotation.supervisor != rotation.pg:
                 Notification.objects.create(
@@ -306,9 +309,6 @@ class RotationAdmin(ImportExportModelAdmin):
                     type='rotation',
                     related_object_id=rotation.id
                 )
-        except ImportError:
-            # Notifications app not available
-            pass
     
     # Custom Actions
     def approve_rotations(self, request, queryset):

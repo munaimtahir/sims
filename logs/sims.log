@@ -781,3 +781,342 @@ Traceback (most recent call last):
     raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
 django.template.exceptions.TemplateDoesNotExist: users/login.html
 ERROR 2025-05-30 15:19:52,732 basehttp 16908 13148 "GET /users/login/?next=/users/dashboard/%3Fid%3D25b08912-a267-4967-a32b-26f5876aa7f5%26vscodeBrowserReqId%3D1748600392677 HTTP/1.1" 500 88422
+INFO 2025-05-31 11:54:50,985 autoreload 14512 23944 Watching for file changes with StatReloader
+INFO 2025-05-31 11:54:51,121 wsgi 14512 12472 SIMS WSGI application initialized successfully
+INFO 2025-05-31 11:55:47,707 basehttp 14512 21700 "GET / HTTP/1.1" 200 59
+INFO 2025-05-31 11:55:54,841 basehttp 14512 21392 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748674554834 HTTP/1.1" 200 59
+INFO 2025-05-31 11:56:03,103 basehttp 14512 21700 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-05-31 11:56:03,261 basehttp 14512 21700 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+INFO 2025-05-31 11:57:05,613 basehttp 14512 19936 "GET / HTTP/1.1" 200 59
+WARNING 2025-05-31 11:57:05,727 log 14512 19936 Not Found: /favicon.ico
+WARNING 2025-05-31 11:57:05,727 basehttp 14512 19936 "GET /favicon.ico HTTP/1.1" 404 3810
+INFO 2025-05-31 11:57:11,741 basehttp 14512 21060 "GET /admin HTTP/1.1" 301 0
+INFO 2025-05-31 11:57:11,746 basehttp 14512 16512 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-05-31 11:57:11,752 basehttp 14512 16512 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+INFO 2025-05-31 11:57:12,071 basehttp 14512 16512 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-05-31 11:57:12,077 basehttp 14512 23932 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-05-31 11:57:12,080 basehttp 14512 9976 "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-05-31 11:57:12,081 basehttp 14512 1776 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-05-31 11:57:12,082 basehttp 14512 14996 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-05-31 11:57:12,084 basehttp 14512 1252 "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-05-31 11:57:12,087 basehttp 14512 14996 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-05-31 12:01:05,507 basehttp 14512 12308 "GET / HTTP/1.1" 200 59
+INFO 2025-05-31 12:01:07,224 basehttp 14512 12308 "GET / HTTP/1.1" 200 59
+INFO 2025-05-31 12:01:07,739 basehttp 14512 12308 "GET / HTTP/1.1" 200 59
+INFO 2025-05-31 12:01:12,221 autoreload 14512 23944 D:\PMC\sims_project\sims_project\urls.py changed, reloading.
+INFO 2025-05-31 12:01:12,972 autoreload 15576 8236 Watching for file changes with StatReloader
+INFO 2025-05-31 12:01:13,140 wsgi 15576 16300 SIMS WSGI application initialized successfully
+ERROR 2025-05-31 12:02:23,632 log 15576 22888 Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 74, in resolve_template
+    return get_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: home/index.html
+ERROR 2025-05-31 12:02:23,635 basehttp 15576 22888 "GET / HTTP/1.1" 500 87934
+INFO 2025-05-31 12:02:53,597 basehttp 15576 21968 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:02:57,167 basehttp 15576 21968 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:02:57,641 basehttp 15576 21968 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:02:57,857 basehttp 15576 21968 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:02,952 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:03,463 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:03,655 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:03,778 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:04,044 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:04,193 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:04,444 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:05,378 basehttp 15576 21884 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:10,746 basehttp 15576 10952 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:20,808 basehttp 15576 15180 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:21,160 basehttp 15576 19148 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:28,139 basehttp 15576 2924 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748675008132 HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:37,353 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:37,894 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:38,104 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:38,420 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:39,248 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:39,484 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:39,621 basehttp 15576 22124 "GET / HTTP/1.1" 200 0
+INFO 2025-05-31 12:03:50,964 basehttp 15576 3616 "GET / HTTP/1.1" 200 0
+WARNING 2025-05-31 12:03:57,377 log 15576 10652 Not Found: /login/
+WARNING 2025-05-31 12:03:57,377 basehttp 15576 10652 "GET /login/?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748675037370 HTTP/1.1" 404 3872
+INFO 2025-05-31 12:03:59,224 basehttp 15576 3616 "GET / HTTP/1.1" 200 0
+WARNING 2025-05-31 12:04:03,861 log 15576 3616 Not Found: /login
+WARNING 2025-05-31 12:04:03,862 basehttp 15576 3616 "GET /login HTTP/1.1" 404 3792
+WARNING 2025-05-31 12:04:42,973 log 15576 11896 Not Found: /login
+WARNING 2025-05-31 12:04:42,973 basehttp 15576 11896 "GET /login HTTP/1.1" 404 3792
+WARNING 2025-05-31 12:04:43,780 log 15576 11896 Not Found: /login
+WARNING 2025-05-31 12:04:43,781 basehttp 15576 11896 "GET /login HTTP/1.1" 404 3792
+INFO 2025-05-31 12:04:59,080 autoreload 15576 8236 D:\PMC\sims_project\sims_project\urls.py changed, reloading.
+INFO 2025-05-31 12:04:59,617 autoreload 22788 6736 Watching for file changes with StatReloader
+INFO 2025-05-31 12:04:59,773 wsgi 22788 17840 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:06:29,205 autoreload 22788 6736 D:\PMC\sims_project\sims_project\urls.py changed, reloading.
+INFO 2025-05-31 12:06:29,867 autoreload 11748 22336 Watching for file changes with StatReloader
+INFO 2025-05-31 12:06:30,024 wsgi 11748 2080 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:06:56,301 autoreload 11748 22336 D:\PMC\sims_project\sims_project\urls.py changed, reloading.
+INFO 2025-05-31 12:06:56,832 autoreload 15724 22324 Watching for file changes with StatReloader
+INFO 2025-05-31 12:06:56,969 wsgi 15724 17624 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:07:03,217 autoreload 15724 22324 D:\PMC\sims_project\sims_project\urls.py changed, reloading.
+INFO 2025-05-31 12:07:03,735 autoreload 9420 19584 Watching for file changes with StatReloader
+INFO 2025-05-31 12:07:03,851 wsgi 9420 18244 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:07:25,603 autoreload 17624 22324 Watching for file changes with StatReloader
+INFO 2025-05-31 12:07:25,737 wsgi 17624 20492 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:07:36,430 basehttp 17624 23400 "GET / HTTP/1.1" 200 24501
+INFO 2025-05-31 12:07:42,061 basehttp 17624 19448 "GET / HTTP/1.1" 200 24501
+ERROR 2025-05-31 12:08:16,793 exception 17096 24440 Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\utils\deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\middleware\common.py", line 48, in process_request
+    host = request.get_host()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\http\request.py", line 186, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: 'testserver'. You may need to add 'testserver' to ALLOWED_HOSTS.
+WARNING 2025-05-31 12:08:16,847 log 17096 24440 Bad Request: /
+INFO 2025-05-31 12:08:47,974 autoreload 17624 22324 D:\PMC\sims_project\sims_project\settings.py changed, reloading.
+INFO 2025-05-31 12:08:48,642 autoreload 22944 1776 Watching for file changes with StatReloader
+INFO 2025-05-31 12:08:48,769 wsgi 22944 1252 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:09:33,546 autoreload 8596 7920 Watching for file changes with StatReloader
+INFO 2025-05-31 12:09:33,675 wsgi 8596 24300 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:09:56,481 basehttp 8596 9272 "GET / HTTP/1.1" 200 24501
+INFO 2025-05-31 12:10:09,754 basehttp 8596 9272 "GET /accounts/login/ HTTP/1.1" 200 17821
+ERROR 2025-05-31 12:10:22,042 log 8596 9272 Internal Server Error: /users/login/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 90, in rendered_content
+    template = self.resolve_template(self.template_name)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 72, in resolve_template
+    return select_template(template, using=self.using)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader.py", line 47, in select_template
+    raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
+django.template.exceptions.TemplateDoesNotExist: users/login.html
+ERROR 2025-05-31 12:10:22,045 basehttp 8596 9272 "GET /users/login/ HTTP/1.1" 500 85815
+INFO 2025-05-31 12:10:55,975 basehttp 8596 9272 "GET /users/login/ HTTP/1.1" 200 17821
+INFO 2025-05-31 12:11:07,620 basehttp 8596 10864 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748675467614 HTTP/1.1" 200 24501
+INFO 2025-05-31 12:11:15,668 basehttp 8596 10864 "GET /accounts/login/?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748675475655 HTTP/1.1" 200 17821
+INFO 2025-05-31 12:11:25,905 basehttp 8596 24052 "GET /accounts/login/ HTTP/1.1" 200 17821
+WARNING 2025-05-31 12:11:25,934 basehttp 8596 24052 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:11:30,581 basehttp 8596 9464 "GET /users/login/ HTTP/1.1" 200 17821
+WARNING 2025-05-31 12:11:30,603 basehttp 8596 9464 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:11:32,956 basehttp 8596 15136 "GET /users/login/ HTTP/1.1" 200 17821
+WARNING 2025-05-31 12:11:32,979 basehttp 8596 15136 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:11:33,972 basehttp 8596 21060 "GET / HTTP/1.1" 200 24501
+INFO 2025-05-31 12:11:38,609 basehttp 8596 21060 "GET /users/login/ HTTP/1.1" 200 17821
+WARNING 2025-05-31 12:11:38,632 basehttp 8596 21060 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:12:19,940 basehttp 8596 20524 "GET / HTTP/1.1" 200 24501
+INFO 2025-05-31 12:14:57,616 basehttp 8596 11692 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748675697607 HTTP/1.1" 200 24501
+INFO 2025-05-31 12:16:47,558 autoreload 8596 7920 D:\PMC\sims_project\sims_project\settings.py changed, reloading.
+INFO 2025-05-31 12:16:48,228 autoreload 20484 11556 Watching for file changes with StatReloader
+INFO 2025-05-31 12:16:48,369 wsgi 20484 10104 SIMS WSGI application initialized successfully
+INFO 2025-05-31 12:24:45,580 basehttp 20484 10984 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:24:56,039 basehttp 20484 10984 "GET /users/login/ HTTP/1.1" 200 17821
+WARNING 2025-05-31 12:24:56,072 basehttp 20484 10984 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:25:12,993 basehttp 20484 18924 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:25:13,049 basehttp 20484 18924 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+INFO 2025-05-31 12:26:11,917 basehttp 20484 14884 "GET /accounts/login/ HTTP/1.1" 200 21088
+WARNING 2025-05-31 12:26:11,939 basehttp 20484 14884 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:26:13,278 basehttp 20484 12316 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748676373267 HTTP/1.1" 200 25517
+INFO 2025-05-31 12:26:18,936 basehttp 20484 12316 "GET /accounts/login/?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748676378930 HTTP/1.1" 200 21088
+INFO 2025-05-31 12:26:25,947 basehttp 20484 24100 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:26:27,809 basehttp 20484 24100 "GET /accounts/login/ HTTP/1.1" 200 21088
+WARNING 2025-05-31 12:26:27,833 basehttp 20484 24100 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:26:40,037 basehttp 20484 10716 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:26:46,352 basehttp 20484 10716 "GET /accounts/login/ HTTP/1.1" 200 21088
+WARNING 2025-05-31 12:26:46,380 basehttp 20484 10716 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:26:50,604 basehttp 20484 22828 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:26:59,632 basehttp 20484 12316 "GET /users/login/?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748676419597 HTTP/1.1" 200 21088
+INFO 2025-05-31 12:31:42,925 basehttp 20484 15488 "GET /?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748676702911 HTTP/1.1" 200 25517
+INFO 2025-05-31 12:31:46,475 basehttp 20484 15488 "GET /accounts/login/?id=fb5b47f0-ae98-482c-b6ab-770ecd51ea22&vscodeBrowserReqId=1748676706459 HTTP/1.1" 200 21088
+INFO 2025-05-31 12:34:53,514 basehttp 20484 16620 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:34:55,018 basehttp 20484 16620 "GET /accounts/login/ HTTP/1.1" 200 21088
+WARNING 2025-05-31 12:34:55,051 basehttp 20484 16620 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:34:58,579 basehttp 20484 7032 "GET /users/login/ HTTP/1.1" 200 21088
+WARNING 2025-05-31 12:34:58,610 basehttp 20484 7032 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:35:02,577 basehttp 20484 18940 "GET / HTTP/1.1" 200 25517
+INFO 2025-05-31 12:47:26,326 basehttp 20484 5544 "GET / HTTP/1.1" 200 26005
+INFO 2025-05-31 12:47:30,382 basehttp 20484 5544 "GET / HTTP/1.1" 200 26005
+INFO 2025-05-31 12:48:00,731 basehttp 20484 5544 "GET /accounts/login/ HTTP/1.1" 200 21561
+WARNING 2025-05-31 12:48:00,786 basehttp 20484 5544 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:49:45,310 basehttp 20484 12204 "GET / HTTP/1.1" 200 26211
+INFO 2025-05-31 12:50:12,166 basehttp 20484 25124 "GET /accounts/login/ HTTP/1.1" 200 21709
+WARNING 2025-05-31 12:50:12,192 basehttp 20484 25124 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:50:24,414 basehttp 20484 25160 "GET / HTTP/1.1" 200 26211
+INFO 2025-05-31 12:53:34,023 basehttp 20484 16620 "GET / HTTP/1.1" 200 26424
+WARNING 2025-05-31 12:53:54,624 log 20484 24764 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-31 12:53:54,625 basehttp 20484 24764 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 4073
+INFO 2025-05-31 12:54:40,949 basehttp 20484 1448 "GET /accounts/login/ HTTP/1.1" 200 21709
+WARNING 2025-05-31 12:54:40,985 log 20484 1448 Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2025-05-31 12:54:40,986 basehttp 20484 1448 "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 4073
+WARNING 2025-05-31 12:54:40,992 basehttp 20484 16300 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-05-31 12:54:49,690 basehttp 20484 1448 "GET / HTTP/1.1" 200 26424
+INFO 2025-05-31 12:55:10,153 basehttp 20484 16524 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:25,660 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:26,334 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:26,719 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:26,884 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,034 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,190 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,341 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,482 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,619 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,774 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:27,917 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:28,060 basehttp 20484 25068 "GET / HTTP/1.1" 200 26197
+INFO 2025-05-31 12:55:58,779 basehttp 20484 25068 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:55:58,941 basehttp 20484 25068 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4164
+INFO 2025-05-31 12:55:59,114 basehttp 20484 18148 "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-05-31 12:55:59,115 basehttp 20484 17160 "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-05-31 12:55:59,117 basehttp 20484 17096 "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-05-31 12:55:59,121 basehttp 20484 25068 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-05-31 12:55:59,126 basehttp 20484 24684 "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-05-31 12:55:59,134 basehttp 20484 25464 "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-05-31 12:55:59,146 basehttp 20484 24684 "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-05-31 12:56:06,972 basehttp 20484 24684 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:07,072 basehttp 20484 24684 "GET /admin/ HTTP/1.1" 200 20033
+INFO 2025-05-31 12:56:07,090 basehttp 20484 24684 "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-05-31 12:56:07,102 basehttp 20484 25464 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-05-31 12:56:07,103 basehttp 20484 24684 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-05-31 12:56:14,548 basehttp 20484 24684 "GET / HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:14,567 basehttp 20484 24684 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:14,687 basehttp 20484 24684 "GET /users/admin-dashboard/ HTTP/1.1" 200 20135
+ERROR 2025-05-31 12:56:30,801 log 20484 24684 Internal Server Error: /users/profile/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 891, in _resolve_lookup
+    current = current[bit]
+              ~~~~~~~^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\context.py", line 88, in __getitem__
+    raise KeyError(key)
+KeyError: 'profile_user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 897, in _resolve_lookup
+    if isinstance(current, BaseContext) and getattr(
+                                            ~~~~~~~^
+        type(current), bit
+        ^^^^^^^^^^^^^^^^^^
+    ):
+    ^
+AttributeError: type object 'RequestContext' has no attribute 'profile_user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 907, in _resolve_lookup
+    current = current[int(bit)]
+                      ~~~^^^^^
+ValueError: invalid literal for int() with base 10: 'profile_user'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1075, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 743, in resolve
+    arg_vals.append(arg.resolve(context))
+                    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 854, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 914, in _resolve_lookup
+    raise VariableDoesNotExist(
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+    )  # missing attribute
+    ^
+django.template.base.VariableDoesNotExist: Failed lookup for key [profile_user] in [{'True': True, 'False': False, 'None': None}, {}, {}, {'object': <SimpleLazyObject: <User: Admin User (Admin)>>, 'user': <SimpleLazyObject: <User: Admin User (Admin)>>, 'view': <sims.users.views.ProfileView object at 0x000001F2D5F0EF90>}]
+ERROR 2025-05-31 12:56:30,820 basehttp 20484 24684 "GET /users/profile/ HTTP/1.1" 500 190158
+INFO 2025-05-31 12:56:51,417 basehttp 20484 24684 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:51,436 basehttp 20484 24684 "GET /users/admin-dashboard/ HTTP/1.1" 200 20135
+INFO 2025-05-31 12:56:53,589 basehttp 20484 24684 "GET / HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:53,605 basehttp 20484 24684 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:56:53,625 basehttp 20484 24684 "GET /users/admin-dashboard/ HTTP/1.1" 200 20135
+WARNING 2025-05-31 12:56:59,684 log 20484 24684 Not Found: /users/
+WARNING 2025-05-31 12:56:59,685 basehttp 20484 24684 "GET /users/ HTTP/1.1" 404 12979
+INFO 2025-05-31 12:57:03,553 basehttp 20484 24684 "GET / HTTP/1.1" 302 0
+INFO 2025-05-31 12:57:03,567 basehttp 20484 24684 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:57:03,599 basehttp 20484 24684 "GET /users/admin-dashboard/ HTTP/1.1" 200 20135
+WARNING 2025-05-31 12:57:07,301 base 20484 24684 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-31 12:57:07,316 log 20484 24684 Method Not Allowed: /users/logout/
+WARNING 2025-05-31 12:57:07,317 basehttp 20484 24684 "GET /users/logout/ HTTP/1.1" 405 0
+INFO 2025-05-31 12:57:11,756 basehttp 20484 24684 "GET / HTTP/1.1" 302 0
+INFO 2025-05-31 12:57:11,770 basehttp 20484 24684 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-05-31 12:57:11,793 basehttp 20484 24684 "GET /users/admin-dashboard/ HTTP/1.1" 200 20135
+WARNING 2025-05-31 12:57:19,428 base 20484 24684 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-31 12:57:19,441 log 20484 24684 Method Not Allowed: /users/logout/
+WARNING 2025-05-31 12:57:19,442 basehttp 20484 24684 "GET /users/logout/ HTTP/1.1" 405 0
+WARNING 2025-05-31 12:57:21,332 base 20484 24684 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-31 12:57:21,344 log 20484 24684 Method Not Allowed: /users/logout/
+WARNING 2025-05-31 12:57:21,345 basehttp 20484 24684 "GET /users/logout/ HTTP/1.1" 405 0
+WARNING 2025-05-31 12:57:21,827 base 20484 24684 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-31 12:57:21,838 log 20484 24684 Method Not Allowed: /users/logout/
+WARNING 2025-05-31 12:57:21,839 basehttp 20484 24684 "GET /users/logout/ HTTP/1.1" 405 0
+WARNING 2025-05-31 12:57:22,266 base 20484 24684 Method Not Allowed (GET): /users/logout/
+WARNING 2025-05-31 12:57:22,277 log 20484 24684 Method Not Allowed: /users/logout/
+WARNING 2025-05-31 12:57:22,278 basehttp 20484 24684 "GET /users/logout/ HTTP/1.1" 405 0
+INFO 2025-05-31 12:57:35,249 basehttp 20484 9600 "GET / HTTP/1.1" 200 26197
+WARNING 2025-05-31 12:57:36,445 log 20484 9600 Not Found: /favicon.ico
+WARNING 2025-05-31 12:57:36,447 basehttp 20484 9600 "GET /favicon.ico HTTP/1.1" 404 3962
+INFO 2025-05-31 13:03:00,207 basehttp 20484 17000 "GET / HTTP/1.1" 200 26197

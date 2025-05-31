@@ -25,7 +25,14 @@ def home_view(request):
     if request.user.is_authenticated:
         return redirect('users:dashboard')
     
-    return HttpResponse("Welcome to SIMS - Specialized Information Management System")
+    # Render the homepage template with context
+    context = {
+        'system_version': '2.1.0',
+        'university_name': 'Faisalabad Medical University',
+        'current_year': '2025',
+        'system_status': 'online',
+    }
+    return TemplateResponse(request, 'home/index.html', context)
 
 def health_check(request):
     """Simple health check endpoint for monitoring"""
@@ -46,6 +53,9 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('health/', health_check, name='health_check'),
     path('robots.txt', robots_txt, name='robots_txt'),
+    
+    # Authentication URLs
+    path('accounts/', include('django.contrib.auth.urls')),
     
     # Django Admin
     path('admin/', admin.site.urls),

@@ -512,11 +512,14 @@ class CertificateDashboardView(LoginRequiredMixin, CertificateAccessMixin, Templ
             context['pending_reviews'] = certificates.filter(
                 status__in=['pending', 'under_review']
             ).select_related('pg', 'certificate_type')[:5]
-        
-        # Certificate type distribution
-        context['certificate_distribution'] = certificates.values(
+          # Certificate type distribution
+        certificate_distribution = certificates.values(
             'certificate_type__name'
         ).annotate(count=Count('id')).order_by('-count')[:10]
+        
+        context['certificate_distribution'] = certificate_distribution
+        # JSON serialized data for JavaScript charts
+        context['certificate_distribution_json'] = json.dumps(list(certificate_distribution))
         
         # CME/CPD totals (for PGs)
         if user.role == 'pg':
