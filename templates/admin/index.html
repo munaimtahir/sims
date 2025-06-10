@@ -1,0 +1,309 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans 'Site administration' %} | SIMS{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <a href="{% url 'admin:index' %}">
+        <i class="fas fa-cogs me-2"></i>
+        SIMS Administration
+    </a>
+</h1>
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-header mb-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="display-6 mb-2">
+                <i class="fas fa-tachometer-alt me-3"></i>
+                Welcome to SIMS Administration
+            </h1>
+            <p class="lead text-muted">
+                Manage your Postgraduate Medical Training System from this central dashboard.
+            </p>
+        </div>
+        <div class="col-md-4 text-end">
+            <div class="admin-stats">
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                        <h6 class="card-title">Last Login</h6>
+                        <small class="text-muted">
+                            {% if user.last_login %}
+                                {{ user.last_login|date:"M d, Y g:i A" }}
+                            {% else %}
+                                First time login
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-gradient text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-bolt me-2"></i>
+                    Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">                    <div class="col-md-3">
+                        <a href="{% url 'admin:users_user_add' %}" class="btn btn-outline-primary w-100 h-100 d-flex flex-column justify-content-center align-items-center p-3">
+                            <i class="fas fa-user-plus fa-2x mb-2"></i>
+                            <span>Add User</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'admin:users_user_changelist' %}" class="btn btn-outline-success w-100 h-100 d-flex flex-column justify-content-center align-items-center p-3">
+                            <i class="fas fa-users fa-2x mb-2"></i>
+                            <span>Manage Users</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'home' %}" target="_blank" class="btn btn-outline-info w-100 h-100 d-flex flex-column justify-content-center align-items-center p-3">
+                            <i class="fas fa-external-link-alt fa-2x mb-2"></i>
+                            <span>View Site</span>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{% url 'admin:password_change' %}" class="btn btn-outline-warning w-100 h-100 d-flex flex-column justify-content-center align-items-center p-3">
+                            <i class="fas fa-key fa-2x mb-2"></i>
+                            <span>Change Password</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if app_list %}
+    <div class="row">
+        {% for app in app_list %}
+        <div class="col-lg-6 mb-4">
+            <div class="module card h-100">
+                <div class="card-header bg-gradient text-white">
+                    <h2 class="card-title mb-0">
+                        {% if app.app_label == 'users' %}
+                            <i class="fas fa-users me-2"></i>
+                        {% elif app.app_label == 'logbook' %}
+                            <i class="fas fa-book-medical me-2"></i>
+                        {% elif app.app_label == 'cases' %}
+                            <i class="fas fa-stethoscope me-2"></i>
+                        {% elif app.app_label == 'certificates' %}
+                            <i class="fas fa-certificate me-2"></i>
+                        {% elif app.app_label == 'rotations' %}
+                            <i class="fas fa-sync-alt me-2"></i>
+                        {% elif app.app_label == 'auth' %}
+                            <i class="fas fa-shield-alt me-2"></i>
+                        {% else %}
+                            <i class="fas fa-cog me-2"></i>
+                        {% endif %}
+                        
+                        <a href="{{ app.app_url }}" class="section" title="{% blocktrans with name=app.name %}Models in the {{ name }} application{% endblocktrans %}">
+                            {{ app.name }}
+                        </a>
+                    </h2>
+                </div>
+                <div class="card-body">
+                    {% for model in app.models %}
+                        <div class="model-item mb-3">
+                            <h6 class="model-name mb-2">
+                                {% if model.object_name == 'User' %}
+                                    <i class="fas fa-user me-2 text-primary"></i>
+                                {% elif model.object_name == 'Profile' %}
+                                    <i class="fas fa-id-card me-2 text-info"></i>
+                                {% elif model.object_name == 'LogbookEntry' %}
+                                    <i class="fas fa-file-medical me-2 text-success"></i>
+                                {% elif model.object_name == 'ClinicalCase' %}
+                                    <i class="fas fa-diagnoses me-2 text-warning"></i>
+                                {% elif model.object_name == 'Certificate' %}
+                                    <i class="fas fa-award me-2 text-info"></i>
+                                {% elif model.object_name == 'Rotation' %}
+                                    <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                {% else %}
+                                    <i class="fas fa-database me-2 text-secondary"></i>
+                                {% endif %}
+                                {{ model.name }}
+                            </h6>
+                            
+                            <div class="model-actions">
+                                {% if model.admin_url %}
+                                    {% if model.add_url %}
+                                        <a href="{{ model.add_url }}" class="addlink btn btn-sm btn-outline-success me-2">
+                                            <i class="fas fa-plus me-1"></i>{% trans 'Add' %}
+                                        </a>
+                                    {% endif %}
+                                    {% if model.admin_url %}
+                                        <a href="{{ model.admin_url }}" class="changelink btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-list me-1"></i>
+                                            {% if model.view_only %}{% trans 'View' %}{% else %}{% trans 'Change' %}{% endif %}
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>
+        {% trans "You don't have permission to view or edit anything." %}
+    </div>
+{% endif %}
+
+<!-- System Information -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    System Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6 class="fw-bold">System Details</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>System:</strong> SIMS v2.1.0</li>
+                            <li><strong>Institution:</strong> Faisalabad Medical University</li>
+                            <li><strong>Environment:</strong> 
+                                {% if debug %}
+                                    <span class="badge bg-warning">Development</span>
+                                {% else %}
+                                    <span class="badge bg-success">Production</span>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="fw-bold">Session Information</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>User:</strong> {{ user.get_full_name|default:user.username }}</li>
+                            <li><strong>Role:</strong> 
+                                {% if user.is_superuser %}
+                                    <span class="badge bg-danger">Super Admin</span>
+                                {% elif user.is_staff %}
+                                    <span class="badge bg-primary">Staff</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">User</span>
+                                {% endif %}
+                            </li>
+                            <li><strong>Login Time:</strong> {{ user.last_login|date:"M d, Y g:i A"|default:"N/A" }}</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="fw-bold">Quick Links</h6>                        <ul class="list-unstyled">
+                            <li><a href="{% url 'home' %}" target="_blank"><i class="fas fa-home me-2"></i>Homepage</a></li>
+                            <li><a href="{% url 'admin:users_user_changelist' %}"><i class="fas fa-users me-2"></i>All Users</a></li>
+                            <li><a href="{% url 'admin:logout' %}"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.bg-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.model-item {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+}
+
+.model-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.model-actions .btn {
+    transition: all 0.3s ease;
+}
+
+.model-actions .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.admin-stats .card {
+    transition: all 0.3s ease;
+}
+
+.admin-stats .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+/* Module-specific colors */
+.module:nth-child(1) .card-header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; }
+.module:nth-child(2) .card-header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%) !important; }
+.module:nth-child(3) .card-header { background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%) !important; }
+.module:nth-child(4) .card-header { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%) !important; }
+.module:nth-child(5) .card-header { background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%) !important; }
+.module:nth-child(6) .card-header { background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%) !important; }
+
+@media (max-width: 768px) {
+    .dashboard-header {
+        text-align: center;
+    }
+    
+    .model-item {
+        margin-bottom: 10px;
+    }
+    
+    .model-actions {
+        text-align: center;
+        margin-top: 10px;
+    }
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    // Add fade-in animation to cards
+    $('.module').each(function(index) {
+        $(this).css('opacity', '0').delay(index * 200).animate({
+            opacity: 1
+        }, 500);
+    });
+    
+    // Add hover effects to quick action buttons
+    $('.btn').hover(
+        function() {
+            $(this).addClass('shadow-lg');
+        },
+        function() {
+            $(this).removeClass('shadow-lg');
+        }
+    );
+});
+</script>
+{% endblock %}

@@ -331,7 +331,7 @@
 
 {% block content %}
 <!-- SIMS Login Button - Top Left -->
-<a href="{% url 'login' %}" class="sims-login-button">
+<a href="{% url 'users:login' %}" class="sims-login-button">
     <i class="bi bi-box-arrow-in-right"></i>
     Sign In to SIMS
 </a>
@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ctrl + L to go to login
         if (e.ctrlKey && e.key === 'l') {
             e.preventDefault();
-            window.location.href = "{% url 'login' %}";
+            window.location.href = "{% url 'users:login' %}";
         }
         
         // Escape to scroll to top

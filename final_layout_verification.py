@@ -125,7 +125,7 @@ def check_server_accessibility():
     print(f"\n🌐 Server Accessibility Check:")
     print("   Server should be running at: http://127.0.0.1:8000/")
     print("   📄 Homepage: http://127.0.0.1:8000/")
-    print("   🔐 Login Page: http://127.0.0.1:8000/accounts/login/")
+    print("   🔐 Login Page: http://127.0.0.1:8000/users/login/")
     print("   👥 Users Login: http://127.0.0.1:8000/users/login/")
     print("   ⚙️  Admin Panel: http://127.0.0.1:8000/admin/")
 

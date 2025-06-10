@@ -60,7 +60,7 @@ def test_url_accessibility():
     test_urls = [
         ('/', 'Homepage'),
         ('/admin/', 'Django Admin'),
-        ('/accounts/login/', 'Login Page'),
+        ('/users/login/', 'Login Page'),
         ('/users/dashboard/', 'User Dashboard'),
         ('/users/profile/', 'User Profile'),
         ('/users/users/', 'User List'),
@@ -230,7 +230,7 @@ def main():
         print("\n🎉 System verification completed successfully!")
         print("\n🚀 SIMS is ready for use:")
         print("   • Admin Panel: http://127.0.0.1:8000/admin/")
-        print("   • Login Page: http://127.0.0.1:8000/accounts/login/")
+        print("   • Login Page: http://127.0.0.1:8000/users/login/")
         print("   • Dashboard: http://127.0.0.1:8000/users/dashboard/")
         print("\n🔑 Admin Credentials:")
         print("   Username: admin")

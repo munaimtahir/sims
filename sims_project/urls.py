@@ -54,9 +54,6 @@ urlpatterns = [
     path('health/', health_check, name='health_check'),
     path('robots.txt', robots_txt, name='robots_txt'),
     
-    # Authentication URLs
-    path('accounts/', include('django.contrib.auth.urls')),
-    
     # Django Admin
     path('admin/', admin.site.urls),
     # SIMS App URLs

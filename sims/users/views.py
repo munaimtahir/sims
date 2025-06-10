@@ -51,13 +51,25 @@ def login_view(request):
     
     return render(request, 'users/login.html')
 
-@login_required
 def logout_view(request):
-    """Custom logout view"""
-    user_name = request.user.get_display_name()
-    logout(request)
-    messages.info(request, f'Goodbye {user_name}! You have been logged out.')
-    return redirect('users:login')
+    """Custom logout view with PMC themed template"""
+    user_name = None
+    user_role = None
+    
+    # Get user info before logout if authenticated
+    if request.user.is_authenticated:
+        user_name = request.user.get_display_name()
+        user_role = request.user.role
+        logout(request)
+    
+    # Context for template
+    context = {
+        'user_name': user_name,
+        'user_role': user_role,
+        'logout_time': timezone.now()
+    }
+    
+    return render(request, 'users/logged_out.html', context)
 
 # Dashboard Views
 @admin_required

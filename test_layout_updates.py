@@ -57,7 +57,7 @@ def test_layout_updates():
         
         # Test login page
         print("\n🔐 Testing Login Page Layout...")
-        login_response = client.get('/accounts/login/')
+        login_response = client.get('/users/login/')
         print(f"   Status: {login_response.status_code}")
         
         if login_response.status_code == 200:

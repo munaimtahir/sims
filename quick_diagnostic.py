@@ -45,7 +45,7 @@ def main():
     print("DIAGNOSTIC COMPLETE")
     print("="*60)
     print("Server should be running at: http://127.0.0.1:8000")
-    print("Login page: http://127.0.0.1:8000/accounts/login/")
+    print("Login page: http://127.0.0.1:8000/users/login/")
     print("Admin dashboard: http://127.0.0.1:8000/users/admin_dashboard/")
 
 if __name__ == "__main__":

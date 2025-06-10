@@ -1,0 +1,276 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Profile - {{ profile.user.get_full_name }} - SIMS{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'users:user_list' %}">Users</a></li>
+        <li class="breadcrumb-item active">{{ profile.user.get_full_name }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Profile Overview -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    {% if profile.avatar %}
+                    <img src="{{ profile.avatar.url }}" alt="{{ profile.user.get_full_name }}" 
+                         class="rounded-circle mb-3" width="120" height="120" style="object-fit: cover;">
+                    {% else %}
+                    <div class="avatar-placeholder rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                         style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 2.5rem;">
+                        {{ profile.user.first_name.0|upper }}{{ profile.user.last_name.0|upper }}
+                    </div>
+                    {% endif %}
+                    
+                    <h5 class="card-title">{{ profile.user.get_full_name }}</h5>
+                    <p class="card-text text-muted">{{ profile.get_role_display }}</p>
+                    
+                    {% if profile.user.email %}
+                    <p class="card-text">
+                        <i class="fas fa-envelope me-2"></i>
+                        <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a>
+                    </p>
+                    {% endif %}
+                    
+                    {% if profile.phone %}
+                    <p class="card-text">
+                        <i class="fas fa-phone me-2"></i>
+                        {{ profile.phone }}
+                    </p>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2 justify-content-center">
+                        {% if request.user == profile.user or request.user.is_staff %}
+                        <a href="{% url 'users:profile_edit' %}" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit me-1"></i>Edit Profile
+                        </a>
+                        {% endif %}
+                        {% if request.user.is_staff and profile.user != request.user %}
+                        <a href="{% url 'users:user_edit' profile.user.pk %}" class="btn btn-outline-secondary btn-sm">
+                            <i class="fas fa-cog me-1"></i>Admin Edit
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Card -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>Status
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6">
+                            <div class="border-end">
+                                <h6 class="mb-1">Account</h6>
+                                <span class="badge {{ profile.user.is_active|yesno:'badge-success,badge-danger' }}">
+                                    {{ profile.user.is_active|yesno:'Active,Inactive' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h6 class="mb-1">Joined</h6>
+                            <small class="text-muted">{{ profile.user.date_joined|date:"M Y" }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Information -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-user me-2"></i>Personal Information
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Basic Information</h6>
+                            <table class="table table-sm">
+                                <tr>
+                                    <td class="fw-bold">First Name:</td>
+                                    <td>{{ profile.user.first_name|default:"Not provided" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Last Name:</td>
+                                    <td>{{ profile.user.last_name|default:"Not provided" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Username:</td>
+                                    <td>{{ profile.user.username }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Email:</td>
+                                    <td>{{ profile.user.email|default:"Not provided" }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Role:</td>
+                                    <td>
+                                        <span class="badge badge-{{ profile.role }}">
+                                            {{ profile.get_role_display }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="fw-bold">Professional Information</h6>
+                            <table class="table table-sm">
+                                {% if profile.employee_id %}
+                                <tr>
+                                    <td class="fw-bold">Employee ID:</td>
+                                    <td>{{ profile.employee_id }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if profile.department %}
+                                <tr>
+                                    <td class="fw-bold">Department:</td>
+                                    <td>{{ profile.department }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if profile.designation %}
+                                <tr>
+                                    <td class="fw-bold">Designation:</td>
+                                    <td>{{ profile.designation }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if profile.specialization %}
+                                <tr>
+                                    <td class="fw-bold">Specialization:</td>
+                                    <td>{{ profile.specialization }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if profile.year_of_residency %}
+                                <tr>
+                                    <td class="fw-bold">Year of Residency:</td>
+                                    <td>{{ profile.year_of_residency }}</td>
+                                </tr>
+                                {% endif %}
+                            </table>
+                        </div>
+                    </div>
+
+                    {% if profile.bio %}
+                    <div class="mt-3">
+                        <h6 class="fw-bold">Biography</h6>
+                        <p class="text-muted">{{ profile.bio|linebreaks }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Activity Summary -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-chart-line me-2"></i>Activity Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h5 class="text-primary mb-1">{{ profile.user.logbook_entries.count }}</h5>
+                                <small class="text-muted">Logbook Entries</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h5 class="text-success mb-1">{{ profile.user.cases.count }}</h5>
+                                <small class="text-muted">Cases</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="border-end">
+                                <h5 class="text-info mb-1">{{ profile.user.certificates.count }}</h5>
+                                <small class="text-muted">Certificates</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <h5 class="text-warning mb-1">{{ profile.user.rotations.count }}</h5>
+                            <small class="text-muted">Rotations</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            {% if recent_activities %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-clock me-2"></i>Recent Activity
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="list-group list-group-flush">
+                        {% for activity in recent_activities|slice:":5" %}
+                        <div class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <i class="fas fa-{{ activity.icon }} me-2 text-{{ activity.color }}"></i>
+                                {{ activity.description }}
+                            </div>
+                            <small class="text-muted">{{ activity.created_at|timesince }} ago</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.badge-pg { background-color: #007bff; }
+.badge-supervisor { background-color: #28a745; }
+.badge-admin { background-color: #dc3545; }
+.badge-staff { background-color: #6f42c1; }
+
+.badge-success { background-color: #28a745; }
+.badge-danger { background-color: #dc3545; }
+
+.avatar-placeholder {
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+.table td {
+    border: none;
+    padding: 0.5rem 0;
+}
+
+.table td.fw-bold {
+    width: 40%;
+}
+
+.border-end {
+    border-right: 1px solid #dee2e6 !important;
+}
+
+@media (max-width: 768px) {
+    .border-end {
+        border-right: none !important;
+        border-bottom: 1px solid #dee2e6 !important;
+        margin-bottom: 1rem;
+        padding-bottom: 1rem;
+    }
+}
+</style>
+{% endblock %}

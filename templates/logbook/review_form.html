@@ -1,0 +1,224 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Review Logbook Entry - SIMS{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'logbook:list' %}">Logbook</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'logbook:detail' entry.pk %}">{{ entry.title|truncatechars:30 }}</a></li>
+        <li class="breadcrumb-item active">Review</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Entry Summary -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-book-medical me-2"></i>
+                        Entry Summary
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-bold">{{ entry.title }}</h6>
+                    <p class="text-muted small mb-2">{{ entry.date|date:"F d, Y" }}</p>
+                    
+                    <div class="mb-3">
+                        <strong>Category:</strong> {{ entry.category.name }}<br>
+                        <strong>Complexity:</strong> 
+                        <span class="badge badge-{{ entry.complexity|default:'secondary' }}">
+                            {{ entry.get_complexity_display }}
+                        </span><br>
+                        <strong>Current Status:</strong> 
+                        <span class="badge badge-{{ entry.status|default:'secondary' }}">
+                            {{ entry.get_status_display }}
+                        </span>
+                    </div>
+
+                    {% if entry.learning_objectives %}
+                    <div class="mb-3">
+                        <strong>Learning Objectives:</strong>
+                        <p class="small text-muted">{{ entry.learning_objectives|truncatechars:200 }}</p>
+                    </div>
+                    {% endif %}
+
+                    {% if entry.reflection %}
+                    <div class="mb-3">
+                        <strong>Student Reflection:</strong>
+                        <p class="small text-muted">{{ entry.reflection|truncatechars:200 }}</p>
+                    </div>
+                    {% endif %}
+
+                    <a href="{% url 'logbook:detail' entry.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye me-1"></i>View Full Entry
+                    </a>
+                </div>
+            </div>
+
+            {% if entry.logbook_reviews.exists %}
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-comments me-2"></i>
+                        Previous Reviews
+                    </h6>
+                </div>
+                <div class="card-body">
+                    {% for review in entry.logbook_reviews.all|slice:":3" %}
+                    <div class="border-bottom pb-2 mb-2">
+                        <div class="d-flex justify-content-between">
+                            <small class="fw-bold">{{ review.reviewer.get_full_name }}</small>
+                            <small class="text-muted">{{ review.created_at|date:"M d" }}</small>
+                        </div>
+                        <p class="small mb-1">{{ review.comments|truncatechars:100 }}</p>
+                        {% if review.rating %}
+                        <div class="rating-stars small">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="fas fa-star text-warning"></i>
+                                {% else %}
+                                    <i class="far fa-star text-muted"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Review Form -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-clipboard-check me-2"></i>
+                        Submit Review
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.rating|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.status|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        {{ form.comments|as_crispy_field }}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form.strengths|as_crispy_field }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form.areas_for_improvement|as_crispy_field }}
+                            </div>
+                        </div>
+
+                        {{ form.learning_objectives_met|as_crispy_field }}
+                        {{ form.competencies_demonstrated|as_crispy_field }}
+                        {{ form.recommendations|as_crispy_field }}
+
+                        {% if form.attachments %}
+                        <div class="mb-3">
+                            {{ form.attachments|as_crispy_field }}
+                            <small class="text-muted">
+                                Attach any supporting documents, images, or feedback materials (Max 10MB each)
+                            </small>
+                        </div>
+                        {% endif %}
+
+                        {{ form.is_final_review|as_crispy_field }}
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'logbook:detail' entry.pk %}" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                            </a>
+                            <div>
+                                <button type="submit" name="action" value="save_draft" class="btn btn-outline-primary me-2">
+                                    <i class="fas fa-save me-2"></i>Save Draft
+                                </button>
+                                <button type="submit" name="action" value="submit_review" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-2"></i>Submit Review
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.rating-stars {
+    font-size: 0.9rem;
+}
+
+.badge-simple { background-color: #28a745; }
+.badge-moderate { background-color: #ffc107; color: #212529; }
+.badge-complex { background-color: #fd7e14; }
+.badge-highly_complex { background-color: #dc3545; }
+
+.badge-draft { background-color: #6c757d; }
+.badge-submitted { background-color: #17a2b8; }
+.badge-approved { background-color: #28a745; }
+.badge-needs_revision { background-color: #ffc107; color: #212529; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Auto-save functionality
+    let autoSaveTimeout;
+    $('form textarea, form input').on('input', function() {
+        clearTimeout(autoSaveTimeout);
+        autoSaveTimeout = setTimeout(function() {
+            // Auto-save draft logic could go here
+            console.log('Auto-saving draft...');
+        }, 5000);
+    });
+
+    // Rating stars interaction
+    $('.rating-select').on('change', function() {
+        const rating = $(this).val();
+        $(this).next('.rating-display').html(
+            Array.from({length: 5}, (_, i) => 
+                `<i class="fas fa-star ${i < rating ? 'text-warning' : 'text-muted'}"></i>`
+            ).join('')
+        );
+    });
+
+    // Form validation
+    $('form').on('submit', function(e) {
+        const action = $(e.originalEvent.submitter).val();
+        if (action === 'submit_review') {
+            if (!$('#id_comments').val().trim()) {
+                e.preventDefault();
+                alert('Please provide comments before submitting the review.');
+                $('#id_comments').focus();
+                return false;
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

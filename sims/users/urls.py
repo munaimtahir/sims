@@ -11,7 +11,7 @@ urlpatterns = [
         redirect_authenticated_user=True
     ), name='login'),
     
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('logout/', views.logout_view, name='logout'),
     
     path('password-change/', auth_views.PasswordChangeView.as_view(
         template_name='users/password_change.html',
@@ -21,6 +21,22 @@ urlpatterns = [
     path('password-change/done/', auth_views.PasswordChangeDoneView.as_view(
         template_name='users/password_change_done.html'
     ), name='password_change_done'),
+      # Password Reset URLs (moved from accounts/)
+    path('password-reset/', auth_views.PasswordResetView.as_view(
+        template_name='users/password_reset.html',
+        success_url='/users/password-reset/done/'
+    ), name='password_reset'),
+      path('password-reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='users/password_reset_done.html'
+    ), name='password_reset_done'),
+      path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='users/password_reset_confirm.html',
+        success_url='/users/password-reset-complete/'
+    ), name='password_reset_confirm'),
+    
+    path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='users/password_reset_complete.html'
+    ), name='password_reset_complete'),
     
     # Dashboard URLs (role-based)
     path('dashboard/', views.DashboardRedirectView.as_view(), name='dashboard'),
@@ -46,12 +62,12 @@ urlpatterns = [
     path('supervisors/', views.SupervisorListView.as_view(), name='supervisor_list'),
     path('supervisor/<int:pk>/pgs/', views.SupervisorPGsView.as_view(), name='supervisor_pgs'),
     path('assign-supervisor/', views.AssignSupervisorView.as_view(), name='assign_supervisor'),
-    
-    # PG Management
+      # PG Management
     path('pgs/', views.PGListView.as_view(), name='pg_list'),
     path('pgs/bulk-upload/', views.PGBulkUploadView.as_view(), name='pg_bulk_upload'),
     path('pg/<int:pk>/progress/', views.PGProgressView.as_view(), name='pg_progress'),
-      # Reports and Analytics
+    
+    # Reports and Analytics
     path('reports/', views.UserReportsView.as_view(), name='user_reports'),
     path('reports/export/', views.UserExportView.as_view(), name='user_export'),
     path('activity-log/', views.ActivityLogView.as_view(), name='activity_log'),
