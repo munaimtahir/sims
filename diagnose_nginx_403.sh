@@ -52,10 +52,10 @@ echo ""
 echo "4. 🌐 NETWORK & PORTS CHECK"
 echo "----------------------------------------"
 echo "Port 80 status:"
-sudo netstat -tulpn | grep :80
+ss -tulpn | grep :80
 echo ""
 echo "Server listening status:"
-sudo ss -tulpn | grep :80
+ss -tulpn | grep :80
 echo ""
 
 # 5. Check logs for errors

@@ -59,10 +59,10 @@ else
 fi
 
 # Check if ports are available
-if sudo netstat -tulpn | grep -q ":80 "; then
+if ss -tulpn | grep -q ":80 "; then
     echo "⚠️  Port 80 is already in use"
     echo "📋 You may need to stop the existing service"
-    sudo netstat -tulpn | grep ":80 "
+    ss -tulpn | grep ":80 "
 else
     echo "✅ Port 80 is available"
 fi
