@@ -68,9 +68,26 @@ sudo chmod -R 775 /var/www/sims_project/logs
 sudo chmod 664 /var/www/sims_project/db.sqlite3
 
 echo "⚙️ Setting up Nginx and Gunicorn..."
-# Stop any existing services
+# Check what's using port 80
+echo "🔍 Checking port 80 usage..."
+if ss -tulpn | grep -q ":80 "; then
+    echo "📋 Port 80 is in use. Checking services..."
+    ss -tulpn | grep ":80 "
+    
+    # Stop common web servers that might conflict
+    echo "🛑 Stopping conflicting services..."
+    sudo systemctl stop apache2 2>/dev/null && echo "   ✅ Stopped Apache2" || echo "   ℹ️  Apache2 not running"
+    sudo systemctl stop nginx 2>/dev/null && echo "   ✅ Stopped Nginx" || echo "   ℹ️  Nginx not running"
+    
+    # Disable Apache2 to prevent conflicts
+    if systemctl is-enabled --quiet apache2 2>/dev/null; then
+        echo "🔧 Disabling Apache2 to prevent startup conflicts..."
+        sudo systemctl disable apache2
+    fi
+fi
+
+# Stop any existing SIMS services
 sudo systemctl stop sims 2>/dev/null || true
-sudo systemctl stop nginx 2>/dev/null || true
 
 # Remove any existing socket files
 sudo rm -f /var/www/sims_project/sims.sock
