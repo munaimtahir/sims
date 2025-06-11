@@ -142,9 +142,8 @@ class Migration(migrations.Migration):
         migrations.AddIndex(
             model_name='certificate',
             index=models.Index(fields=['issuing_organization'], name='certificate_issuing_bdd5c9_idx'),
-        ),
-        migrations.AddConstraint(
+        ),        migrations.AddConstraint(
             model_name='certificate',
-            constraint=models.CheckConstraint(condition=models.Q(('expiry_date__isnull', True), ('expiry_date__gt', models.F('issue_date')), _connector='OR'), name='certificate_expiry_after_issue'),
+            constraint=models.CheckConstraint(check=models.Q(('expiry_date__isnull', True), ('expiry_date__gt', models.F('issue_date')), _connector='OR'), name='certificate_expiry_after_issue'),
         ),
     ]

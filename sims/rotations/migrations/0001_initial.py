@@ -143,10 +143,9 @@ class Migration(migrations.Migration):
         migrations.AddIndex(
             model_name='rotation',
             index=models.Index(fields=['hospital'], name='rotations_r_hospita_4571f1_idx'),
-        ),
-        migrations.AddConstraint(
+        ),        migrations.AddConstraint(
             model_name='rotation',
-            constraint=models.CheckConstraint(condition=models.Q(('end_date__gt', models.F('start_date'))), name='rotation_end_after_start'),
+            constraint=models.CheckConstraint(check=models.Q(('end_date__gt', models.F('start_date'))), name='rotation_end_after_start'),
         ),
         migrations.AddIndex(
             model_name='rotationevaluation',
@@ -163,10 +162,9 @@ class Migration(migrations.Migration):
         migrations.AddIndex(
             model_name='rotationevaluation',
             index=models.Index(fields=['created_at'], name='rotations_r_created_a4ace7_idx'),
-        ),
-        migrations.AddConstraint(
+        ),        migrations.AddConstraint(
             model_name='rotationevaluation',
-            constraint=models.CheckConstraint(condition=models.Q(('score__gte', 0), ('score__lte', 100)), name='evaluation_score_range'),
+            constraint=models.CheckConstraint(check=models.Q(('score__gte', 0), ('score__lte', 100)), name='evaluation_score_range'),
         ),
         migrations.AlterUniqueTogether(
             name='rotationevaluation',

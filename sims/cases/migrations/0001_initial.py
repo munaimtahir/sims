@@ -167,13 +167,12 @@ class Migration(migrations.Migration):
             model_name='clinicalcase',
             index=models.Index(fields=['created_at'], name='cases_clini_created_4d9739_idx'),
         ),
-        migrations.AddConstraint(
-            model_name='clinicalcase',
-            constraint=models.CheckConstraint(condition=models.Q(('date_encountered__lte', datetime.date(2025, 5, 30))), name='case_date_not_future'),
+        migrations.AddConstraint(            model_name='clinicalcase',
+            constraint=models.CheckConstraint(check=models.Q(('date_encountered__lte', datetime.date(2025, 5, 30))), name='case_date_not_future'),
         ),
         migrations.AddConstraint(
             model_name='clinicalcase',
-            constraint=models.CheckConstraint(condition=models.Q(('patient_age__gte', 0), ('patient_age__lte', 150)), name='case_valid_age'),
+            constraint=models.CheckConstraint(check=models.Q(('patient_age__gte', 0), ('patient_age__lte', 150)), name='case_valid_age'),
         ),
         migrations.AlterUniqueTogether(
             name='casereview',

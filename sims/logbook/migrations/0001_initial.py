@@ -277,12 +277,11 @@ class Migration(migrations.Migration):
             model_name='logbookentry',
             index=models.Index(fields=['created_at'], name='logbook_log_created_2b3be3_idx'),
         ),
-        migrations.AddConstraint(
-            model_name='logbookentry',
-            constraint=models.CheckConstraint(condition=models.Q(('date__lte', datetime.date(2025, 5, 30))), name='logbook_entry_date_not_future'),
+        migrations.AddConstraint(            model_name='logbookentry',
+            constraint=models.CheckConstraint(check=models.Q(('date__lte', datetime.date(2025, 5, 30))), name='logbook_entry_date_not_future'),
         ),
         migrations.AddConstraint(
             model_name='logbookentry',
-            constraint=models.CheckConstraint(condition=models.Q(('patient_age__gte', 0), ('patient_age__lte', 150)), name='logbook_entry_valid_age'),
+            constraint=models.CheckConstraint(check=models.Q(('patient_age__gte', 0), ('patient_age__lte', 150)), name='logbook_entry_valid_age'),
         ),
     ]
