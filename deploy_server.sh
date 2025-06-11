@@ -5,8 +5,20 @@
 echo "🚀 SIMS Deployment Script for Nginx Server 172.236.152.35"
 echo "=========================================================="
 
+# Check if running as root or with sudo
+if [[ $EUID -eq 0 ]]; then
+   echo "⚠️  This script should not be run as root directly. Use a regular user with sudo access."
+   exit 1
+fi
+
+# Update system packages
+echo "📦 Updating system packages..."
+sudo apt update
+sudo apt install -y nginx python3-venv python3-pip python3-dev build-essential
+
 # Set working directory
-cd /var/www/sims_project
+echo "📁 Navigating to project directory..."
+cd /var/www/sims_project || { echo "❌ Project directory not found. Please upload your project files first."; exit 1; }
 
 echo "📁 Setting up directories..."
 # Create necessary directories
@@ -15,6 +27,12 @@ mkdir -p staticfiles
 mkdir -p media
 mkdir -p logs
 mkdir -p backups
+
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "🐍 Creating virtual environment..."
+    python3 -m venv venv
+fi
 
 echo "🔐 Setting environment variables..."
 # Set environment variables for production
@@ -50,6 +68,13 @@ sudo chmod -R 775 /var/www/sims_project/logs
 sudo chmod 664 /var/www/sims_project/db.sqlite3
 
 echo "⚙️ Setting up Nginx and Gunicorn..."
+# Stop any existing services
+sudo systemctl stop sims 2>/dev/null || true
+sudo systemctl stop nginx 2>/dev/null || true
+
+# Remove any existing socket files
+sudo rm -f /var/www/sims_project/sims.sock
+
 # Copy Nginx configuration
 sudo cp nginx_sims.conf /etc/nginx/sites-available/sims
 sudo ln -sf /etc/nginx/sites-available/sims /etc/nginx/sites-enabled/
@@ -68,13 +93,46 @@ sudo nginx -t
 python manage.py check --deploy
 
 echo "🚀 Starting services..."
-# Start SIMS service
+# Start SIMS service first
 sudo systemctl start sims
 
-# Restart Nginx
+# Wait a moment for service to start
+sleep 3
+
+# Check if SIMS service started successfully
+if sudo systemctl is-active --quiet sims; then
+    echo "✅ SIMS service started successfully"
+else
+    echo "❌ SIMS service failed to start"
+    echo "📋 Checking logs:"
+    sudo journalctl -u sims -n 10 --no-pager
+    exit 1
+fi
+
+# Start Nginx
 sudo systemctl restart nginx
 
+# Check if Nginx started successfully
+if sudo systemctl is-active --quiet nginx; then
+    echo "✅ Nginx started successfully"
+else
+    echo "❌ Nginx failed to start"
+    echo "📋 Checking logs:"
+    sudo journalctl -u nginx -n 10 --no-pager
+    exit 1
+fi
+
 echo "✅ Deployment complete!"
+echo ""
+echo "🔍 Final checks..."
+# Check socket file
+if [ -S "/var/www/sims_project/sims.sock" ]; then
+    echo "✅ Gunicorn socket created successfully"
+    ls -la /var/www/sims_project/sims.sock
+else
+    echo "⚠️  Socket file not found, checking service status..."
+    sudo systemctl status sims --no-pager
+fi
 echo ""
 echo "🌐 Access your SIMS system at:"
 echo "   Homepage: http://172.236.152.35/"

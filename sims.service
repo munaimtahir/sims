@@ -14,6 +14,7 @@ Environment="PATH=/var/www/sims_project/venv/bin"
 Environment="SECRET_KEY=your-production-secret-key"
 Environment="DEBUG=False"
 Environment="ALLOWED_HOSTS=172.236.152.35,localhost,127.0.0.1"
+Environment="DJANGO_SETTINGS_MODULE=sims_project.settings"
 ExecStart=/var/www/sims_project/venv/bin/gunicorn \
           --config /var/www/sims_project/gunicorn.conf.py \
           sims_project.wsgi:application
