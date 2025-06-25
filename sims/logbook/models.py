@@ -964,7 +964,11 @@ class LogbookReview(models.Model):
         return f"Review of {self.logbook_entry.case_title or 'Entry'} by {self.reviewer.get_full_name() if self.reviewer else 'N/A'}"
     
     def clean(self):
-        if (self.reviewer and self.logbook_entry and
+        super().clean()
+        
+        # Only validate if all required fields are present
+        if (hasattr(self, 'reviewer') and self.reviewer and 
+            hasattr(self, 'logbook_entry') and self.logbook_entry and
             self.reviewer.role == SUPERVISOR_ROLE_STRING): # Use constant
             # Ensure the reviewer is the assigned supervisor of the entry's PG
             # This check assumes LogbookEntry.supervisor is correctly populated from PG.supervisor

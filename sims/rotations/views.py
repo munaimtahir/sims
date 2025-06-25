@@ -542,21 +542,36 @@ class BulkRotationAssignmentView(LoginRequiredMixin, RotationAccessMixin, FormVi
     success_url = reverse_lazy('rotations:list')
     
     def test_func(self):
-        """Only admins can do bulk assignments"""
+        """Allow admins and supervisors to do bulk assignments"""
         return (super().test_func() and 
-                self.request.user.role == 'admin')
+                self.request.user.role in ['admin', 'supervisor'])
+    
+    def get_form_kwargs(self):
+        """Pass user to form"""
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
     
     def form_valid(self, form):
         """Process bulk assignment"""
         created_count = 0
         
         try:
+            # For supervisors, ensure they can only create rotations for their PGs
+            supervisor = form.cleaned_data['supervisor']
+            if self.request.user.role == 'supervisor':
+                supervisor = self.request.user
+            
             for pg in form.cleaned_data['pgs']:
+                # Additional permission check for supervisors
+                if self.request.user.role == 'supervisor' and pg.supervisor != self.request.user:
+                    continue  # Skip PGs not supervised by current user
+                
                 rotation = Rotation.objects.create(
                     pg=pg,
                     department=form.cleaned_data['department'],
                     hospital=form.cleaned_data['hospital'],
-                    supervisor=form.cleaned_data['supervisor'],
+                    supervisor=supervisor,
                     start_date=form.cleaned_data['start_date'],
                     end_date=form.cleaned_data['end_date'],
                     objectives=form.cleaned_data['objectives'],

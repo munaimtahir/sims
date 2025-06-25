@@ -449,6 +449,19 @@ class LogbookReviewForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         
+        # Set up field labels
+        self.fields['status'].label = "Review Decision"
+        self.fields['feedback'].label = "Overall Feedback"
+        self.fields['strengths_identified'].label = "Strengths Demonstrated"
+        self.fields['areas_for_improvement'].label = "Areas for Improvement"
+        self.fields['recommendations'].label = "Recommendations for Future Learning"
+        self.fields['clinical_knowledge_score'].label = "Clinical Knowledge (1-10)"
+        self.fields['clinical_skills_score'].label = "Clinical Skills (1-10)"
+        self.fields['professionalism_score'].label = "Professionalism (1-10)"
+        self.fields['overall_score'].label = "Overall Performance (1-10)"
+        self.fields['review_date'].label = "Review Date"
+        self.fields['follow_up_required'].label = "Follow-up Discussion Required"
+        
         if self.user and self.entry:
             self._setup_field_requirements()
         
@@ -478,11 +491,12 @@ class LogbookReviewForm(forms.ModelForm):
     def _setup_status_choices(self):
         """Setup status choices based on entry status"""
         if self.entry:
-            if self.entry.status == 'submitted':
+            if self.entry.status in ['pending', 'submitted']:
                 status_choices = [
                     ('pending', 'Keep Pending'),
                     ('approved', 'Approve'),
                     ('needs_revision', 'Needs Revision'),
+                    ('rejected', 'Reject'),
                 ]
             else:
                 status_choices = LogbookReview.STATUS_CHOICES
@@ -1085,15 +1099,103 @@ class LogbookComplianceReportForm(forms.Form):
 
 # New form for PG logbook entry creation as per feature requirements
 class PGLogbookEntryForm(forms.ModelForm):
+    # Additional fields that can be stored in extra fields or handled separately
+    specialty = forms.ChoiceField(
+        choices=[
+            ('general_medicine', 'General Medicine'),
+            ('surgery', 'Surgery'),
+            ('pediatrics', 'Pediatrics'),
+            ('obstetrics_gynecology', 'Obstetrics & Gynecology'),
+            ('psychiatry', 'Psychiatry'),
+            ('radiology', 'Radiology'),
+            ('pathology', 'Pathology'),
+            ('anesthesiology', 'Anesthesiology'),
+            ('emergency_medicine', 'Emergency Medicine'),
+            ('family_medicine', 'Family Medicine'),
+            ('internal_medicine', 'Internal Medicine'),
+            ('cardiology', 'Cardiology'),
+            ('neurology', 'Neurology'),
+            ('orthopedics', 'Orthopedics'),
+            ('dermatology', 'Dermatology'),
+            ('ophthalmology', 'Ophthalmology'),
+            ('ent', 'ENT'),
+            ('urology', 'Urology'),
+            ('oncology', 'Oncology'),
+            ('other', 'Other'),
+        ],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    clinical_setting = forms.ChoiceField(
+        choices=[
+            ('inpatient', 'Inpatient Ward'),
+            ('outpatient', 'Outpatient Clinic'),
+            ('emergency', 'Emergency Department'),
+            ('icu', 'Intensive Care Unit'),
+            ('operating_room', 'Operating Room'),
+            ('laboratory', 'Laboratory'),
+            ('radiology', 'Radiology Department'),
+            ('community', 'Community Setting'),
+            ('other', 'Other'),
+        ],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    competency_level = forms.ChoiceField(
+        choices=[
+            ('1', 'Level 1 - Novice'),
+            ('2', 'Level 2 - Beginner'),
+            ('3', 'Level 3 - Competent'),
+            ('4', 'Level 4 - Proficient'),
+            ('5', 'Level 5 - Expert'),
+        ],
+        required=False,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    # Fields for procedures and investigations (as text for now)
+    procedure_performed = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Procedures performed or observed during this case...'})
+    )
+    
+    secondary_diagnosis = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 'placeholder': 'Secondary or differential diagnoses...'})
+    )
+    
+    management_plan = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control', 'placeholder': 'Treatment plan and management decisions...'})
+    )
+    
+    cme_points = forms.DecimalField(
+        required=False,
+        max_digits=4,
+        decimal_places=1,
+        widget=forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5', 'min': '0'})
+    )
+
     class Meta:
         model = LogbookEntry
         fields = [
             'case_title',
             'date',
             'location_of_activity',
+            'patient_age',
+            'patient_gender',
+            'patient_chief_complaint',
             'patient_history_summary', # Corresponds to "Brief history"
+            'primary_diagnosis',
             'management_action',
             'topic_subtopic',
+            'learning_points',
+            'challenges_faced',
+            'follow_up_required',
+            'self_assessment_score',
+            'investigations_ordered',
         ]
         widgets = {
             'date': forms.DateInput(
@@ -1105,14 +1207,41 @@ class PGLogbookEntryForm(forms.ModelForm):
             'location_of_activity': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'E.g., Ward A, OPD Clinic 2, Emergency Room'}
             ),
+            'patient_age': forms.NumberInput(
+                attrs={'class': 'form-control', 'min': 0, 'max': 150, 'placeholder': 'Patient age in years'}
+            ),
+            'patient_gender': forms.Select(
+                attrs={'class': 'form-control'}
+            ),
+            'patient_chief_complaint': forms.Textarea(
+                attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Patient\'s main presenting complaint...'}
+            ),
             'patient_history_summary': forms.Textarea(
                 attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Brief relevant history of the patient'}
+            ),
+            'primary_diagnosis': forms.Select(
+                attrs={'class': 'form-control'}
             ),
             'management_action': forms.Textarea(
                 attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Management actions taken'}
             ),
             'topic_subtopic': forms.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'E.g., Cardiology/Arrhythmia'}
+            ),
+            'learning_points': forms.Textarea(
+                attrs={'rows': 4, 'class': 'form-control', 'placeholder': 'Key learning points from this case...'}
+            ),
+            'challenges_faced': forms.Textarea(
+                attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Difficulties encountered and how addressed...'}
+            ),
+            'follow_up_required': forms.Textarea(
+                attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Follow-up actions or further learning needed...'}
+            ),
+            'self_assessment_score': forms.NumberInput(
+                attrs={'class': 'form-control', 'min': 1, 'max': 10, 'placeholder': 'Rate your performance (1-10)'}
+            ),
+            'investigations_ordered': forms.Textarea(
+                attrs={'rows': 3, 'class': 'form-control', 'placeholder': 'Laboratory tests, imaging, and other investigations...'}
             ),
         }
 
@@ -1123,18 +1252,49 @@ class PGLogbookEntryForm(forms.ModelForm):
         if not self.initial.get('date'):
             self.fields['date'].initial = timezone.now().date()
 
+        # Set up querysets for foreign key fields
+        if 'primary_diagnosis' in self.fields:
+            self.fields['primary_diagnosis'].queryset = Diagnosis.objects.filter(is_active=True).order_by('name')
+            self.fields['primary_diagnosis'].empty_label = "Select primary diagnosis..."
+
+        # Field requirements
         self.fields['case_title'].required = True
         self.fields['date'].required = True
         self.fields['location_of_activity'].required = True
         self.fields['patient_history_summary'].required = True
         self.fields['management_action'].required = True
         self.fields['topic_subtopic'].required = False
+        
+        # New field requirements
+        self.fields['patient_age'].required = False
+        self.fields['patient_gender'].required = False
+        self.fields['patient_chief_complaint'].required = False
+        self.fields['primary_diagnosis'].required = False
+        self.fields['learning_points'].required = False
+        self.fields['challenges_faced'].required = False
+        self.fields['follow_up_required'].required = False
+        self.fields['self_assessment_score'].required = False
+        self.fields['investigations_ordered'].required = False
 
     def clean_date(self):
         date = self.cleaned_data.get('date')
         if date and date > timezone.now().date():
             raise ValidationError("The date cannot be in the future.")
         return date
+    
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        
+        # Handle custom fields that aren't directly in the model
+        if hasattr(self, 'cleaned_data'):
+            # Store custom fields in a temporary way or handle them differently
+            # For now, we'll just save the model fields
+            pass
+            
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
 
 class PGLogbookEntryEditForm(forms.ModelForm):
     supervisor_feedback_display = forms.CharField(
@@ -1226,4 +1386,79 @@ class SupervisorLogbookReviewForm(forms.Form):
             self.add_error('supervisor_comment', 'Comments are required when rejecting or returning an entry for edits.')
 
         return cleaned_data
+
+class SupervisorBulkActionForm(forms.Form):
+    """Form for selecting entries and action for bulk review"""
+    BULK_ACTION_CHOICES = [
+        ('', '---------'),
+        ('approve', 'Approve Selected'),
+        ('reject', 'Reject Selected'),
+        ('return', 'Return for Revision'),
+    ]
+    
+    entry_ids = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        required=True,
+        label="Select Entries"
+    )
+    
+    action = forms.ChoiceField(
+        choices=BULK_ACTION_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+    
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 
+                                   'placeholder': 'Optional comment for all selected entries...'}),
+        required=False,
+        label="Comment (Optional)"
+    )
+    
+    def __init__(self, *args, **kwargs):
+        entries = kwargs.pop('entries', None)
+        super().__init__(*args, **kwargs)
+        
+        if entries:
+            self.fields['entry_ids'].choices = [
+                (entry.id, f"{entry.pg.get_full_name()} - {entry.case_title[:50]}{'...' if len(entry.case_title) > 50 else ''}")
+                for entry in entries
+            ]
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        action = cleaned_data.get('action')
+        comment = cleaned_data.get('comment')
+        entry_ids = cleaned_data.get('entry_ids')
+        
+        if not entry_ids:
+            self.add_error('entry_ids', 'Please select at least one entry.')
+        
+        if action in ['reject', 'return'] and not comment:
+            self.add_error('comment', 'Comment is required when rejecting or returning entries.')
+        
+        return cleaned_data
+
+class SupervisorBulkApproveForm(forms.Form):
+    """Simplified form for bulk approval"""
+    entry_ids = forms.CharField(widget=forms.HiddenInput())
+    action = forms.CharField(initial='approve', widget=forms.HiddenInput())
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 2, 'class': 'form-control', 
+                                   'placeholder': 'Optional approval comment...'}),
+        required=False,
+        label="Approval Comment (Optional)"
+    )
+
+class SupervisorBulkRejectForm(forms.Form):
+    """Form for bulk rejection with required feedback"""
+    entry_ids = forms.CharField(widget=forms.HiddenInput())
+    action = forms.CharField(initial='reject', widget=forms.HiddenInput())
+    comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 3, 'class': 'form-control', 
+                                   'placeholder': 'Please provide reason for rejection...'}),
+        required=True,
+        label="Rejection Reason (Required)"
+    )
+
 # --- Appended Forms End ---

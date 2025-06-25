@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.views.generic import (
-    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
+    ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView, RedirectView
 )
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy, reverse
@@ -28,7 +28,7 @@ from .forms import (
     LogbookEntryCreateForm, LogbookEntryUpdateForm, LogbookReviewForm,
     LogbookSearchForm, LogbookFilterForm, BulkLogbookActionForm,
     QuickLogbookEntryForm, LogbookTemplateForm, PGLogbookEntryForm, PGLogbookEntryEditForm, # Added EditForm
-    SupervisorLogbookReviewForm
+    SupervisorLogbookReviewForm, SupervisorBulkActionForm, SupervisorBulkApproveForm, SupervisorBulkRejectForm
 )
 
 User = get_user_model()
@@ -97,7 +97,7 @@ class LogbookEntryListView(LoginRequiredMixin, LogbookAccessMixin, ListView):
     def get_queryset(self):
         """Filter entries based on user role and search parameters"""
         queryset = LogbookEntry.objects.select_related(
-            'pg', 'rotation__department', 'primary_diagnosis', 'supervisor', 'template'
+            'pg', 'rotation__department', 'primary_diagnosis', 'supervisor'
         ).prefetch_related('procedures', 'skills', 'secondary_diagnoses', 'reviews')
         
         # Role-based filtering
@@ -161,7 +161,7 @@ class LogbookEntryListView(LoginRequiredMixin, LogbookAccessMixin, ListView):
         if pg_filter:
             if self.request.user.role == 'supervisor':
                 # Ensure supervisor can only filter their own PGs
-                if self.request.user.supervised_pgs.filter(id=pg_filter).exists():
+                if self.request.user.assigned_pgs.filter(id=pg_filter).exists():
                     queryset = queryset.filter(pg_id=pg_filter)
             elif self.request.user.role == 'admin':
                 queryset = queryset.filter(pg_id=pg_filter)
@@ -178,7 +178,7 @@ class LogbookEntryListView(LoginRequiredMixin, LogbookAccessMixin, ListView):
         # Review status filter
         review_filter = self.request.GET.get('review_status')
         if review_filter == 'pending':
-            queryset = queryset.filter(status='submitted')
+            queryset = queryset.filter(status='pending')
         elif review_filter == 'reviewed':
             queryset = queryset.filter(reviews__isnull=False).distinct()
         elif review_filter == 'unreviewed':
@@ -213,16 +213,16 @@ class LogbookEntryListView(LoginRequiredMixin, LogbookAccessMixin, ListView):
             context['supervisors'] = User.objects.filter(role='supervisor', is_active=True)
             context['pgs'] = User.objects.filter(role='pg', is_active=True)
         elif self.request.user.role == 'supervisor':
-            context['pgs'] = self.request.user.supervised_pgs.filter(is_active=True)
+            context['pgs'] = self.request.user.assigned_pgs.filter(is_active=True)
         
         # Add statistics
         entries = self.get_queryset()
         context['stats'] = {
             'total': entries.count(),
             'draft': entries.filter(status='draft').count(),
-            'submitted': entries.filter(status='submitted').count(),
+            'pending': entries.filter(status='pending').count(),
             'approved': entries.filter(status='approved').count(),
-            'needs_revision': entries.filter(status='needs_revision').count(),
+            'needs_revision': entries.filter(status='returned').count(),
             'overdue': entries.filter(
                 status='draft',
                 date__lt=timezone.now().date() - timedelta(days=7)
@@ -429,8 +429,8 @@ class LogbookEntryCreateView(LoginRequiredMixin, LogbookAccessMixin, CreateView)
         if 'save_and_continue' in self.request.POST:
             return reverse('logbook:edit', kwargs={'pk': self.object.pk})
         elif 'save_and_submit' in self.request.POST:
-            # Change status to submitted
-            self.object.status = 'submitted'
+            # Change status to pending
+            self.object.status = 'pending'
             self.object.save()
             messages.info(self.request, "Entry submitted for review")
             return reverse('logbook:detail', kwargs={'pk': self.object.pk})
@@ -492,8 +492,8 @@ class LogbookEntryUpdateView(LoginRequiredMixin, LogbookAccessMixin, UpdateView)
         if 'save_and_continue' in self.request.POST:
             return reverse('logbook:edit', kwargs={'pk': self.object.pk})
         elif 'save_and_submit' in self.request.POST:
-            # Change status to submitted
-            self.object.status = 'submitted'
+            # Change status to pending
+            self.object.status = 'pending'
             self.object.save()
             messages.info(self.request, "Entry submitted for review")
             return reverse('logbook:detail', kwargs={'pk': self.object.pk})
@@ -557,7 +557,7 @@ class LogbookReviewCreateView(LoginRequiredMixin, LogbookAccessMixin, CreateView
         elif request.user.role != 'admin':
             raise PermissionDenied("You don't have permission to review entries")
         
-        if self.entry.status != 'submitted':
+        if self.entry.status not in ['pending', 'submitted']:
             raise PermissionDenied("This entry is not ready for review")
         
         # Check if user has already reviewed this entry
@@ -576,6 +576,15 @@ class LogbookReviewCreateView(LoginRequiredMixin, LogbookAccessMixin, CreateView
         kwargs['entry'] = self.entry
         kwargs['user'] = self.request.user
         return kwargs
+    
+    def get_form(self, form_class=None):
+        """Get form and pre-populate reviewer for validation"""
+        form = super().get_form(form_class)
+        # Set reviewer on the form instance so model validation can access it
+        if hasattr(form, 'instance'):
+            form.instance.logbook_entry = self.entry
+            form.instance.reviewer = self.request.user
+        return form
     
     def form_valid(self, form):
         """Set entry and reviewer fields"""
@@ -650,9 +659,9 @@ class LogbookDashboardView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
         context['stats'] = {
             'total_entries': entries.count(),
             'draft_entries': entries.filter(status='draft').count(),
-            'submitted_entries': entries.filter(status='submitted').count(),
+            'pending_entries': entries.filter(status='pending').count(),
             'approved_entries': entries.filter(status='approved').count(),
-            'revision_entries': entries.filter(status='needs_revision').count(),
+            'revision_entries': entries.filter(status='returned').count(),
             'overdue_entries': entries.filter(
                 status='draft',
                 date__lt=today - timedelta(days=7)
@@ -667,7 +676,7 @@ class LogbookDashboardView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
         # Pending reviews (for supervisors and admins)
         if user.role in ['admin', 'supervisor']:
             context['pending_reviews'] = entries.filter(
-                status='submitted'
+                status='pending'
             ).select_related('pg', 'primary_diagnosis')[:5]
         
         # Overdue entries
@@ -777,7 +786,7 @@ class LogbookDashboardView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
     
     def get_supervisor_metrics(self, supervisor):
         """Calculate metrics for supervisor"""
-        pgs = supervisor.supervised_pgs.filter(is_active=True)
+        pgs = supervisor.assigned_pgs.filter(is_active=True)
         all_entries = LogbookEntry.objects.filter(pg__in=pgs)
         
         metrics = {
@@ -785,7 +794,7 @@ class LogbookDashboardView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
             'active_pgs': pgs.filter(
                 logbook_entries__date__gte=timezone.now().date() - timedelta(days=30)
             ).distinct().count(),
-            'pending_reviews': all_entries.filter(status='submitted').count(),
+            'pending_reviews': all_entries.filter(status='pending').count(),
             'average_review_time': 0,
             'pg_performance': [],
         }
@@ -808,7 +817,7 @@ class LogbookDashboardView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
                 'pg': pg,
                 'total_entries': pg_entries.count(),
                 'approved_entries': pg_entries.filter(status='approved').count(),
-                'pending_entries': pg_entries.filter(status='submitted').count(),
+                'pending_entries': pg_entries.filter(status='pending').count(),
                 'last_entry': pg_entries.order_by('-date').first(),
             }
             metrics['pg_performance'].append(pg_data)
@@ -925,7 +934,7 @@ class BulkLogbookActionView(LoginRequiredMixin, LogbookAccessMixin, FormView):
                     continue
                 
                 if action == 'approve':
-                    if entry.status == 'submitted':
+                    if entry.status == 'pending':
                         entry.status = 'approved'
                         entry.verified_by = self.request.user
                         entry.verified_at = timezone.now()
@@ -933,8 +942,8 @@ class BulkLogbookActionView(LoginRequiredMixin, LogbookAccessMixin, FormView):
                         processed_count += 1
                 
                 elif action == 'request_revision':
-                    if entry.status == 'submitted':
-                        entry.status = 'needs_revision'
+                    if entry.status == 'pending':
+                        entry.status = 'returned'
                         entry.save()
                         processed_count += 1
                 
@@ -1140,7 +1149,7 @@ class LogbookAnalyticsView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
             pgs = User.objects.filter(role='pg', is_active=True)
         elif user.role == 'supervisor':
             entries = LogbookEntry.objects.filter(pg__supervisor=user)
-            pgs = user.supervised_pgs.filter(is_active=True)
+            pgs = user.assigned_pgs.filter(is_active=True)
         else:
             entries = LogbookEntry.objects.none()
             pgs = User.objects.none()
@@ -1170,7 +1179,7 @@ class LogbookAnalyticsView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
         }).values('month').annotate(
             total=Count('id'),
             approved=Count('id', filter=Q(status='approved')),
-            submitted=Count('id', filter=Q(status='submitted')),
+            pending=Count('id', filter=Q(status='pending')),
             draft=Count('id', filter=Q(status='draft'))
         ).order_by('month')
     
@@ -1275,7 +1284,7 @@ class LogbookAnalyticsView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
 class PGLogbookEntryCreateView(LoginRequiredMixin, PGRequiredMixin, CreateView):
     model = LogbookEntry
     form_class = PGLogbookEntryForm
-    template_name = 'logbook/pg_logbook_entry_form.html' # Needs to be created
+    template_name = 'logbook/pg_logbook_entry_form_enhanced.html' # Updated to use enhanced template
     # success_url will be defined in get_success_url or by reversing a named URL for PG's list view
 
     def get_form_kwargs(self):
@@ -1381,8 +1390,8 @@ class PGLogbookEntryUpdateView(LoginRequiredMixin, PGRequiredMixin, UpdateView):
         # For now, resaving a draft keeps it draft. Resaving 'returned' makes it 'pending'.
         if original_status == 'returned':
             entry.status = 'pending'
-            # entry.submitted_to_supervisor_at = timezone.now() # Model's save method will handle this
-            # entry.supervisor_action_at = None # Model's save method will handle this
+            # entry.submitted_to_supervisor_at = timezone.now() # Model's save will handle this
+            # entry.supervisor_action_at = None # Model's save will handle this
             messages.success(self.request, f"Logbook entry '{entry.case_title}' has been updated and resubmitted for supervisor review.")
         elif original_status == 'draft':
             # Retain draft status, or add a "Submit" button to change to 'pending'
@@ -1442,6 +1451,112 @@ class SupervisorLogbookDashboardView(LoginRequiredMixin, SupervisorRequiredMixin
         # Optionally, add counts of other statuses for context if needed
         # context['approved_count'] = LogbookEntry.objects.filter(supervisor=self.request.user, status='approved').count()
         # context['returned_count'] = LogbookEntry.objects.filter(supervisor=self.request.user, status='returned').count()
+        return context
+
+class SupervisorLogbookAllEntriesView(LoginRequiredMixin, SupervisorRequiredMixin, ListView):
+    """
+    Comprehensive view for supervisors to see all entries from their assigned PGs
+    with filtering and review capabilities.
+    """
+    model = LogbookEntry
+    template_name = 'logbook/supervisor_all_entries.html'
+    context_object_name = 'entries'
+    paginate_by = 20
+    
+    def get_queryset(self):
+        """Get all entries from assigned PGs with filtering"""
+        queryset = LogbookEntry.objects.filter(
+            pg__supervisor=self.request.user
+        ).select_related(
+            'pg', 'rotation__department', 'primary_diagnosis', 'supervisor'
+        ).prefetch_related('procedures', 'skills', 'secondary_diagnoses', 'reviews')
+        
+        # Apply filters similar to main LogbookEntryListView
+        # Status filter
+        status_filter = self.request.GET.get('status')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+        
+        # PG filter (for this supervisor's PGs only)
+        pg_filter = self.request.GET.get('pg')
+        if pg_filter:
+            if self.request.user.assigned_pgs.filter(id=pg_filter).exists():
+                queryset = queryset.filter(pg_id=pg_filter)
+        
+        # Date range filter
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+        if start_date:
+            queryset = queryset.filter(date__gte=start_date)
+        if end_date:
+            queryset = queryset.filter(date__lte=end_date)
+        
+        # Review status filter
+        review_status = self.request.GET.get('review_status')
+        if review_status == 'pending':
+            queryset = queryset.filter(status='pending')
+        elif review_status == 'reviewed':
+            queryset = queryset.filter(status__in=['approved', 'rejected', 'returned'])
+        elif review_status == 'needs_action':
+            queryset = queryset.filter(status__in=['pending', 'returned'])
+        
+        # Search functionality
+        search_query = self.request.GET.get('search')
+        if search_query:
+            queryset = queryset.filter(
+                Q(case_title__icontains=search_query) |
+                Q(pg__first_name__icontains=search_query) |
+                Q(pg__last_name__icontains=search_query) |
+                Q(patient_chief_complaint__icontains=search_query) |
+                Q(primary_diagnosis__name__icontains=search_query) |
+                Q(learning_points__icontains=search_query)
+            )
+        
+        # Sorting
+        sort_by = self.request.GET.get('sort', '-submitted_to_supervisor_at')
+        valid_sort_fields = [
+            'date', '-date', 'created_at', '-created_at', 
+            'submitted_to_supervisor_at', '-submitted_to_supervisor_at',
+            'status', 'pg__last_name', 'case_title'
+        ]
+        if sort_by in valid_sort_fields:
+            queryset = queryset.order_by(sort_by)
+        else:
+            queryset = queryset.order_by('-submitted_to_supervisor_at', '-date')
+        
+        return queryset
+    
+    def get_context_data(self, **kwargs):
+        """Add context for filtering and statistics"""
+        context = super().get_context_data(**kwargs)
+        
+        # Add assigned PGs for filtering
+        context['assigned_pgs'] = self.request.user.assigned_pgs.filter(is_active=True)
+        
+        # Add statistics for supervisor dashboard
+        all_entries = LogbookEntry.objects.filter(pg__supervisor=self.request.user)
+        context['stats'] = {
+            'total': all_entries.count(),
+            'pending': all_entries.filter(status='pending').count(),
+            'approved': all_entries.filter(status='approved').count(),
+            'rejected': all_entries.filter(status='rejected').count(),
+            'returned': all_entries.filter(status='returned').count(),
+            'draft': all_entries.filter(status='draft').count(),
+        }
+        
+        # Add current filters for display
+        context['current_filters'] = {
+            'status': self.request.GET.get('status', ''),
+            'pg': self.request.GET.get('pg', ''),
+            'start_date': self.request.GET.get('start_date', ''),
+            'end_date': self.request.GET.get('end_date', ''),
+            'review_status': self.request.GET.get('review_status', ''),
+            'search': self.request.GET.get('search', ''),
+            'sort': self.request.GET.get('sort', '-submitted_to_supervisor_at'),
+        }
+        
+        context['page_title'] = "All Logbook Entries - My PGs"
+        
         return context
 
 # --- Supervisor Review Action View ---
@@ -1520,3 +1635,86 @@ class SupervisorLogbookReviewActionView(LoginRequiredMixin, SupervisorRequiredMi
         # entry = self.get_logbook_entry()
         # return {'supervisor_comment': entry.supervisor_feedback}
         return super().get_initial()
+
+class LogbookEntryCreateRedirectView(LoginRequiredMixin, RedirectView):
+    """Redirect /logbook/entry/create/ to /logbook/entry/new/"""
+    permanent = True
+    
+    def get_redirect_url(self, *args, **kwargs):
+        return reverse_lazy('logbook:entry_new')
+
+class SupervisorBulkReviewView(LoginRequiredMixin, SupervisorRequiredMixin, FormView):
+    """
+    Allow supervisors to perform bulk review actions on multiple entries
+    """
+    template_name = 'logbook/supervisor_bulk_review.html'
+    
+    def get_form_class(self):
+        """Return different form based on action"""
+        action = self.request.POST.get('action', self.request.GET.get('action'))
+        if action == 'bulk_approve':
+            return SupervisorBulkApproveForm
+        elif action == 'bulk_reject':
+            return SupervisorBulkRejectForm
+        else:
+            return SupervisorBulkActionForm
+    
+    def get_queryset(self):
+        """Get entries that can be bulk reviewed"""
+        return LogbookEntry.objects.filter(
+            pg__supervisor=self.request.user,
+            status='pending'
+        ).select_related('pg', 'primary_diagnosis')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pending_entries'] = self.get_queryset()
+        context['page_title'] = "Bulk Review Logbook Entries"
+        return context
+    
+    def form_valid(self, form):
+        """Process bulk review actions"""
+        entry_ids = form.cleaned_data.get('entry_ids', [])
+        action = form.cleaned_data.get('action')
+        comment = form.cleaned_data.get('comment', '')
+        
+        entries = self.get_queryset().filter(id__in=entry_ids)
+        
+        if not entries.exists():
+            messages.error(self.request, "No valid entries selected for review.")
+            return self.form_invalid(form)
+        
+        updated_count = 0
+        
+        for entry in entries:
+            if action == 'approve':
+                entry.status = 'approved'
+                entry.supervisor_feedback = comment or f"Bulk approved by {self.request.user.get_full_name()}"
+                entry.verified_by = self.request.user
+                entry.supervisor_action_at = timezone.now()
+                entry.save()
+                updated_count += 1
+                
+            elif action == 'reject':
+                entry.status = 'rejected'
+                entry.supervisor_feedback = comment or "Rejected in bulk review"
+                entry.supervisor_action_at = timezone.now()
+                entry.save()
+                updated_count += 1
+                
+            elif action == 'return':
+                entry.status = 'returned'
+                entry.supervisor_feedback = comment or "Returned for revision in bulk review"
+                entry.supervisor_action_at = timezone.now()
+                entry.save()
+                updated_count += 1
+        
+        if updated_count > 0:
+            messages.success(
+                self.request, 
+                f"Successfully {action}d {updated_count} logbook entries."
+            )
+        else:
+            messages.warning(self.request, "No entries were updated.")
+        
+        return redirect('logbook:supervisor_logbook_dashboard')

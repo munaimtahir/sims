@@ -110,40 +110,184 @@
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.rating|as_crispy_field }}
+                        {% if not form %}
+                            <div class="alert alert-danger">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                Form is not available. Please try again or contact support.
                             </div>
-                            <div class="col-md-6">
-                                {{ form.status|as_crispy_field }}
+                        {% else %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if form.overall_score %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.overall_score.id_for_label }}" class="form-label">{{ form.overall_score.label }}</label>
+                                            {{ form.overall_score }}
+                                            {% if form.overall_score.help_text %}
+                                                <div class="form-text">{{ form.overall_score.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.overall_score.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.overall_score.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning">Overall score field not available</div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if form.status %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.status.id_for_label }}" class="form-label">{{ form.status.label }}</label>
+                                            {{ form.status }}
+                                            {% if form.status.help_text %}
+                                                <div class="form-text">{{ form.status.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.status.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.status.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning">Status field not available</div>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-
-                        {{ form.comments|as_crispy_field }}
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.strengths|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.areas_for_improvement|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        {{ form.learning_objectives_met|as_crispy_field }}
-                        {{ form.competencies_demonstrated|as_crispy_field }}
-                        {{ form.recommendations|as_crispy_field }}
-
-                        {% if form.attachments %}
-                        <div class="mb-3">
-                            {{ form.attachments|as_crispy_field }}
-                            <small class="text-muted">
-                                Attach any supporting documents, images, or feedback materials (Max 10MB each)
-                            </small>
-                        </div>
                         {% endif %}
 
-                        {{ form.is_final_review|as_crispy_field }}
+                        {% if form and form.feedback %}
+                            <div class="mb-3">
+                                <label for="{{ form.feedback.id_for_label }}" class="form-label">{{ form.feedback.label }}</label>
+                                {{ form.feedback }}
+                                {% if form.feedback.help_text %}
+                                    <div class="form-text">{{ form.feedback.help_text }}</div>
+                                {% endif %}
+                                {% if form.feedback.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.feedback.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if form %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if form.strengths_identified %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.strengths_identified.id_for_label }}" class="form-label">{{ form.strengths_identified.label }}</label>
+                                            {{ form.strengths_identified }}
+                                            {% if form.strengths_identified.help_text %}
+                                                <div class="form-text">{{ form.strengths_identified.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.strengths_identified.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.strengths_identified.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if form.areas_for_improvement %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.areas_for_improvement.id_for_label }}" class="form-label">{{ form.areas_for_improvement.label }}</label>
+                                            {{ form.areas_for_improvement }}
+                                            {% if form.areas_for_improvement.help_text %}
+                                                <div class="form-text">{{ form.areas_for_improvement.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.areas_for_improvement.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.areas_for_improvement.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+                                    {% if form.clinical_knowledge_score %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.clinical_knowledge_score.id_for_label }}" class="form-label">{{ form.clinical_knowledge_score.label }}</label>
+                                            {{ form.clinical_knowledge_score }}
+                                            {% if form.clinical_knowledge_score.help_text %}
+                                                <div class="form-text">{{ form.clinical_knowledge_score.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.clinical_knowledge_score.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.clinical_knowledge_score.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if form.clinical_skills_score %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.clinical_skills_score.id_for_label }}" class="form-label">{{ form.clinical_skills_score.label }}</label>
+                                            {{ form.clinical_skills_score }}
+                                            {% if form.clinical_skills_score.help_text %}
+                                                <div class="form-text">{{ form.clinical_skills_score.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.clinical_skills_score.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.clinical_skills_score.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    {% if form.professionalism_score %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.professionalism_score.id_for_label }}" class="form-label">{{ form.professionalism_score.label }}</label>
+                                            {{ form.professionalism_score }}
+                                            {% if form.professionalism_score.help_text %}
+                                                <div class="form-text">{{ form.professionalism_score.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.professionalism_score.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.professionalism_score.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            {% if form.recommendations %}
+                                <div class="mb-3">
+                                    <label for="{{ form.recommendations.id_for_label }}" class="form-label">{{ form.recommendations.label }}</label>
+                                    {{ form.recommendations }}
+                                    {% if form.recommendations.help_text %}
+                                        <div class="form-text">{{ form.recommendations.help_text }}</div>
+                                    {% endif %}
+                                    {% if form.recommendations.errors %}
+                                        <div class="invalid-feedback d-block">{{ form.recommendations.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    {% if form.review_date %}
+                                        <div class="mb-3">
+                                            <label for="{{ form.review_date.id_for_label }}" class="form-label">{{ form.review_date.label }}</label>
+                                            {{ form.review_date }}
+                                            {% if form.review_date.help_text %}
+                                                <div class="form-text">{{ form.review_date.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.review_date.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.review_date.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-6">
+                                    {% if form.follow_up_required %}
+                                        <div class="mb-3">
+                                            <div class="form-check">
+                                                {{ form.follow_up_required }}
+                                                <label for="{{ form.follow_up_required.id_for_label }}" class="form-check-label">{{ form.follow_up_required.label }}</label>
+                                            </div>
+                                            {% if form.follow_up_required.help_text %}
+                                                <div class="form-text">{{ form.follow_up_required.help_text }}</div>
+                                            {% endif %}
+                                            {% if form.follow_up_required.errors %}
+                                                <div class="invalid-feedback d-block">{{ form.follow_up_required.errors }}</div>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
 
                         <div class="d-flex justify-content-between mt-4">
                             <a href="{% url 'logbook:detail' entry.pk %}" class="btn btn-secondary">

@@ -339,7 +339,7 @@ $(document).ready(function() {
 
 function loadStatistics() {
     // Load general statistics
-    $.get('{% url "users:api_pg_statistics" %}')
+    $.get('{% url "users:user_list_stats_api" %}')
         .done(function(data) {
             $('#specialtyCount').text(data.specialty_count || 0);
             $('#newThisMonth').text(data.new_this_month || 0);
@@ -351,7 +351,7 @@ function loadStatistics() {
 
 function loadPGProgress(pgId) {
     // Load individual PG progress
-    $.get(`{% url "users:api_pg_progress" 0 %}`.replace('0', pgId))
+    $.get(`{% url "users:user_stats_api" 0 %}`.replace('0', pgId))
         .done(function(data) {
             const progressPercent = data.overall_progress || 0;
             $(`#progress-${pgId}`).text(`${progressPercent}%`);

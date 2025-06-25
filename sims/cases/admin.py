@@ -344,7 +344,7 @@ class CaseStatisticsAdmin(admin.ModelAdmin):
                 return qs.filter(pg=request.user)
             elif request.user.role == 'supervisor':
                 # Supervisors can see statistics for PGs they supervise
-                supervised_pgs = request.user.supervised_rotations.values_list('residents', flat=True)
+                supervised_pgs = request.user.assigned_pgs.values_list('id', flat=True)
                 return qs.filter(pg__in=supervised_pgs)
         
         return qs

@@ -101,9 +101,9 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'logbook:supervisor_logbook_dashboard' %}" class="btn btn-danger w-100">
+                            <button class="btn btn-secondary w-100" disabled title="Logbook functionality coming soon">
                                 <i class="fas fa-clipboard-check me-2"></i>Review Logbooks
-                            </a>
+                            </button>
                         </div>
                         <div class="col-md-3 mb-2">
                             <a href="{% url 'users:supervisor_analytics' %}" class="btn btn-success w-100">
@@ -325,7 +325,7 @@ $(document).ready(function() {
 
 function loadDashboardStats() {
     $.ajax({
-        url: '{% url "users:user_stats_api" %}',
+        url: '{% url "users:user_stats_api" user.pk %}',
         method: 'GET',
         success: function(data) {
             $('#completedReviews').text(data.completed_reviews || 0);
@@ -341,45 +341,29 @@ function loadDashboardStats() {
 }
 
 function loadPendingReviews() {
+    // TODO: Replace with actual pending reviews API when logbook app is implemented
     $.ajax({
-        url: '{% url "logbook:logbook_stats_api" %}',
+        url: '{% url "users:user_list_stats_api" %}',
         method: 'GET',
         success: function(data) {
             const container = $('#pendingReviewsList');
             container.empty();
             
-            if (data.pending_reviews && data.pending_reviews.length > 0) {
-                data.pending_reviews.forEach(function(review) {
-                    const item = `
-                        <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
-                            <div>
-                                <small class="fw-bold">${review.type}</small>
-                                <br>
-                                <small class="text-muted">${review.pg_name}</small>
-                            </div>
-                            <div class="text-end">
-                                <small class="text-muted">${review.time_ago}</small>
-                                <br>
-                                <a href="${review.url}" class="btn btn-sm btn-outline-primary">Review</a>
-                            </div>
-                        </div>
-                    `;
-                    container.append(item);
-                });
-            } else {
-                container.html(`
-                    <div class="text-center py-3">
-                        <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
-                        <p class="text-muted mb-0">No pending reviews</p>
-                    </div>
-                `);
-            }
+            // Show placeholder message for now
+            container.html(`
+                <div class="text-center text-muted p-3">
+                    <i class="fas fa-clock fa-2x mb-2"></i>
+                    <p>Pending reviews will appear here when logbook functionality is implemented.</p>
+                </div>
+            `);
         },
         error: function() {
-            $('#pendingReviewsList').html(`
-                <div class="text-center py-3">
-                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
-                    <p class="text-muted mb-0">Failed to load pending reviews</p>
+            console.error('Failed to load pending reviews');
+            const container = $('#pendingReviewsList');
+            container.html(`
+                <div class="text-center text-muted p-3">
+                    <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+                    <p>Unable to load pending reviews at this time.</p>
                 </div>
             `);
         }

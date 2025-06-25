@@ -258,24 +258,41 @@ class User(AbstractUser):
         }
         return role_classes.get(self.role, 'badge-secondary')
     
-    # Statistics methods (for analytics)    def get_documents_pending_count(self):
+    # Statistics methods (for analytics)
+    def get_documents_pending_count(self):
         """Get count of documents pending review (for supervisors)"""
         if not self.is_supervisor():
             return 0
         
         count = 0
-        # Import here to avoid circular imports
-        from sims.certificates.models import Certificate
-        from sims.rotations.models import Rotation
-        from sims.logbook.models import LogbookEntry
-        from sims.cases.models import ClinicalCase
-        
-        # Count pending documents assigned to this supervisor
-        for pg in self.get_assigned_pgs():
-            count += Certificate.objects.filter(pg=pg, status='pending').count()
-            count += Rotation.objects.filter(pg=pg, status='pending').count()
-            count += LogbookEntry.objects.filter(pg=pg, status='pending').count()
-            count += ClinicalCase.objects.filter(pg=pg, status='pending').count()
+        try:
+            # Import here to avoid circular imports
+            from django.apps import apps
+            
+            # Check if apps exist before importing
+            if apps.is_installed('sims.certificates'):
+                from sims.certificates.models import Certificate
+                for pg in self.get_assigned_pgs():
+                    count += Certificate.objects.filter(pg=pg, status='pending').count()
+            
+            if apps.is_installed('sims.rotations'):
+                from sims.rotations.models import Rotation
+                for pg in self.get_assigned_pgs():
+                    count += Rotation.objects.filter(pg=pg, status='pending').count()
+            
+            if apps.is_installed('sims.logbook'):
+                from sims.logbook.models import LogbookEntry
+                for pg in self.get_assigned_pgs():
+                    count += LogbookEntry.objects.filter(pg=pg, status='pending').count()
+            
+            if apps.is_installed('sims.cases'):
+                from sims.cases.models import ClinicalCase
+                for pg in self.get_assigned_pgs():
+                    count += ClinicalCase.objects.filter(pg=pg, status='pending').count()
+                    
+        except ImportError:
+            # Handle case where related models don't exist yet
+            pass
         
         return count
     
@@ -283,16 +300,31 @@ class User(AbstractUser):
         """Get count of documents submitted by this PG"""
         if not self.is_pg():
             return 0
-          # Import here to avoid circular imports
-        from sims.certificates.models import Certificate
-        from sims.rotations.models import Rotation
-        from sims.logbook.models import LogbookEntry
-        from sims.cases.models import ClinicalCase
         
         count = 0
-        count += Certificate.objects.filter(pg=self).count()
-        count += Rotation.objects.filter(pg=self).count()
-        count += LogbookEntry.objects.filter(pg=self).count()
-        count += ClinicalCase.objects.filter(pg=self).count()
+        try:
+            # Import here to avoid circular imports
+            from django.apps import apps
+            
+            # Check if apps exist before importing
+            if apps.is_installed('sims.certificates'):
+                from sims.certificates.models import Certificate
+                count += Certificate.objects.filter(pg=self).count()
+            
+            if apps.is_installed('sims.rotations'):
+                from sims.rotations.models import Rotation
+                count += Rotation.objects.filter(pg=self).count()
+            
+            if apps.is_installed('sims.logbook'):
+                from sims.logbook.models import LogbookEntry
+                count += LogbookEntry.objects.filter(pg=self).count()
+            
+            if apps.is_installed('sims.cases'):
+                from sims.cases.models import ClinicalCase
+                count += ClinicalCase.objects.filter(pg=self).count()
+                
+        except ImportError:
+            # Handle case where related models don't exist yet
+            pass
         
         return count

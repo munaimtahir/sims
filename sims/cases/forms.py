@@ -34,6 +34,21 @@ class CaseCategoryForm(forms.ModelForm):
 class ClinicalCaseForm(forms.ModelForm):
     """Form for creating and editing clinical cases"""
     
+    def __init__(self, *args, **kwargs):
+        # Extract user from kwargs if provided
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        # Filter supervisors and rotations based on user context if needed
+        if self.user and hasattr(self.user, 'role'):
+            if self.user.role == 'pg':
+                # For PG users, limit supervisor choices to their actual supervisors
+                if hasattr(self.user, 'supervisor') and self.user.supervisor:
+                    self.fields['supervisor'].queryset = self.fields['supervisor'].queryset.filter(
+                        id=self.user.supervisor.id
+                    )
+                    self.fields['supervisor'].initial = self.user.supervisor
+    
     class Meta:
         model = ClinicalCase
         fields = [

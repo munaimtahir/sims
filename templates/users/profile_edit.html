@@ -26,158 +26,77 @@
                     </h5>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" id="profileForm">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="post" id="profileForm">
                         {% csrf_token %}
                         
-                        <!-- Avatar Section -->
+                        <!-- Profile Information -->
                         <div class="row mb-4">
                             <div class="col-md-3 text-center">
-                                <div class="avatar-section">
-                                    {% if form.instance.avatar %}
-                                    <img src="{{ form.instance.avatar.url }}" alt="Current Avatar" 
-                                         id="currentAvatar" class="rounded-circle mb-3" 
-                                         width="120" height="120" style="object-fit: cover;">
-                                    {% else %}
-                                    <div class="avatar-placeholder rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                                         id="avatarPlaceholder"
-                                         style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 2.5rem;">
-                                        {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
-                                    </div>
+                                <div class="avatar-placeholder rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
+                                     style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 2.5rem;">
+                                    {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
+                                </div>
+                                <div class="text-muted small">
+                                    {{ user.get_role_display }}
+                                    {% if user.specialty %}
+                                        <br>{{ user.get_specialty_display }}
                                     {% endif %}
-                                    <div>
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="$('#id_avatar').click()">
-                                            <i class="fas fa-camera me-1"></i>Change Photo
-                                        </button>
-                                        {% if form.instance.avatar %}
-                                        <button type="button" class="btn btn-outline-danger btn-sm ms-2" id="removeAvatar">
-                                            <i class="fas fa-trash me-1"></i>Remove
-                                        </button>
-                                        {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-9">
+                                <!-- Basic Information -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {{ form.first_name|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {{ form.last_name|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    {{ form.email|as_crispy_field }}
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {{ form.phone_number|as_crispy_field }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {{ form.registration_number|as_crispy_field }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-9">
-                                <div style="display: none;">
-                                    {{ form.avatar }}
-                                </div>
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    <strong>Photo Guidelines:</strong>
-                                    <ul class="mb-0 mt-2">
-                                        <li>Use a professional, clear photo</li>
-                                        <li>Maximum file size: 5MB</li>
-                                        <li>Supported formats: JPG, PNG, GIF</li>
-                                        <li>Recommended size: 300x300 pixels</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
 
-                        <!-- Basic Information -->
-                        <h6 class="fw-bold mb-3">Basic Information</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.first_name|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.last_name|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.email|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.phone|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        <!-- Professional Information -->
-                        <h6 class="fw-bold mb-3 mt-4">Professional Information</h6>
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.employee_id|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.department|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.designation|as_crispy_field }}
-                            </div>
-                            <div class="col-md-6">
-                                {{ form.specialization|as_crispy_field }}
-                            </div>
-                        </div>
-
-                        {% if form.year_of_residency %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                {{ form.year_of_residency|as_crispy_field }}
-                            </div>
-                            {% if form.supervisor %}
-                            <div class="col-md-6">
-                                {{ form.supervisor|as_crispy_field }}
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-
-                        <!-- Biography -->
-                        <h6 class="fw-bold mb-3 mt-4">Biography</h6>
-                        {{ form.bio|as_crispy_field }}
-
-                        <!-- Notification Preferences -->
-                        {% if form.email_notifications or form.sms_notifications %}
-                        <h6 class="fw-bold mb-3 mt-4">Notification Preferences</h6>
-                        <div class="row">
-                            {% if form.email_notifications %}
-                            <div class="col-md-6">
-                                {{ form.email_notifications|as_crispy_field }}
-                            </div>
-                            {% endif %}
-                            {% if form.sms_notifications %}
-                            <div class="col-md-6">
-                                {{ form.sms_notifications|as_crispy_field }}
-                            </div>
-                            {% endif %}
-                        </div>
-                        {% endif %}
-
-                        <!-- Save Actions -->
-                        <div class="d-flex justify-content-between mt-4">
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-between">
                             <a href="{% url 'users:profile' %}" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Cancel
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
                             </a>
-                            <div>
-                                <button type="submit" name="action" value="save" class="btn btn-outline-primary me-2">
-                                    <i class="fas fa-save me-2"></i>Save Changes
-                                </button>
-                                <button type="submit" name="action" value="save_and_continue" class="btn btn-primary">
-                                    <i class="fas fa-check me-2"></i>Save & Continue
-                                </button>
-                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Save Changes
+                            </button>
                         </div>
                     </form>
-                </div>
-            </div>
-
-            <!-- Change Password Card -->
-            <div class="card mt-3">
-                <div class="card-header">
-                    <h6 class="card-title mb-0">
-                        <i class="fas fa-lock me-2"></i>
-                        Security
-                    </h6>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Want to change your password or update security settings?</p>
-                    <a href="{% url 'users:password_change' %}" class="btn btn-outline-warning">
-                        <i class="fas fa-key me-2"></i>Change Password
-                    </a>
                 </div>
             </div>
         </div>
@@ -187,174 +106,78 @@
 
 {% block extra_css %}
 <style>
-.avatar-section {
-    position: relative;
-}
-
-.avatar-placeholder {
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-#currentAvatar {
-    border: 3px solid #fff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
-}
-
-.btn-file {
-    position: relative;
-    overflow: hidden;
-}
-
-.btn-file input[type=file] {
-    position: absolute;
-    top: 0;
-    right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
-    text-align: right;
-    filter: alpha(opacity=0);
-    opacity: 0;
-    outline: none;
-    background: white;
-    cursor: inherit;
-    display: block;
-}
-
-.char-counter {
-    font-size: 0.875rem;
-    color: #6c757d;
-}
-
-.char-counter.text-danger {
-    color: #dc3545 !important;
-}
+    .avatar-placeholder {
+        border: 3px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+    }
+    
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+    }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
 $(document).ready(function() {
-    // Avatar preview functionality
-    $('#id_avatar').on('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                if ($('#currentAvatar').length) {
-                    $('#currentAvatar').attr('src', e.target.result);
-                } else {
-                    $('#avatarPlaceholder').replaceWith(
-                        `<img src="${e.target.result}" alt="Avatar Preview" 
-                         id="currentAvatar" class="rounded-circle mb-3" 
-                         width="120" height="120" style="object-fit: cover; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">`
-                    );
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    // Remove avatar functionality
-    $('#removeAvatar').on('click', function() {
-        if (confirm('Are you sure you want to remove your profile photo?')) {
-            $('#currentAvatar').replaceWith(
-                `<div class="avatar-placeholder rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center"
-                     id="avatarPlaceholder"
-                     style="width: 120px; height: 120px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-size: 2.5rem;">
-                    {{ user.first_name.0|upper }}{{ user.last_name.0|upper }}
-                </div>`
-            );
-            $('#id_avatar').val('');
-            $(this).hide();
-        }
-    });
-
-    // Character counter for bio
-    $('#id_bio').on('input', function() {
-        const maxLength = 500;
-        const currentLength = $(this).val().length;
-        const remaining = maxLength - currentLength;
-        
-        if (!$(this).next('.char-counter').length) {
-            $(this).after(`<small class="char-counter"></small>`);
-        }
-        
-        $(this).next('.char-counter')
-               .text(`${remaining} characters remaining`)
-               .toggleClass('text-danger', remaining < 50)
-               .toggleClass('text-muted', remaining >= 50);
-    });
-
-    // Auto-save functionality
-    let autoSaveTimeout;
-    $('#profileForm input, #profileForm textarea, #profileForm select').on('input change', function() {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = setTimeout(function() {
-            // Auto-save logic could go here
-            console.log('Auto-saving profile...');
-        }, 5000);
-    });
-
     // Form validation
     $('#profileForm').on('submit', function(e) {
+        let isValid = true;
+        
+        // Validate required fields
         const firstName = $('#id_first_name').val().trim();
         const lastName = $('#id_last_name').val().trim();
         const email = $('#id_email').val().trim();
         
+        // Clear previous error states
+        $('.is-invalid').removeClass('is-invalid');
+        
         if (!firstName) {
-            e.preventDefault();
-            alert('Please provide your first name.');
+            $('#id_first_name').addClass('is-invalid');
             $('#id_first_name').focus();
-            return false;
+            isValid = false;
         }
         
         if (!lastName) {
-            e.preventDefault();
-            alert('Please provide your last name.');
-            $('#id_last_name').focus();
-            return false;
+            $('#id_last_name').addClass('is-invalid');
+            if (isValid) $('#id_last_name').focus();
+            isValid = false;
         }
         
         if (!email) {
-            e.preventDefault();
-            alert('Please provide your email address.');
-            $('#id_email').focus();
-            return false;
+            $('#id_email').addClass('is-invalid');
+            if (isValid) $('#id_email').focus();
+            isValid = false;
+        } else if (!isValidEmail(email)) {
+            $('#id_email').addClass('is-invalid');
+            if (isValid) $('#id_email').focus();
+            isValid = false;
         }
         
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
+        if (!isValid) {
             e.preventDefault();
-            alert('Please provide a valid email address.');
-            $('#id_email').focus();
             return false;
         }
     });
-
-    // Initialize character counter
-    $('#id_bio').trigger('input');
-
-    // Phone number formatting (basic)
-    $('#id_phone').on('input', function() {
-        let value = $(this).val().replace(/\D/g, '');
-        if (value.length > 0) {
-            if (value.length <= 3) {
-                value = value;
-            } else if (value.length <= 6) {
-                value = value.slice(0, 3) + '-' + value.slice(3);
-            } else {
-                value = value.slice(0, 3) + '-' + value.slice(3, 6) + '-' + value.slice(6, 10);
-            }
-        }
-        $(this).val(value);
+    
+    // Email validation function
+    function isValidEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    // Remove invalid class when user starts typing
+    $('.form-control').on('input', function() {
+        $(this).removeClass('is-invalid');
     });
 });
 </script>

@@ -412,8 +412,44 @@ class UserFilterForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-control form-control-sm'})
     )
 
-# Alias forms for backward compatibility with existing views
-UserProfileForm = ProfileEditForm
+class UserProfileForm(forms.ModelForm):
+    """Form for users to edit their own profile"""
+    
+    class Meta:
+        model = User
+        fields = [
+            'first_name', 'last_name', 'email', 'phone_number', 
+            'registration_number'
+        ]
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'First Name'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Last Name'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Email Address'
+            }),
+            'phone_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Phone Number'
+            }),
+            'registration_number': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Medical Registration Number'
+            })
+        }
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Make email required
+        self.fields['email'].required = True
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
 
 class PGSearchForm(forms.Form):
     """Search form for PG lists"""

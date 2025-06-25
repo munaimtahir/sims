@@ -1,29 +1,53 @@
 {% extends "base/base.html" %}
 {% load humanize %}
-{% load crispy_forms_tags %} {# Assuming crispy_forms is used, or remove if not #}
+{% load crispy_forms_tags %}
 
 {% block title %}
     {{ page_title|default:"My Logbook Entries" }} - {{ block.super }}
 {% endblock title %}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">{{ page_title|default:"My Logbook Entries" }}</h2>
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">My Logbook Entries</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2><i class="fas fa-book me-2"></i>My Logbook Entries</h2>
+        <p class="text-muted">View and manage your clinical logbook entries</p>
+    </div>
+    <div>
         <a href="{% url 'logbook:pg_entry_create' %}" class="btn btn-primary">
             <i class="fas fa-plus me-2"></i>Create New Entry
         </a>
     </div>
+</div>
+{% endblock %}
 
+{% block content %}
+<div class="container-fluid">
     <!-- Status Filters -->
-    <div class="mb-3">
-        <strong class="me-2">Filter by status:</strong>
-        <a href="{% url 'logbook:pg_logbook_list' %}" class="btn btn-sm {% if not current_status_filter %}btn-secondary{% else %}btn-outline-secondary{% endif %} mb-1">All</a>
-        {% for status in status_choices %}
-            <a href="?status={{ status.value }}" class="btn btn-sm {% if current_status_filter == status.value %}btn-secondary{% else %}btn-outline-secondary{% endif %} mb-1">
-                {{ status.display }}
-            </a>
-        {% endfor %}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h6 class="card-title mb-3">
+                <i class="fas fa-filter me-2"></i>Filter by Status
+            </h6>
+            <div class="filter-buttons">
+                <a href="{% url 'logbook:list' %}" class="btn btn-sm {% if not current_status_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    <i class="fas fa-list me-1"></i>All
+                </a>
+                {% for status in status_choices %}
+                    <a href="?status={{ status.value }}" class="btn btn-sm {% if current_status_filter == status.value %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        {{ status.display }}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 
     {% if logbook_entries %}
@@ -45,18 +69,18 @@
                             {% for entry in logbook_entries %}
                                 <tr>
                                     <td>
-                                        <a href="{% url 'logbook:entry_detail' pk=entry.pk %}" title="{{ entry.case_title }}">
+                                        <a href="{% url 'logbook:detail' pk=entry.pk %}" title="{{ entry.case_title }}">
                                             {{ entry.case_title|truncatewords:10 }}
                                         </a>
                                     </td>
                                     <td>{{ entry.date|date:"d M Y" }}</td>
                                     <td>
-                                        <span class.pyenv_version="badge" style="background-color: {{ entry.get_status_color }}; color: #fff;">{{ entry.get_status_display }}</span>
+                                        <span class="badge" style="background-color: {{ entry.get_status_color }}; color: #fff;">{{ entry.get_status_display }}</span>
                                     </td>
                                     <td>{{ entry.supervisor.get_full_name|default:"N/A" }}</td>
                                     <td>{{ entry.updated_at|naturaltime }}</td>
                                     <td>
-                                        <a href="{% url 'logbook:entry_detail' pk=entry.pk %}" class="btn btn-sm btn-outline-info me-1" title="View Details">
+                                        <a href="{% url 'logbook:detail' pk=entry.pk %}" class="btn btn-sm btn-outline-info me-1" title="View Details">
                                             <i class="fas fa-eye"></i> View
                                         </a>
                                         {% if entry.status == 'returned' %}
@@ -122,6 +146,30 @@
     {% endif %}
 </div>
 {% endblock content %}
+
+{% block extra_css %}
+<style>
+    .status-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+    }
+    
+    .table-hover tbody tr:hover {
+        background-color: rgba(0,0,0,.02);
+    }
+    
+    .card {
+        border: none;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    
+    .filter-buttons .btn {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
 
 {% block extra_js %}
 {{ block.super }}

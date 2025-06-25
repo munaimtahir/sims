@@ -71,11 +71,11 @@ class CaseListView(LoginRequiredMixin, ListView):
         date_from = self.request.GET.get('date_from')
         date_to = self.request.GET.get('date_to')
         if date_from:
-            queryset = queryset.filter(date__gte=date_from)
+            queryset = queryset.filter(date_encountered__gte=date_from)
         if date_to:
-            queryset = queryset.filter(date__lte=date_to)
+            queryset = queryset.filter(date_encountered__lte=date_to)
         
-        return queryset.order_by('-date', '-created_at')
+        return queryset.order_by('-date_encountered', '-created_at')
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -333,7 +333,7 @@ def case_statistics_view(request):
         )
         
         # Refresh statistics
-        stats.refresh_statistics()
+        stats.update_statistics()
         stats.save()
         
         context.update({
@@ -354,27 +354,54 @@ def case_statistics_view(request):
             Q(rotation__supervisor=request.user)
         )
         
+        # Get unique PGs supervised by this supervisor
+        supervised_pgs_count = supervised_cases.values('pg').distinct().count()
+        
+        # Create supervisor stats object
+        supervisor_stats = {
+            'total_pgs': supervised_pgs_count,
+            'total_cases': supervised_cases.count(),
+            'pending_reviews': supervised_cases.filter(
+                status__in=['submitted', 'under_review']
+            ).count(),
+        }
+        
         context.update({
+            'supervisor_stats': supervisor_stats,
             'total_supervised_cases': supervised_cases.count(),
             'pending_reviews': supervised_cases.filter(
                 status__in=['submitted', 'under_review']
             ).count(),
             'recent_submissions': supervised_cases.filter(
                 status='submitted'
-            ).order_by('-submitted_at')[:10],
+            ).order_by('-created_at')[:10],
             'case_stats_by_status': supervised_cases.values('status').annotate(
                 count=Count('id')
             ),
             'average_scores': supervised_cases.filter(
-                completion_score__isnull=False
-            ).aggregate(avg_score=Avg('completion_score')),
+                supervisor_assessment_score__isnull=False
+            ).aggregate(avg_score=Avg('supervisor_assessment_score')),
         })
     
     elif request.user.role == 'admin':
         # Admin dashboard - system-wide statistics
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        
         total_cases = ClinicalCase.objects.all()
+        total_pgs = User.objects.filter(role='pg', is_active=True).count()
+        total_supervisors = User.objects.filter(role='supervisor', is_active=True).count()
+        pending_reviews = total_cases.filter(status__in=['submitted', 'under_review']).count()
+        
+        system_stats = {
+            'total_cases': total_cases.count(),
+            'total_pgs': total_pgs,
+            'total_supervisors': total_supervisors,
+            'pending_reviews': pending_reviews,
+        }
         
         context.update({
+            'system_stats': system_stats,
             'total_cases': total_cases.count(),
             'cases_by_status': total_cases.values('status').annotate(
                 count=Count('id')
@@ -383,9 +410,10 @@ def case_statistics_view(request):
                 'category__name', 'category__color_code'
             ).annotate(count=Count('id')),
             'recent_activity': total_cases.order_by('-created_at')[:10],
-            'top_performers': CaseStatistics.objects.filter(
-                total_cases__gt=0
-            ).order_by('-average_score')[:10],
+            'top_performers': total_cases.values('pg__first_name', 'pg__last_name').annotate(
+                case_count=Count('id'),
+                avg_score=Avg('supervisor_assessment_score')
+            ).filter(case_count__gt=0).order_by('-case_count')[:10],
         })
     
     return render(request, 'cases/statistics.html', context)

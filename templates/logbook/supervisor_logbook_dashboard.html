@@ -9,11 +9,29 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0"><i class="fas fa-clipboard-check me-2"></i>{{ page_title|default:"Pending Logbook Reviews" }}</h2>
-        {# Optional: Link to view all entries they supervise, not just pending #}
-        {# <a href="{% url 'logbook:supervisor_all_entries_list' %}" class="btn btn-outline-secondary">View All My PG Entries</a> #}
+        <div>
+            <a href="{% url 'logbook:supervisor_all_entries' %}" class="btn btn-outline-secondary me-2">
+                <i class="fas fa-list me-2"></i>View All Entries
+            </a>
+            <a href="{% url 'logbook:list' %}" class="btn btn-outline-primary">
+                <i class="fas fa-search me-2"></i>Advanced Search
+            </a>
+        </div>
     </div>
 
     {% if pending_entries %}
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="alert alert-info mb-0 flex-grow-1 me-3" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                You have {{ pending_entries|length }} logbook entries pending review.
+            </div>
+            {% if pending_entries|length > 1 %}
+                <a href="{% url 'logbook:supervisor_bulk_review' %}" class="btn btn-warning">
+                    <i class="fas fa-tasks me-2"></i>Bulk Review ({{ pending_entries|length }})
+                </a>
+            {% endif %}
+        </div>
+
         <div class="card shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">

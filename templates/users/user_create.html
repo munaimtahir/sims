@@ -4,7 +4,6 @@
 {% block title %}Create User - SIMS{% endblock %}
 
 {% block extra_css %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 <style>
     .form-container {
@@ -89,7 +88,7 @@
         </div>
 
         <!-- User Creation Form -->
-        <form method="post" id="userCreateForm">
+        <form method="post" id="userCreateForm" novalidate>
             {% csrf_token %}
             
             <!-- Role Selection -->
@@ -252,7 +251,7 @@
                     <div class="row" id="supervisors-list">
                         <!-- Supervisors will be loaded here via JavaScript -->
                     </div>
-                    <input type="hidden" name="supervisor" id="selected-supervisor">
+                    <input type="hidden" name="supervisor_choice" id="selected-supervisor">
                 </div>
             </div>
 
@@ -325,7 +324,6 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 let selectedRole = null;
 
@@ -335,14 +333,30 @@ function selectRole(role) {
         card.classList.remove('selected');
     });
     
-    // Select new role
-    const card = document.querySelector(`#role_${role}`).closest('.role-card');
-    card.classList.add('selected');
-    document.getElementById(`role_${role}`).checked = true;
-    selectedRole = role;
+    // Uncheck all radio buttons first
+    document.querySelectorAll('input[name="role"]').forEach(radio => {
+        radio.checked = false;
+    });
     
-    // Show/hide role-specific sections
-    updateRoleSpecificSections();
+    // Select new role
+    const radioInput = document.getElementById(`role_${role}`);
+    const card = radioInput.closest('.role-card');
+    
+    if (card && radioInput) {
+        card.classList.add('selected');
+        radioInput.checked = true;
+        selectedRole = role;
+        
+        // Trigger change event to ensure any other listeners are notified
+        radioInput.dispatchEvent(new Event('change'));
+        
+        console.log('Role selected:', role, 'Radio checked:', radioInput.checked); // Debug log
+        
+        // Show/hide role-specific sections
+        updateRoleSpecificSections();
+    } else {
+        console.error('Could not find role card or radio input for:', role);
+    }
 }
 
 function updateRoleSpecificSections() {
@@ -390,7 +404,7 @@ function loadSupervisors() {
     supervisorsList.innerHTML = '<div class="col-12"><p class="text-muted">Loading supervisors...</p></div>';
     
     // Fetch supervisors by specialty
-    fetch(`/users/api/supervisors/${specialty}/`)
+    fetch(`/users/api/supervisors/specialty/${specialty}/`)
         .then(response => response.json())
         .then(data => {
             if (data.supervisors && data.supervisors.length > 0) {
@@ -517,25 +531,41 @@ document.getElementById('specialty').addEventListener('change', function() {
 
 // Form submission
 document.getElementById('userCreateForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    // Get the selected role from the form
+    const roleInput = document.querySelector('input[name="role"]:checked');
+    const currentRole = roleInput ? roleInput.value : selectedRole;
     
-    // Validation
-    if (!selectedRole) {
+    // Basic validation
+    if (!currentRole) {
+        e.preventDefault();
         alert('Please select a user role.');
-        return;
+        return false;
     }
     
-    if (selectedRole === 'pg' && !document.getElementById('selected-supervisor').value) {
-        alert('Please select a supervisor for the postgraduate.');
-        return;
+    // Check supervisor selection for PG users
+    if (currentRole === 'pg') {
+        const supervisorInput = document.getElementById('selected-supervisor');
+        const supervisorChoice = document.querySelector('input[name="supervisor_choice"]:checked');
+        
+        if (!supervisorInput || (!supervisorInput.value && !supervisorChoice)) {
+            e.preventDefault();
+            alert('Please select a supervisor for the postgraduate.');
+            return false;
+        }
+        
+        // If we have a selected supervisor from radio buttons but hidden field is empty, update it
+        if (supervisorChoice && !supervisorInput.value) {
+            supervisorInput.value = supervisorChoice.value;
+        }
     }
     
-    // Show loading modal
-    const loadingModal = new bootstrap.Modal(document.getElementById('loadingModal'));
-    loadingModal.show();
+    // If validation passes, show loading state and allow form to submit normally
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Creating User...';
+    submitBtn.disabled = true;
     
-    // Submit form
-    this.submit();
+    // Let the form submit naturally - don't prevent default
+    return true;
 });
 
 // Initialize

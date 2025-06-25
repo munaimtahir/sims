@@ -9,7 +9,7 @@
         <li class="breadcrumb-item"><a href="{% url 'users:dashboard' %}">Dashboard</a></li>
         <li class="breadcrumb-item"><a href="{% url 'certificates:list' %}">Certificates</a></li>
         {% if form.instance.pk %}
-        <li class="breadcrumb-item"><a href="{% url 'certificates:detail' form.instance.pk %}">{{ form.instance.name|truncatechars:30 }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'certificates:detail' form.instance.pk %}">{{ form.instance.title|truncatechars:30 }}</a></li>
         <li class="breadcrumb-item active">Edit</li>
         {% else %}
         <li class="breadcrumb-item active">Add Certificate</li>
@@ -61,14 +61,15 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-8">
-                            {{ form.name|as_crispy_field }}
+                            {{ form.title|as_crispy_field }}
                         </div>
                         <div class="col-md-4">
                             {{ form.certificate_type|as_crispy_field }}
                         </div>
                     </div>
                     {{ form.description|as_crispy_field }}
-                    {{ form.issuing_authority|as_crispy_field }}
+                    {{ form.issuing_organization|as_crispy_field }}
+                    {{ form.skills_acquired|as_crispy_field }}
                 </div>
             </div>
 
@@ -92,23 +93,74 @@
                 </div>
             </div>
 
+            <!-- Credits and Points -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-award me-2"></i>Credits & Points</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form.cme_points_earned|as_crispy_field }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.cpd_credits_earned|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verification -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-check-circle me-2"></i>Verification</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ form.verification_url|as_crispy_field }}
+                        </div>
+                        <div class="col-md-4">
+                            {{ form.verification_code|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- File Upload -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Certificate File</h5>
+                    <h5 class="mb-0"><i class="fas fa-upload me-2"></i>Certificate Files</h5>
                 </div>
                 <div class="card-body">
-                    {% if form.instance.certificate_file %}
-                    <div class="alert alert-info">
-                        <i class="fas fa-file-pdf me-2"></i>
-                        Current file: <a href="{{ form.instance.certificate_file.url }}" target="_blank">{{ form.instance.certificate_file.name }}</a>
-                        <small class="d-block text-muted">Upload a new file to replace the current one</small>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {% if form.instance.certificate_file %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-file-pdf me-2"></i>
+                                Current file: <a href="{{ form.instance.certificate_file.url }}" target="_blank">{{ form.instance.certificate_file.name }}</a>
+                                <small class="d-block text-muted">Upload a new file to replace the current one</small>
+                            </div>
+                            {% endif %}
+                            {{ form.certificate_file|as_crispy_field }}
+                            <small class="text-muted">
+                                Supported formats: PDF, JPG, PNG. Maximum file size: 10MB
+                            </small>
+                        </div>
+                        <div class="col-md-6">
+                            {% if form.instance.additional_documents %}
+                            <div class="alert alert-info">
+                                <i class="fas fa-file me-2"></i>
+                                Current additional file: <a href="{{ form.instance.additional_documents.url }}" target="_blank">{{ form.instance.additional_documents.name }}</a>
+                                <small class="d-block text-muted">Upload a new file to replace the current one</small>
+                            </div>
+                            {% endif %}
+                            {{ form.additional_documents|as_crispy_field }}
+                            <small class="text-muted">
+                                Optional additional documents (PDF, DOC, DOCX, images)
+                            </small>
+                        </div>
                     </div>
-                    {% endif %}
-                    {{ form.certificate_file|as_crispy_field }}
-                    <small class="text-muted">
-                        Supported formats: PDF, JPG, PNG. Maximum file size: 10MB
-                    </small>
                 </div>
             </div>
 

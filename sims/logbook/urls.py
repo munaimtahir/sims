@@ -10,7 +10,8 @@ urlpatterns = [
     path('analytics/', views.LogbookAnalyticsView.as_view(), name='analytics'),
     
     # Entry management
-    path('entry/create/', views.LogbookEntryCreateView.as_view(), name='create'), # General create, might be admin/supervisor focused
+    path('entry/create/', views.LogbookEntryCreateRedirectView.as_view(), name='create'), # Redirect to PG entry create
+    path('entry/new/', views.PGLogbookEntryCreateView.as_view(), name='entry_new'), # Alternative URL for PG entry create
 
     # PG specific entry management
     path('pg/entries/', views.PGLogbookEntryListView.as_view(), name='pg_logbook_list'),
@@ -25,6 +26,8 @@ urlpatterns = [
 
     # Supervisor specific views
     path('supervisor/dashboard/', views.SupervisorLogbookDashboardView.as_view(), name='supervisor_logbook_dashboard'),
+    path('supervisor/all-entries/', views.SupervisorLogbookAllEntriesView.as_view(), name='supervisor_all_entries'),
+    path('supervisor/bulk-review/', views.SupervisorBulkReviewView.as_view(), name='supervisor_bulk_review'),
     path('supervisor/entry/<int:entry_pk>/review/', views.SupervisorLogbookReviewActionView.as_view(), name='supervisor_logbook_review_action'),
     
     # Review management

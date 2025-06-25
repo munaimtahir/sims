@@ -117,19 +117,19 @@
         <div class="card-body">
             <form method="get" class="row g-3">
                 <div class="col-md-4">
-                    {{ search_form.search|as_crispy_field }}
+                    {{ search_form.search_query|as_crispy_field }}
                 </div>
                 <div class="col-md-2">
-                    {{ filter_form.status|as_crispy_field }}
+                    {{ search_form.status|as_crispy_field }}
                 </div>
                 <div class="col-md-2">
-                    {{ filter_form.category|as_crispy_field }}
+                    {{ search_form.category|as_crispy_field }}
                 </div>
                 <div class="col-md-2">
-                    {{ filter_form.date_from|as_crispy_field }}
+                    {{ search_form.date_from|as_crispy_field }}
                 </div>
                 <div class="col-md-2">
-                    {{ filter_form.date_to|as_crispy_field }}
+                    {{ search_form.date_to|as_crispy_field }}
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-primary">

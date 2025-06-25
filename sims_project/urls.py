@@ -16,6 +16,22 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
+from django.contrib.auth.views import LogoutView
+
+# Import test view
+from test_crispy_view import test_crispy_view
+
+# Custom admin logout view that handles GET requests
+def admin_logout_view(request):
+    """Custom admin logout that handles GET requests"""
+    from django.contrib.auth import logout
+    from django.contrib.admin import site
+    
+    if request.user.is_authenticated:
+        logout(request)
+    
+    # Redirect to admin login page
+    return redirect('/admin/')
 
 def home_view(request):
     """
@@ -49,10 +65,16 @@ Allow: /
     return HttpResponse(content, content_type="text/plain")
 
 urlpatterns = [
+    # Test URL for debugging
+    path('test-crispy/', test_crispy_view, name='test_crispy'),
+    
     # Home and utility URLs
     path('', home_view, name='home'),
     path('health/', health_check, name='health_check'),
     path('robots.txt', robots_txt, name='robots_txt'),
+    
+    # Custom admin logout URL (must come before admin/ URL)
+    path('admin/logout/', admin_logout_view, name='admin_logout'),
     
     # Django Admin
     path('admin/', admin.site.urls),

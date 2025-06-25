@@ -59,16 +59,14 @@
                     <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Rotation Details</h5>
                 </div>
                 <div class="card-body">
-                    {{ form.name|as_crispy_field }}
                     <div class="row">
                         <div class="col-md-6">
                             {{ form.department|as_crispy_field }}
                         </div>
                         <div class="col-md-6">
-                            {{ form.specialty|as_crispy_field }}
+                            {{ form.hospital|as_crispy_field }}
                         </div>
                     </div>
-                    {{ form.description|as_crispy_field }}
                 </div>
             </div>
 
@@ -103,62 +101,31 @@
                             {{ form.end_date|as_crispy_field }}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form.hours_per_week|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form.total_hours|as_crispy_field }}
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Learning Objectives -->
+            <!-- Learning Content -->
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-bullseye me-2"></i>Learning Objectives</h5>
+                    <h5 class="mb-0"><i class="fas fa-bullseye me-2"></i>Learning Content</h5>
                 </div>
                 <div class="card-body">
-                    {{ form.learning_objectives|as_crispy_field }}
-                    {{ form.competencies_to_achieve|as_crispy_field }}
-                    {{ form.assessment_criteria|as_crispy_field }}
+                    {{ form.objectives|as_crispy_field }}
+                    {{ form.learning_outcomes|as_crispy_field }}
+                    {{ form.requirements|as_crispy_field }}
                 </div>
             </div>
 
             <!-- Additional Information -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h5 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Additional Information</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            {{ form.location|as_crispy_field }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form.contact_information|as_crispy_field }}
-                        </div>
-                    </div>
-                    {{ form.special_requirements|as_crispy_field }}
-                    {{ form.additional_notes|as_crispy_field }}
-                </div>
-            </div>
-
             <!-- Status -->
-            {% if form.instance.pk %}
             <div class="card mb-4">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="fas fa-flag me-2"></i>Status</h5>
                 </div>
                 <div class="card-body">
                     {{ form.status|as_crispy_field }}
-                    {% if form.completion_notes %}
-                    {{ form.completion_notes|as_crispy_field }}
-                    {% endif %}
                 </div>
             </div>
-            {% endif %}
 
             <!-- Form Actions -->
             <div class="card">

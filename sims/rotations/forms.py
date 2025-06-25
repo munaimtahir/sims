@@ -505,6 +505,32 @@ class BulkRotationAssignmentForm(forms.Form):
         help_text="Common objectives for all rotations"
     )
     
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        
+        # Configure form based on user role
+        if self.user:
+            if self.user.role == 'supervisor':
+                # Supervisors can only assign rotations to their own PGs
+                self.fields['pgs'].queryset = User.objects.filter(
+                    role='pg', supervisor=self.user, is_active=True
+                ).order_by('last_name', 'first_name')
+                
+                # Set supervisor to current user and make it readonly
+                self.fields['supervisor'].initial = self.user
+                self.fields['supervisor'].queryset = User.objects.filter(id=self.user.id)
+                self.fields['supervisor'].widget.attrs.update({
+                    'readonly': True,
+                    'disabled': True
+                })
+                
+            elif self.user.role == 'admin':
+                # Admins see all active PGs and supervisors
+                self.fields['pgs'].queryset = User.objects.filter(
+                    role='pg', is_active=True
+                ).order_by('last_name', 'first_name')
+    
     def clean(self):
         """Validate bulk assignment data"""
         cleaned_data = super().clean()
@@ -513,6 +539,11 @@ class BulkRotationAssignmentForm(forms.Form):
         pgs = cleaned_data.get('pgs')
         department = cleaned_data.get('department')
         hospital = cleaned_data.get('hospital')
+        supervisor = cleaned_data.get('supervisor')
+        
+        # For supervisors, ensure they are set as the supervisor regardless of form input
+        if self.user and self.user.role == 'supervisor':
+            cleaned_data['supervisor'] = self.user
         
         # Validate dates
         if start_date and end_date:

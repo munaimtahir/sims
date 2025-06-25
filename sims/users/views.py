@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponseForbidden
 from django.core.paginator import Paginator
 from django.db.models import Q, Count
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, DetailView, UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -56,20 +56,25 @@ def logout_view(request):
     user_name = None
     user_role = None
     
-    # Get user info before logout if authenticated
-    if request.user.is_authenticated:
-        user_name = request.user.get_display_name()
-        user_role = request.user.role
-        logout(request)
+    # Handle both GET and POST requests
+    if request.method in ['GET', 'POST']:
+        # Get user info before logout if authenticated
+        if request.user.is_authenticated:
+            user_name = request.user.get_display_name()
+            user_role = request.user.role
+            logout(request)
+        
+        # Context for template
+        context = {
+            'user_name': user_name,
+            'user_role': user_role,
+            'logout_time': timezone.now()
+        }
+        
+        return render(request, 'users/logged_out.html', context)
     
-    # Context for template
-    context = {
-        'user_name': user_name,
-        'user_role': user_role,
-        'logout_time': timezone.now()
-    }
-    
-    return render(request, 'users/logged_out.html', context)
+    # If somehow other method, redirect to login
+    return redirect('users:login')
 
 # Dashboard Views
 @admin_required
@@ -149,27 +154,47 @@ def supervisor_dashboard(request):
 def pg_dashboard(request):
     """PG dashboard with personal progress overview"""
     
-    # Get document counts
-    documents_submitted = request.user.get_documents_submitted_count()
-    
     # Get supervisor info
     supervisor = request.user.supervisor
     
     # Get recent submissions
     recent_submissions = []
-      # Get progress statistics
+    
+    # Get progress statistics
     # Import here to avoid circular imports
-    from sims.certificates.models import Certificate
-    from sims.rotations.models import Rotation
-    from sims.logbook.models import LogbookEntry
-    from sims.cases.models import ClinicalCase
+    try:
+        from sims.certificates.models import Certificate
+        certificates_count = Certificate.objects.filter(pg=request.user).count()
+    except:
+        certificates_count = 0
+        
+    try:
+        from sims.rotations.models import Rotation
+        rotations_count = Rotation.objects.filter(pg=request.user).count()
+    except:
+        rotations_count = 0
+        
+    try:
+        from sims.logbook.models import LogbookEntry
+        logbook_entries_count = LogbookEntry.objects.filter(pg=request.user).count()
+    except:
+        logbook_entries_count = 0
+        
+    try:
+        from sims.cases.models import ClinicalCase
+        clinical_cases_count = ClinicalCase.objects.filter(pg=request.user).count()
+    except:
+        clinical_cases_count = 0
     
     progress_stats = {
-        'certificates': Certificate.objects.filter(pg=request.user).count(),
-        'rotations': Rotation.objects.filter(pg=request.user).count(),
-        'logbook_entries': LogbookEntry.objects.filter(pg=request.user).count(),
-        'clinical_cases': ClinicalCase.objects.filter(pg=request.user).count(),
+        'certificates': certificates_count,
+        'rotations': rotations_count,
+        'logbook_entries': logbook_entries_count,
+        'clinical_cases': clinical_cases_count,
     }
+    
+    # Calculate documents submitted (sum of all submissions)
+    documents_submitted = sum(progress_stats.values())
     
     context = {
         'documents_submitted': documents_submitted,
@@ -222,7 +247,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
     """User's own profile view"""
     model = User
     template_name = 'users/profile.html'
-    context_object_name = 'user'
+    context_object_name = 'profile_user'
     
     def get_object(self):
         return self.request.user
@@ -233,6 +258,39 @@ class ProfileDetailView(SupervisorOrAdminRequiredMixin, DetailView):
     model = User
     template_name = 'users/profile_detail.html'
     context_object_name = 'profile_user'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.get_object()
+        
+        # Add recent activities if needed
+        try:
+            recent_activities = []
+            # Add logbook entries as activities
+            for entry in user.logbook_entries.all()[:3]:
+                recent_activities.append({
+                    'icon': 'book',
+                    'color': 'primary',
+                    'description': f"Created logbook entry: {entry.case_title}",
+                    'created_at': entry.created_at
+                })
+            
+            # Add cases as activities
+            for case in user.cases.all()[:2]:
+                recent_activities.append({
+                    'icon': 'folder',
+                    'color': 'success', 
+                    'description': f"Added case: {case.case_title}",
+                    'created_at': case.created_at
+                })
+            
+            # Sort by date
+            recent_activities = sorted(recent_activities, key=lambda x: x['created_at'], reverse=True)[:5]
+            context['recent_activities'] = recent_activities
+        except:
+            context['recent_activities'] = []
+        
+        return context
 
 
 class ProfileEditView(LoginRequiredMixin, UpdateView):
@@ -265,16 +323,131 @@ class UserCreateView(AdminRequiredMixin, View):
         return render(request, 'users/user_create.html')
     
     def post(self, request):
-        # Implementation for user creation
-        return redirect('users:user_list')
+        try:
+            # Get form data
+            username = request.POST.get('username', '').strip()
+            email = request.POST.get('email', '').strip()
+            first_name = request.POST.get('first_name', '').strip()
+            last_name = request.POST.get('last_name', '').strip()
+            role = request.POST.get('role', '').strip()
+            specialty = request.POST.get('specialty', '').strip()
+            year = request.POST.get('year', '').strip()
+            phone_number = request.POST.get('phone_number', '').strip()
+            registration_number = request.POST.get('registration_number', '').strip()
+            password1 = request.POST.get('password1', '').strip()
+            password2 = request.POST.get('password2', '').strip()
+            supervisor_id = request.POST.get('supervisor_choice', '').strip()
+            
+            # Also check for 'supervisor' field as backup
+            if not supervisor_id:
+                supervisor_id = request.POST.get('supervisor', '').strip()
+            
+            # Validation
+            errors = []
+            
+            if not username:
+                errors.append("Username is required")
+            elif User.objects.filter(username=username).exists():
+                errors.append("Username already exists")
+                
+            if not email:
+                errors.append("Email is required")
+            elif User.objects.filter(email=email).exists():
+                errors.append("Email already exists")
+                
+            if not first_name:
+                errors.append("First name is required")
+                
+            if not last_name:
+                errors.append("Last name is required")
+                
+            if not role:
+                errors.append("Role is required")
+                
+            if not password1:
+                errors.append("Password is required")
+            elif password1 != password2:
+                errors.append("Passwords do not match")
+            elif len(password1) < 8:
+                errors.append("Password must be at least 8 characters")
+                
+            # Role-specific validation
+            if role in ['pg', 'supervisor'] and not specialty:
+                errors.append("Specialty is required for PGs and Supervisors")
+                
+            if role == 'pg':
+                if not year:
+                    errors.append("Year is required for PGs")
+                if not supervisor_id:
+                    errors.append("Supervisor is required for PGs")
+                    
+            if errors:
+                for error in errors:
+                    messages.error(request, error)
+                return render(request, 'users/user_create.html')
+            
+            # Create user
+            user = User(
+                username=username,
+                email=email,
+                first_name=first_name,
+                last_name=last_name,
+                role=role,
+                specialty=specialty if role in ['pg', 'supervisor'] else None,
+                year=year if role == 'pg' else None,
+                phone_number=phone_number,
+                registration_number=registration_number,
+                is_active=True
+            )
+            
+            # Set supervisor for PG users
+            if role == 'pg' and supervisor_id:
+                try:
+                    supervisor = User.objects.get(id=supervisor_id, role='supervisor')
+                    user.supervisor = supervisor
+                except User.DoesNotExist:
+                    messages.error(request, "Selected supervisor not found")
+                    return render(request, 'users/user_create.html')
+            
+            user.set_password(password1)
+            user.save()
+            
+            messages.success(request, f'User {user.get_display_name()} created successfully!')
+            return redirect('users:user_list')
+            
+        except Exception as e:
+            messages.error(request, f'Error creating user: {str(e)}')
+            return render(request, 'users/user_create.html')
 
 
 class UserEditView(AdminRequiredMixin, UpdateView):
     """Edit user (admin only)"""
     model = User
-    fields = ['first_name', 'last_name', 'email', 'role', 'specialty', 'year', 'is_active']
+    fields = ['first_name', 'last_name', 'email', 'role', 'specialty', 'year', 'supervisor', 'is_active', 'phone_number', 'registration_number']
     template_name = 'users/user_edit.html'
-    success_url = reverse_lazy('users:user_list')
+    
+    def get_success_url(self):
+        return reverse('users:profile_detail', kwargs={'pk': self.object.pk})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"Edit User - {self.object.get_full_name()}"
+        
+        # Customize supervisor field queryset to show only active supervisors
+        if 'form' in context:
+            form = context['form']
+            if 'supervisor' in form.fields:
+                form.fields['supervisor'].queryset = User.objects.filter(
+                    role='supervisor', 
+                    is_active=True
+                ).order_by('first_name', 'last_name')
+                form.fields['supervisor'].empty_label = "No Supervisor (for Supervisors/Admins)"
+        
+        return context
+    
+    def form_valid(self, form):
+        messages.success(self.request, f'User profile for {self.object.get_full_name()} has been updated successfully.')
+        return super().form_valid(form)
 
 
 class UserDeleteView(AdminRequiredMixin, View):
@@ -357,8 +530,14 @@ class AssignSupervisorView(AdminRequiredMixin, View):
 
 # PG Management Views  
 @supervisor_or_admin_required
+@login_required
 def pg_list_view(request):
     """List PGs for supervisors and admins"""
+    
+    # Check if user has the required role
+    if not (request.user.is_supervisor() or request.user.is_admin()):
+        raise PermissionDenied("You don't have permission to view this page.")
+    
     if request.user.is_supervisor():
         # Supervisors see only their assigned PGs
         pgs = request.user.get_assigned_pgs()
@@ -506,6 +685,48 @@ class UserStatsAPIView(LoginRequiredMixin, View):
             'total_certificates': 0,  # Would come from certificates app
             'total_rotations': 0,  # Would come from rotations app
             'logbook_entries': 0,  # Would come from logbook app
+            'overall_progress': 0,  # Calculate based on various metrics
+        }
+        
+        return JsonResponse(stats)
+
+class UserListStatsAPIView(LoginRequiredMixin, View):
+    """Get user list statistics API for dashboard updates"""
+    
+    def get(self, request):
+        # Check permissions - allow admin and supervisor access
+        if not (request.user.is_admin() or request.user.is_supervisor()):
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        
+        # Get user counts
+        total_users = User.objects.filter(is_archived=False).count()
+        active_users = User.objects.filter(is_active=True, is_archived=False).count()
+        pg_count = User.objects.filter(role='pg', is_archived=False).count()
+        supervisor_count = User.objects.filter(role='supervisor', is_archived=False).count()
+        
+        # Get specialty count for PGs
+        from django.db.models import Count
+        specialty_count = User.objects.filter(
+            role='pg', is_archived=False, specialty__isnull=False
+        ).values('specialty').distinct().count()
+        
+        # Get new users this month
+        from django.utils import timezone
+        from datetime import datetime, timedelta
+        current_month_start = timezone.now().replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        new_this_month = User.objects.filter(
+            role='pg',
+            is_archived=False,
+            date_joined__gte=current_month_start
+        ).count()
+        
+        stats = {
+            'total_users': total_users,
+            'active_users': active_users,
+            'pg_count': pg_count,
+            'supervisor_count': supervisor_count,
+            'specialty_count': specialty_count,
+            'new_this_month': new_this_month,
         }
         
         return JsonResponse(stats)

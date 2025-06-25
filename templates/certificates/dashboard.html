@@ -106,12 +106,18 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'certificates:list' %}" class="btn btn-info w-100">
+                            {% if user.role == 'admin' %}
+                            <a href="/admin/certificates/certificatetype/" class="btn btn-info w-100">
                                 <i class="fas fa-tags me-2"></i>Manage Types
                             </a>
+                            {% else %}
+                            <a href="{% url 'certificates:list' %}" class="btn btn-info w-100">
+                                <i class="fas fa-filter me-2"></i>Filter Certificates
+                            </a>
+                            {% endif %}
                         </div>
                         <div class="col-md-3 mb-2">
-                            <a href="{% url 'certificates:export' %}" class="btn btn-secondary w-100">
+                            <a href="{% url 'certificates:export_csv' %}" class="btn btn-secondary w-100">
                                 <i class="fas fa-download me-2"></i>Export Data
                             </a>
                         </div>
@@ -124,6 +130,7 @@
     <!-- Main Content Row -->
     <div class="row">
         <!-- Certificate Distribution -->
+        {% if certificate_distribution %}
         <div class="col-lg-6 mb-4">
             <div class="card">
                 <div class="card-header bg-light">
@@ -131,12 +138,29 @@
                         <i class="fas fa-chart-pie me-2"></i>
                         Certificate Type Distribution
                     </h5>
-                </div>                <div class="card-body">
+                </div>
+                <div class="card-body">
                     <canvas id="distributionChart" height="300" 
                             data-distribution="{{ certificate_distribution_json|escapejs }}"></canvas>
                 </div>
             </div>
         </div>
+        {% else %}
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        Certificate Type Distribution
+                    </h5>
+                </div>
+                <div class="card-body text-center text-muted">
+                    <i class="fas fa-chart-pie fa-3x mb-3 opacity-50"></i>
+                    <p>No certificate data available yet</p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
         <!-- CME/CPD Progress (for PGs) -->
         {% if user.role == 'pg' %}
@@ -278,7 +302,7 @@
                                                     <i class="fas fa-eye"></i>
                                                 </a>
                                                 {% if user.role != 'pg' and cert.status == 'pending' %}
-                                                <a href="{% url 'certificates:review' cert.pk %}" 
+                                                <a href="{% url 'certificates:review' certificate_pk=cert.pk %}" 
                                                    class="btn btn-sm btn-outline-success">
                                                     <i class="fas fa-check"></i>
                                                 </a>
@@ -363,53 +387,70 @@ $(document).ready(function() {
 
 function initializeCharts() {
     // Certificate Distribution Chart
-    const ctx = document.getElementById('distributionChart').getContext('2d');
+    const chartElement = document.getElementById('distributionChart');
+    
+    if (!chartElement) {
+        console.log('Chart element not found');
+        return;
+    }
+    
+    const ctx = chartElement.getContext('2d');
     
     // Get chart data from data attributes to avoid Django template conflicts
-    const chartElement = document.getElementById('distributionChart');
-    const certificateDistribution = JSON.parse(chartElement.getAttribute('data-distribution') || '[]');
-    
-    const distributionData = {
-        labels: certificateDistribution.map(item => item.certificate_type__name),
-        datasets: [{
-            data: certificateDistribution.map(item => item.count),
-            backgroundColor: [
-                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
-                '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'
-            ],
-            borderWidth: 2,
-            borderColor: '#fff'
-        }]
-    };
+    try {
+        const certificateDistribution = JSON.parse(chartElement.getAttribute('data-distribution') || '[]');
+        
+        if (certificateDistribution.length === 0) {
+            console.log('No certificate data available for chart');
+            chartElement.style.display = 'none';
+            return;
+        }
+        
+        const distributionData = {
+            labels: certificateDistribution.map(item => item.certificate_type__name || 'Unknown'),
+            datasets: [{
+                data: certificateDistribution.map(item => item.count || 0),
+                backgroundColor: [
+                    '#007bff', '#28a745', '#ffc107', '#dc3545', '#6c757d',
+                    '#17a2b8', '#fd7e14', '#6f42c1', '#e83e8c', '#20c997'
+                ],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        };
 
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: distributionData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        padding: 20,
-                        usePointStyle: true
-                    }
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${label}: ${value} (${percentage}%)`;
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: distributionData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
                         }
                     }
                 }
             }
-        }
-    });
+        });
+    } catch (error) {
+        console.error('Error initializing chart:', error);
+        chartElement.style.display = 'none';
+    }
 }
 </script>
 {% endblock %}
