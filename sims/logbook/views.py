@@ -7,9 +7,10 @@ from django.views.generic import (
 )
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy, reverse
-from django.http import JsonResponse, HttpResponse, Http404, FileResponse
+from django.http import JsonResponse, HttpResponse, Http404, FileResponse, HttpResponseRedirect
 from django.db.models import Q, Count, Sum, Avg, F
 from django.utils import timezone
+from django.conf import settings # Import settings
 from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
@@ -26,10 +27,37 @@ from .models import (
 from .forms import (
     LogbookEntryCreateForm, LogbookEntryUpdateForm, LogbookReviewForm,
     LogbookSearchForm, LogbookFilterForm, BulkLogbookActionForm,
-    QuickLogbookEntryForm, LogbookTemplateForm
+    QuickLogbookEntryForm, LogbookTemplateForm, PGLogbookEntryForm, PGLogbookEntryEditForm, # Added EditForm
+    SupervisorLogbookReviewForm
 )
 
 User = get_user_model()
+
+# Mixin to ensure user is a Postgraduate Resident
+class PGRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.role == 'pg'
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You do not have permission to access this page.")
+        if self.request.user.is_authenticated:
+            # Redirect to a relevant dashboard or home page if logged in but wrong role
+            # This depends on your project's URL structure
+            # For example, redirect to a generic dashboard or user profile
+            # return redirect(reverse_lazy('users:dashboard')) # Adjust as needed
+            return redirect(reverse_lazy('home')) # Fallback to home
+        return redirect(settings.LOGIN_URL)
+
+# Mixin to ensure user is a Supervisor
+class SupervisorRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.role == 'supervisor'
+
+    def handle_no_permission(self):
+        messages.error(self.request, "You do not have permission to access this page.")
+        if self.request.user.is_authenticated:
+            return redirect(reverse_lazy('home')) # Fallback to home or user's specific dashboard
+        return redirect(settings.LOGIN_URL)
 
 class LogbookAccessMixin(UserPassesTestMixin):
     """
@@ -1218,7 +1246,7 @@ class LogbookAnalyticsView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
             return {}
         
         # Review turnaround time
-        reviewed_entries = entries.filter(verified_at__isnull=False)
+        reviewed_entries = entries.filter(verified_at__isnull=False) # Should be approved_at
         avg_review_time = 0
         
         if reviewed_entries.exists():
@@ -1234,11 +1262,261 @@ class LogbookAnalyticsView(LoginRequiredMixin, LogbookAccessMixin, TemplateView)
         # Other quality metrics
         return {
             'total_entries': total_entries,
-            'approval_rate': (entries.filter(status='approved').count() / total_entries) * 100,
-            'revision_rate': (entries.filter(status='needs_revision').count() / total_entries) * 100,
+            'approval_rate': (entries.filter(status='approved').count() / total_entries) * 100 if total_entries > 0 else 0,
+            'revision_rate': (entries.filter(status='returned').count() / total_entries) * 100 if total_entries > 0 else 0, # 'returned' not 'needs_revision'
             'average_review_time': avg_review_time,
             'overdue_rate': (entries.filter(
                 status='draft',
                 date__lt=timezone.now().date() - timedelta(days=7)
-            ).count() / total_entries) * 100,
+            ).count() / total_entries) * 100 if total_entries > 0 else 0,
         }
+
+# --- New View for PG Logbook Entry Creation ---
+class PGLogbookEntryCreateView(LoginRequiredMixin, PGRequiredMixin, CreateView):
+    model = LogbookEntry
+    form_class = PGLogbookEntryForm
+    template_name = 'logbook/pg_logbook_entry_form.html' # Needs to be created
+    # success_url will be defined in get_success_url or by reversing a named URL for PG's list view
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        entry = form.save(commit=False)
+        entry.pg = self.request.user
+
+        # Attempt to assign supervisor from PG's profile
+        # The user model has 'supervisor' as a direct attribute on the PG user instance
+        pg_supervisor = getattr(self.request.user, 'supervisor', None)
+
+        if pg_supervisor:
+            entry.supervisor = pg_supervisor
+            entry.status = 'pending' # Directly to pending if supervisor exists
+            # entry.submitted_to_supervisor_at = timezone.now() # Model's save method handles this
+            messages.success(self.request, f"Logbook entry '{entry.case_title}' submitted for supervisor review.")
+        else:
+            entry.status = 'draft' # Save as draft if no supervisor is assigned to the PG
+            messages.warning(self.request, f"Logbook entry '{entry.case_title}' saved as draft. Please ensure a supervisor is assigned to you to enable submission for review.")
+
+        # created_by is handled by the model's save method.
+        # supervisor_action_at is also handled by the model's save method.
+        entry.save()
+        self.object = entry # Set self.object for get_success_url
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_success_url(self):
+        # Redirect to a logbook list view for the PG. This URL needs to be defined.
+        # For now, placeholder, will be updated when PG list view is created.
+        # Example: return reverse_lazy('logbook:pg_entry_list')
+        # Fallback to detail view of the created entry for now, or a generic dashboard.
+        if self.object:
+            # Redirect to the PG's logbook list after creation.
+            # Could also redirect to the detail page of the created entry:
+            # return reverse('logbook:detail', kwargs={'pk': self.object.pk})
+            return reverse_lazy('logbook:pg_logbook_list')
+        return reverse_lazy('logbook:pg_logbook_list') # Default fallback
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = "Create New Logbook Entry"
+        return context
+
+# --- New View for PG to List their Logbook Entries ---
+class PGLogbookEntryListView(LoginRequiredMixin, PGRequiredMixin, ListView):
+    model = LogbookEntry
+    template_name = 'logbook/pg_logbook_list.html' # Needs to be created
+    context_object_name = 'logbook_entries'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = LogbookEntry.objects.filter(pg=self.request.user).select_related('supervisor').order_by('-date', '-updated_at')
+
+        status_filter = self.request.GET.get('status', '')
+        if status_filter:
+            queryset = queryset.filter(status=status_filter)
+
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = "My Logbook Entries"
+        context['current_status_filter'] = self.request.GET.get('status', '')
+
+        # Provide status choices for filtering UI, excluding 'draft' perhaps, or handling it.
+        # PGs should see all their entries including drafts.
+        status_choices = [{'value': s[0], 'display': s[1]} for s in LogbookEntry.STATUS_CHOICES]
+        context['status_choices'] = status_choices
+        # Add choices for quick links, e.g. only 'Pending', 'Approved', 'Returned', 'Rejected'
+        context['quick_filter_statuses'] = [s for s in status_choices if s['value'] in ['pending', 'approved', 'returned', 'rejected']]
+
+        return context
+
+# --- New View for PG to Edit their Returned/Draft Logbook Entries ---
+class PGLogbookEntryUpdateView(LoginRequiredMixin, PGRequiredMixin, UpdateView):
+    model = LogbookEntry
+    form_class = PGLogbookEntryEditForm # Use the new edit form
+    template_name = 'logbook/pg_logbook_entry_edit_form.html' # Needs to be created
+    context_object_name = 'logbook_entry'
+
+    def get_queryset(self):
+        # PGs can only edit their own entries that are 'returned' or 'draft'
+        return LogbookEntry.objects.filter(
+            pg=self.request.user,
+            status__in=['returned', 'draft']
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        entry = form.save(commit=False)
+        original_status = self.get_object().status # Get original status before it's changed by form save
+
+        # If editing a 'returned' entry, it goes back to 'pending'.
+        # If editing a 'draft', it stays 'draft' unless a specific action submits it.
+        # For now, resaving a draft keeps it draft. Resaving 'returned' makes it 'pending'.
+        if original_status == 'returned':
+            entry.status = 'pending'
+            # entry.submitted_to_supervisor_at = timezone.now() # Model's save method will handle this
+            # entry.supervisor_action_at = None # Model's save method will handle this
+            messages.success(self.request, f"Logbook entry '{entry.case_title}' has been updated and resubmitted for supervisor review.")
+        elif original_status == 'draft':
+            # Retain draft status, or add a "Submit" button to change to 'pending'
+            entry.status = 'draft' # Explicitly keep as draft
+            messages.success(self.request, f"Draft logbook entry '{entry.case_title}' updated.")
+
+        # Ensure pg is still set (should be handled by form/model instance)
+        entry.pg = self.request.user
+        # Supervisor should already be on the entry if it was 'returned'. If 'draft' and PG now has supervisor, model's save might assign.
+
+        # Handle explicit submission from draft
+        if original_status == 'draft' and 'submit_for_review' in self.request.POST:
+            pg_supervisor = getattr(self.request.user, 'supervisor', None)
+            if pg_supervisor:
+                entry.supervisor = pg_supervisor # Ensure supervisor is set if not already
+                entry.status = 'pending'
+                # entry.submitted_to_supervisor_at = timezone.now() # Model's save handles this
+                messages.success(self.request, f"Logbook entry '{entry.case_title}' submitted for supervisor review.")
+            else:
+                # This case should ideally be prevented by not showing the button if no supervisor
+                messages.error(self.request, "Cannot submit for review: No supervisor assigned to you.")
+                entry.status = 'draft' # Remain draft
+
+        entry.save()
+        self.object = entry
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = f"Edit Logbook Entry: {self.object.case_title}"
+        # The form itself now handles displaying supervisor_feedback_display
+        # context['supervisor_feedback'] = self.object.supervisor_feedback
+        return context
+
+    def get_success_url(self):
+        # Redirect to the PG's logbook list, perhaps with a filter for pending or drafts
+        return reverse_lazy('logbook:pg_logbook_list')
+
+# --- Supervisor Dashboard for Pending Reviews ---
+class SupervisorLogbookDashboardView(LoginRequiredMixin, SupervisorRequiredMixin, ListView):
+    model = LogbookEntry
+    template_name = 'logbook/supervisor_logbook_dashboard.html' # Needs to be created
+    context_object_name = 'pending_entries'
+    paginate_by = 10
+
+    def get_queryset(self):
+        # Supervisors see entries from their PGs that are 'pending'
+        # Order by oldest submission first to encourage timely review
+        return LogbookEntry.objects.filter(
+            supervisor=self.request.user,
+            status='pending'
+        ).select_related('pg').order_by('submitted_to_supervisor_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page_title'] = "Pending Logbook Reviews"
+        # Optionally, add counts of other statuses for context if needed
+        # context['approved_count'] = LogbookEntry.objects.filter(supervisor=self.request.user, status='approved').count()
+        # context['returned_count'] = LogbookEntry.objects.filter(supervisor=self.request.user, status='returned').count()
+        return context
+
+# --- Supervisor Review Action View ---
+class SupervisorLogbookReviewActionView(LoginRequiredMixin, SupervisorRequiredMixin, FormView):
+    form_class = SupervisorLogbookReviewForm
+    template_name = 'logbook/supervisor_review_form.html' # Needs to be created
+    # success_url = reverse_lazy('logbook:supervisor_logbook_dashboard') # Set in form_valid
+
+    def get_logbook_entry(self):
+        entry_pk = self.kwargs.get('entry_pk')
+        # Ensure the entry belongs to this supervisor and is pending
+        entry = get_object_or_404(
+            LogbookEntry,
+            pk=entry_pk,
+            supervisor=self.request.user,
+            status='pending'
+        )
+        return entry
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['logbook_entry'] = self.get_logbook_entry()
+        context['page_title'] = f"Review Logbook Entry: {context['logbook_entry'].case_title}"
+        return context
+
+    def form_valid(self, form):
+        entry = self.get_logbook_entry()
+        action = form.cleaned_data['action']
+        supervisor_comment = form.cleaned_data['supervisor_comment']
+
+        if action == 'approve':
+            entry.status = 'approved'
+            messages.success(self.request, f"Logbook entry '{entry.case_title}' approved.")
+        elif action == 'reject':
+            entry.status = 'rejected'
+            messages.warning(self.request, f"Logbook entry '{entry.case_title}' rejected.")
+        elif action == 'return_for_edits':
+            entry.status = 'returned'
+            messages.info(self.request, f"Logbook entry '{entry.case_title}' returned to resident for edits.")
+
+        entry.supervisor_feedback = supervisor_comment
+        # entry.supervisor_action_at = timezone.now() # Model's save method handles this
+        entry.save() # This will trigger LogbookEntry's save and _handle_status_change
+
+        # Placeholder for notifying PG
+        # self._notify_pg_of_supervisor_action(entry, action)
+
+        return redirect(reverse_lazy('logbook:supervisor_logbook_dashboard'))
+
+    # def _notify_pg_of_supervisor_action(self, entry, action):
+    #     # Similar to _notify_supervisor_of_submission in the model
+    #     # try:
+    #     #     from sims.notifications.models import Notification
+    #     #     if entry.pg and Notification:
+    #     #         action_map = {
+    #     #             'approved': 'approved',
+    #     #             'rejected': 'rejected',
+    #     #             'return_for_edits': 'returned for edits'
+    #     #         }
+    #     #         message = f"Your logbook entry '{entry.case_title}' has been {action_map.get(action, 'actioned by')} by your supervisor."
+    #     #         Notification.objects.create(
+    #     #             user=entry.pg,
+    #     #             title=f"Logbook Entry Update: {entry.case_title}",
+    #     #             message=message,
+    #     #             type='logbook_review',
+    #     #             related_object_id=entry.id
+    #     #         )
+    #     # except ImportError:
+    #     #     pass
+    #     # except Exception as e:
+    #     #     pass # log error
+    #     pass
+
+    def get_initial(self):
+        """ Optionally pre-fill comment if editing a previous review action, though this view is for new actions. """
+        # entry = self.get_logbook_entry()
+        # return {'supervisor_comment': entry.supervisor_feedback}
+        return super().get_initial()

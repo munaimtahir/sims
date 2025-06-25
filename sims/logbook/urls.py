@@ -10,11 +10,22 @@ urlpatterns = [
     path('analytics/', views.LogbookAnalyticsView.as_view(), name='analytics'),
     
     # Entry management
-    path('entry/create/', views.LogbookEntryCreateView.as_view(), name='create'),
+    path('entry/create/', views.LogbookEntryCreateView.as_view(), name='create'), # General create, might be admin/supervisor focused
+
+    # PG specific entry management
+    path('pg/entries/', views.PGLogbookEntryListView.as_view(), name='pg_logbook_list'),
+    path('pg/entry/new/', views.PGLogbookEntryCreateView.as_view(), name='pg_entry_create'),
+    path('pg/entry/<int:pk>/edit/', views.PGLogbookEntryUpdateView.as_view(), name='pg_logbook_entry_edit'),
+
+    # Generic entry views (might be used by admin/supervisor or for general detail)
     path('entry/quick/', views.QuickLogbookEntryView.as_view(), name='quick_create'),
-    path('entry/<int:pk>/', views.LogbookEntryDetailView.as_view(), name='detail'),
-    path('entry/<int:pk>/edit/', views.LogbookEntryUpdateView.as_view(), name='edit'),
+    path('entry/<int:pk>/', views.LogbookEntryDetailView.as_view(), name='detail'), # Detail view is generic
+    path('entry/<int:pk>/edit/', views.LogbookEntryUpdateView.as_view(), name='edit'), # Generic edit, might be admin/supervisor focused
     path('entry/<int:pk>/delete/', views.LogbookEntryDeleteView.as_view(), name='delete'),
+
+    # Supervisor specific views
+    path('supervisor/dashboard/', views.SupervisorLogbookDashboardView.as_view(), name='supervisor_logbook_dashboard'),
+    path('supervisor/entry/<int:entry_pk>/review/', views.SupervisorLogbookReviewActionView.as_view(), name='supervisor_logbook_review_action'),
     
     # Review management
     path('entry/<int:entry_pk>/review/', 

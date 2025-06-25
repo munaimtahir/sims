@@ -1080,3 +1080,150 @@ class LogbookComplianceReportForm(forms.Form):
             self.fields['pg_filter'].queryset = User.objects.filter(
                 role='pg', supervisor=self.user, is_active=True
             )
+
+# --- Appended Forms Start ---
+
+# New form for PG logbook entry creation as per feature requirements
+class PGLogbookEntryForm(forms.ModelForm):
+    class Meta:
+        model = LogbookEntry
+        fields = [
+            'case_title',
+            'date',
+            'location_of_activity',
+            'patient_history_summary', # Corresponds to "Brief history"
+            'management_action',
+            'topic_subtopic',
+        ]
+        widgets = {
+            'date': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control', 'max': timezone.now().date().isoformat()}
+            ),
+            'case_title': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Title of case or diagnosis'}
+            ),
+            'location_of_activity': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'E.g., Ward A, OPD Clinic 2, Emergency Room'}
+            ),
+            'patient_history_summary': forms.Textarea(
+                attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Brief relevant history of the patient'}
+            ),
+            'management_action': forms.Textarea(
+                attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Management actions taken'}
+            ),
+            'topic_subtopic': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'E.g., Cardiology/Arrhythmia'}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None) # PG user
+        super().__init__(*args, **kwargs)
+
+        if not self.initial.get('date'):
+            self.fields['date'].initial = timezone.now().date()
+
+        self.fields['case_title'].required = True
+        self.fields['date'].required = True
+        self.fields['location_of_activity'].required = True
+        self.fields['patient_history_summary'].required = True
+        self.fields['management_action'].required = True
+        self.fields['topic_subtopic'].required = False
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if date and date > timezone.now().date():
+            raise ValidationError("The date cannot be in the future.")
+        return date
+
+class PGLogbookEntryEditForm(forms.ModelForm):
+    supervisor_feedback_display = forms.CharField(
+        widget=forms.Textarea(attrs={'readonly': 'readonly', 'rows': 4, 'class': 'form-control bg-light'}),
+        required=False,
+        label="Latest Supervisor Feedback"
+    )
+
+    class Meta:
+        model = LogbookEntry
+        fields = [
+            'case_title',
+            'date',
+            'location_of_activity',
+            'patient_history_summary',
+            'management_action',
+            'topic_subtopic',
+            'supervisor_feedback_display',
+        ]
+        widgets = {
+            'date': forms.DateInput(
+                attrs={'type': 'date', 'class': 'form-control', 'max': timezone.now().date().isoformat()}
+            ),
+            'case_title': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Title of case or diagnosis'}
+            ),
+            'location_of_activity': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'E.g., Ward A, OPD Clinic 2, Emergency Room'}
+            ),
+            'patient_history_summary': forms.Textarea(
+                attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Brief relevant history of the patient'}
+            ),
+            'management_action': forms.Textarea(
+                attrs={'rows': 5, 'class': 'form-control', 'placeholder': 'Management actions taken'}
+            ),
+            'topic_subtopic': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'E.g., Cardiology/Arrhythmia'}
+            ),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if self.instance and self.instance.pk:
+            self.fields['supervisor_feedback_display'].initial = self.instance.supervisor_feedback
+
+        self.fields['case_title'].required = True
+        self.fields['date'].required = True
+        self.fields['location_of_activity'].required = True
+        self.fields['patient_history_summary'].required = True
+        self.fields['management_action'].required = True
+        self.fields['topic_subtopic'].required = False
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if date and date > timezone.now().date():
+            raise ValidationError("The date cannot be in the future.")
+        return date
+
+    def save(self, commit=True):
+        self.cleaned_data.pop('supervisor_feedback_display', None)
+        return super().save(commit=commit)
+
+class SupervisorLogbookReviewForm(forms.Form):
+    ACTION_CHOICES = [
+        ('', '---------'),
+        ('approve', 'Approve'),
+        ('reject', 'Reject'),
+        ('return_for_edits', 'Return for Edits'),
+    ]
+    action = forms.ChoiceField(
+        choices=ACTION_CHOICES,
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-select form-select-lg mb-3'})
+    )
+    supervisor_comment = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': 4, 'class': 'form-control', 'placeholder': 'Provide feedback or reason for rejection/return (optional for approval).'}),
+        required=False,
+        label="Feedback / Comments"
+    )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        action = cleaned_data.get('action')
+        comment = cleaned_data.get('supervisor_comment')
+
+        if action in ['reject', 'return_for_edits'] and not comment:
+            self.add_error('supervisor_comment', 'Comments are required when rejecting or returning an entry for edits.')
+
+        return cleaned_data
+# --- Appended Forms End ---
