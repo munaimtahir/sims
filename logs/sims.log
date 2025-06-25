@@ -5900,3 +5900,169 @@ Traceback (most recent call last):
 django.core.exceptions.PermissionDenied: You can only view your own entries
 WARNING 2025-06-25 06:16:58,917 log 23315 140070462253952 Not Found: /logbook/supervisor/entry/1/review/
 WARNING 2025-06-25 06:16:58,923 log 23315 140070462253952 Not Found: /logbook/supervisor/entry/1/review/
+INFO 2025-06-25 12:07:06,514 autoreload 14244 11104 Watching for file changes with StatReloader
+INFO 2025-06-25 12:07:07,476 wsgi 14244 22692 SIMS WSGI application initialized successfully
+INFO 2025-06-25 12:07:23,109 basehttp 14244 7272 "GET / HTTP/1.1" 200 26191
+WARNING 2025-06-25 12:07:25,309 log 14244 7272 Not Found: /favicon.ico
+WARNING 2025-06-25 12:07:25,310 basehttp 14244 7272 "GET /favicon.ico HTTP/1.1" 404 3810
+INFO 2025-06-25 12:07:27,779 basehttp 14244 19236 "GET /users/login/ HTTP/1.1" 200 21085
+WARNING 2025-06-25 12:07:27,915 basehttp 14244 19236 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-06-25 12:07:36,295 basehttp 14244 21160 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:07:36,471 basehttp 14244 21160 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 15607
+INFO 2025-06-25 12:07:36,627 basehttp 14244 21160 "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-06-25 12:08:17,247 basehttp 14244 20092 "POST /users/login/ HTTP/1.1" 200 21360
+WARNING 2025-06-25 12:08:17,278 basehttp 14244 20092 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-06-25 12:08:25,213 basehttp 14244 13752 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:08:25,330 basehttp 14244 13752 "GET /admin/ HTTP/1.1" 200 51362
+INFO 2025-06-25 12:08:25,364 basehttp 14244 18824 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-06-25 12:08:25,364 basehttp 14244 13752 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-06-25 12:11:28,475 basehttp 14244 25832 "GET /admin/?id=033bf751-9f7f-4ff5-b3a8-7d6838d352af&vscodeBrowserReqId=1750835488469 HTTP/1.1" 302 0
+INFO 2025-06-25 12:11:28,480 basehttp 14244 25832 "GET /admin/login/?next=/admin/%3Fid%3D033bf751-9f7f-4ff5-b3a8-7d6838d352af%26vscodeBrowserReqId%3D1750835488469 HTTP/1.1" 200 15684
+INFO 2025-06-25 12:11:40,150 basehttp 14244 8584 "GET /users/list/?id=033bf751-9f7f-4ff5-b3a8-7d6838d352af&vscodeBrowserReqId=1750835500144 HTTP/1.1" 302 0
+INFO 2025-06-25 12:11:40,153 basehttp 14244 8584 "GET /users/login/?next=/users/list/%3Fid%3D033bf751-9f7f-4ff5-b3a8-7d6838d352af%26vscodeBrowserReqId%3D1750835500144 HTTP/1.1" 200 21085
+WARNING 2025-06-25 12:14:57,281 log 14244 25800 Forbidden (CSRF token from POST incorrect.): /users/login/
+WARNING 2025-06-25 12:14:57,291 basehttp 14244 25800 "POST /users/login/ HTTP/1.1" 403 2503
+WARNING 2025-06-25 12:15:00,691 log 14244 25808 Forbidden (CSRF token from POST incorrect.): /users/login/
+WARNING 2025-06-25 12:15:00,704 basehttp 14244 25808 "POST /users/login/ HTTP/1.1" 403 2503
+INFO 2025-06-25 12:15:04,971 basehttp 14244 25808 "GET /users/login/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:15:04,986 basehttp 14244 25808 "GET /users/dashboard/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:15:05,032 basehttp 14244 25808 "GET /users/admin-dashboard/ HTTP/1.1" 200 20146
+INFO 2025-06-25 12:15:08,199 basehttp 14244 20816 "GET /users/logout/ HTTP/1.1" 200 13822
+INFO 2025-06-25 12:15:11,797 basehttp 14244 20816 "GET / HTTP/1.1" 200 26191
+INFO 2025-06-25 12:15:16,129 basehttp 14244 20816 "GET /users/login/ HTTP/1.1" 200 21085
+WARNING 2025-06-25 12:15:16,162 basehttp 14244 20816 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-06-25 12:15:27,570 basehttp 14244 14056 "POST /users/login/ HTTP/1.1" 200 21352
+WARNING 2025-06-25 12:15:27,593 basehttp 14244 14056 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-06-25 12:15:37,536 basehttp 14244 7704 "GET /admin/users/user/add/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:15:37,542 basehttp 14244 7704 "GET /admin/login/?next=/admin/users/user/add/ HTTP/1.1" 200 15622
+INFO 2025-06-25 12:15:51,691 basehttp 14244 4764 "POST /admin/login/?next=/admin/users/user/add/ HTTP/1.1" 200 16160
+INFO 2025-06-25 12:15:53,911 basehttp 14244 4764 "GET /admin/login/?next=/admin/users/user/add/ HTTP/1.1" 200 15622
+INFO 2025-06-25 12:15:55,102 basehttp 14244 4764 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:15:55,110 basehttp 14244 4764 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 15607
+INFO 2025-06-25 12:15:59,704 basehttp 14244 17324 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 15607
+INFO 2025-06-25 12:16:13,809 basehttp 14244 11524 "POST /users/login/ HTTP/1.1" 200 21352
+WARNING 2025-06-25 12:16:13,832 basehttp 14244 11524 "GET /static/images/medical-bg.jpg HTTP/1.1" 404 1990
+INFO 2025-06-25 12:16:19,300 basehttp 14244 740 "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:16:19,306 basehttp 14244 740 "GET /admin/login/?next=/admin/ HTTP/1.1" 200 15607
+INFO 2025-06-25 12:16:24,643 basehttp 14244 740 "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-06-25 12:16:24,663 basehttp 14244 740 "GET /admin/ HTTP/1.1" 200 51362
+ERROR 2025-06-25 12:16:30,548 log 14244 2020 Internal Server Error: /admin/users/user/
+Traceback (most recent call last):
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\core\handlers\base.py", line 220, in _get_response
+    response = response.render()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 114, in render
+    self.content = self.rendered_content
+                   ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\response.py", line 92, in rendered_content
+    return template.render(context, self._request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 1016, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 977, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        template_name,
+        ^^^^^^^^^^^^^^
+        skip=history,
+        ^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\defaulttags.py", line 976, in do_if
+    nodelist = parser.parse(("endif",))
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 518, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\template\base.py", line 516, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\site-packages\django\templatetags\i18n.py", line 570, in do_block_translate
+    raise TemplateSyntaxError(
+        "%r doesn't allow other block tags inside it" % bits[0]
+    )
+django.template.exceptions.TemplateSyntaxError: 'blocktrans' doesn't allow other block tags inside it
+ERROR 2025-06-25 12:16:30,569 basehttp 14244 2020 "GET /admin/users/user/ HTTP/1.1" 500 384745
+WARNING 2025-06-25 12:19:13,741 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:13,754 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:13,755 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
+WARNING 2025-06-25 12:19:14,979 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:14,987 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:14,987 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
+WARNING 2025-06-25 12:19:16,105 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:16,113 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:16,113 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
+WARNING 2025-06-25 12:19:16,229 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:16,234 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:16,235 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
+WARNING 2025-06-25 12:19:16,364 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:16,381 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:16,382 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
+WARNING 2025-06-25 12:19:16,613 base 14244 13192 Method Not Allowed (GET): /admin/logout/
+WARNING 2025-06-25 12:19:16,619 log 14244 13192 Method Not Allowed: /admin/logout/
+WARNING 2025-06-25 12:19:16,620 basehttp 14244 13192 "GET /admin/logout/ HTTP/1.1" 405 0
