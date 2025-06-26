@@ -75,7 +75,19 @@
                                     </td>
                                     <td>{{ entry.date|date:"d M Y" }}</td>
                                     <td>
-                                        <span class="badge" style="background-color: {{ entry.get_status_color }}; color: #fff;">{{ entry.get_status_display }}</span>
+                                        {% if entry.status == 'draft' %}
+                                            <span class="badge bg-secondary">{{ entry.get_status_display }}</span>
+                                        {% elif entry.status == 'pending' %}
+                                            <span class="badge bg-warning text-dark">{{ entry.get_status_display }}</span>
+                                        {% elif entry.status == 'approved' %}
+                                            <span class="badge bg-success">{{ entry.get_status_display }}</span>
+                                        {% elif entry.status == 'rejected' %}
+                                            <span class="badge bg-danger">{{ entry.get_status_display }}</span>
+                                        {% elif entry.status == 'returned' %}
+                                            <span class="badge bg-info">{{ entry.get_status_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-light text-dark">{{ entry.get_status_display }}</span>
+                                        {% endif %}
                                     </td>
                                     <td>{{ entry.supervisor.get_full_name|default:"N/A" }}</td>
                                     <td>{{ entry.updated_at|naturaltime }}</td>

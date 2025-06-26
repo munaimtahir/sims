@@ -318,17 +318,30 @@
 {% endblock %}
 
 {% block extra_js %}
+<!-- Django data for JavaScript -->
+{{ block.super }}
+<script id="django-data" type="application/json">
+{
+    "pg_ids": [{% if page_obj %}{% for pg in page_obj %}{{ pg.pk }}{% if not forloop.last %},{% endif %}{% endfor %}{% endif %}],
+    "urls": {
+        "user_list_stats_api": "{% url 'users:user_list_stats_api' %}",
+        "user_stats_api": "{% url 'users:user_stats_api' 0 %}"
+    }
+}
+</script>
+
 <script>
 $(document).ready(function() {
+    // Get Django data
+    const djangoData = JSON.parse(document.getElementById('django-data').textContent);
+    
     // Load statistics
     loadStatistics();
     
     // Load progress for each PG
-    {% if page_obj %}
-    {% for pg in page_obj %}
-    loadPGProgress({{ pg.pk }});
-    {% endfor %}
-    {% endif %}
+    djangoData.pg_ids.forEach(function(pgId) {
+        loadPGProgress(pgId);
+    });
     
     // Initialize tooltips
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
@@ -339,7 +352,8 @@ $(document).ready(function() {
 
 function loadStatistics() {
     // Load general statistics
-    $.get('{% url "users:user_list_stats_api" %}')
+    const djangoData = JSON.parse(document.getElementById('django-data').textContent);
+    $.get(djangoData.urls.user_list_stats_api)
         .done(function(data) {
             $('#specialtyCount').text(data.specialty_count || 0);
             $('#newThisMonth').text(data.new_this_month || 0);
@@ -351,7 +365,9 @@ function loadStatistics() {
 
 function loadPGProgress(pgId) {
     // Load individual PG progress
-    $.get(`{% url "users:user_stats_api" 0 %}`.replace('0', pgId))
+    const djangoData = JSON.parse(document.getElementById('django-data').textContent);
+    const url = djangoData.urls.user_stats_api.replace('0', pgId);
+    $.get(url)
         .done(function(data) {
             const progressPercent = data.overall_progress || 0;
             $(`#progress-${pgId}`).text(`${progressPercent}%`);

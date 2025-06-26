@@ -92,7 +92,7 @@
                                             <label class="form-label">Average Self Score</label>
                                             <div class="progress">
                                                 <div class="progress-bar" role="progressbar" 
-                                                     style="width: {% widthratio user_stats.average_self_score|default:0 10 100 %}%">
+                                                     data-width="{% widthratio user_stats.average_self_score|default:0 10 100 %}">
                                                     {{ user_stats.average_self_score|default:0|floatformat:1 }}/10
                                                 </div>
                                             </div>
@@ -101,7 +101,7 @@
                                             <label class="form-label">Average Supervisor Score</label>
                                             <div class="progress">
                                                 <div class="progress-bar bg-success" role="progressbar" 
-                                                     style="width: {% widthratio user_stats.average_supervisor_score|default:0 10 100 %}%">
+                                                     data-width="{% widthratio user_stats.average_supervisor_score|default:0 10 100 %}">
                                                     {{ user_stats.average_supervisor_score|default:0|floatformat:1 }}/10
                                                 </div>
                                             </div>
@@ -110,7 +110,7 @@
                                             <label class="form-label">Completion Rate</label>
                                             <div class="progress">
                                                 <div class="progress-bar bg-info" role="progressbar" 
-                                                     style="width: {{ user_stats.completion_rate|default:0|floatformat:0 }}%">
+                                                     data-width="{{ user_stats.completion_rate|default:0|floatformat:0 }}">
                                                     {{ user_stats.completion_rate|default:0|floatformat:1 }}%
                                                 </div>
                                             </div>
@@ -289,4 +289,17 @@
     .bg-needs_revision { background-color: #dc3545 !important; }
     .bg-archived { background-color: #6f42c1 !important; }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Set progress bar widths from data attributes
+    const progressBars = document.querySelectorAll('.progress-bar[data-width]');
+    progressBars.forEach(function(bar) {
+        const width = bar.getAttribute('data-width');
+        bar.style.width = width + '%';
+    });
+});
+</script>
 {% endblock %}

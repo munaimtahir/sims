@@ -13,7 +13,7 @@
         padding-bottom: 80px; /* Space for footer */
     }
     
-    /* SIMS Login Button - Top Left Corner */
+    /* SIMS Home Button - Top Left Corner with Scroll Trigger */
     .sims-home-button {
         position: fixed;
         top: 20px;
@@ -32,6 +32,13 @@
         align-items: center;
         gap: 8px;
         backdrop-filter: blur(10px);
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    
+    .sims-home-button.visible {
+        opacity: 1;
+        transform: translateY(0);
     }
     
     .sims-home-button:hover {
@@ -56,6 +63,7 @@
         overflow: hidden;
         max-width: 900px;
         width: 100%;
+        margin: 0 auto;
     }
     .login-image {
         background: linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8)), 
@@ -181,6 +189,13 @@
         
         .main-content {
             padding-top: 80px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+        
+        .login-container {
+            margin: 0 auto;
+            border-radius: 15px;
         }
     }
 </style>
@@ -435,6 +450,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Check for system notifications
     checkSystemStatus();
+});
+
+// Scroll-triggered home button logic
+window.addEventListener('scroll', function() {
+    var homeBtn = document.querySelector('.sims-home-button');
+    if (!homeBtn) return;
+    if (window.scrollY > 60) {
+        homeBtn.classList.add('visible');
+    } else {
+        homeBtn.classList.remove('visible');
+    }
 });
 
 function checkSystemStatus() {

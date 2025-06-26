@@ -267,34 +267,6 @@
         text-decoration: underline;
     }
     
-    .status-indicator {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #48bb78;
-        color: white;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-        box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
-    }
-    
-    .status-indicator::before {
-        content: '';
-        width: 8px;
-        height: 8px;
-        background: white;
-        border-radius: 50%;
-        display: inline-block;
-        margin-right: 8px;
-        animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.5; }
-    }
       @media (max-width: 768px) {
         .homepage-container {
             margin: 80px 10px 20px;
@@ -424,7 +396,7 @@
                         
                         <div class="feature-card">
                             <div class="feature-icon">
-                                <i class="bi bi-shield-check-fill"></i>
+                                <i class="fas fa-shield-alt"></i>
                             </div>
                             <div class="feature-title">Secure Platform</div>
                             <div class="feature-description">
@@ -449,14 +421,6 @@
                     
                     <!-- System Statistics -->
                     <div class="system-stats">
-                        <div class="stat-item">
-                            <div class="stat-icon">
-                                <i class="bi bi-check-circle-fill text-success"></i>
-                            </div>
-                            <div class="stat-value">Online</div>
-                            <div class="stat-label">System Status</div>
-                        </div>
-                        
                         <div class="stat-item">
                             <div class="stat-icon">
                                 <i class="bi bi-shield-fill-check text-primary"></i>
@@ -493,18 +457,13 @@
 <footer class="page-footer">
     <div class="container">
         <p class="mb-0">
-            © {{ current_year }} SIMS - Postgraduate Medical Training System. All rights reserved. |
+            © {{ current_year }} SIMS - Postgraduate Medical Training System. All rights reserved. Created by Muhammad Ibrahim(MBBS) |
             <a href="{% url 'admin:index' %}">Admin</a> |
             SIMS v{{ system_version }} |
             {{ university_name }}
         </p>
     </div>
 </footer>
-
-<!-- Status Indicator -->
-<div class="status-indicator">
-    <i class="bi bi-wifi"></i> System {{ system_status|title }}
-</div>
 {% endblock %}
 
 {% block extra_js %}

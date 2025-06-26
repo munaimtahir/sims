@@ -319,12 +319,19 @@
     {% endif %}
 </div>
 
+<!-- Django data for JavaScript -->
+<script id="django-data" type="application/json">
+{
+    "hasActiveFilters": {% if current_filters.status or current_filters.pg or current_filters.search or current_filters.review_status or current_filters.start_date or current_filters.end_date %}true{% else %}false{% endif %}
+}
+</script>
+
 <script>
 // Auto-expand filters if any are active
 document.addEventListener('DOMContentLoaded', function() {
-    const hasActiveFilters = {% if current_filters.status or current_filters.pg or current_filters.search or current_filters.review_status or current_filters.start_date or current_filters.end_date %}true{% else %}false{% endif %};
+    const djangoData = JSON.parse(document.getElementById('django-data').textContent);
     
-    if (hasActiveFilters) {
+    if (djangoData.hasActiveFilters) {
         const filtersCollapse = new bootstrap.Collapse(document.getElementById('filtersCollapse'), {
             show: true
         });
