@@ -481,9 +481,28 @@
                                         {% endfor %}
                                     </td>
                                 {% endif %}
-                                {% for item in result %}
-                                    <td{{ item.class_attrib }}>{{ item }}</td>
-                                {% endfor %}
+                                {% if result.0 %}
+                                    {% comment %}Result is iterable (list of field values){% endcomment %}
+                                    {% for item in result %}
+                                        {% if item.class_attrib %}
+                                            <td{{ item.class_attrib }}>{{ item }}</td>
+                                        {% else %}
+                                            <td>{{ item }}</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    {% comment %}Result might be a single object - extract fields manually{% endcomment %}
+                                    <td>{{ result.username|default:result }}</td>
+                                    <td>{{ result.email|default:"" }}</td>
+                                    <td>{{ result.first_name|default:"" }}</td>
+                                    <td>{{ result.last_name|default:"" }}</td>
+                                    <td>{{ result.get_role_display|default:result.role|default:"" }}</td>
+                                    <td>{{ result.specialty|default:"" }}</td>
+                                    <td>{{ result.year|default:"" }}</td>
+                                    <td>{{ result.supervisor|default:"" }}</td>
+                                    <td>{% if result.is_active %}<span class="text-success">✓</span>{% else %}<span class="text-danger">✗</span>{% endif %}</td>
+                                    <td>{{ result.date_joined|date:"M d, Y" }}</td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -512,13 +531,13 @@
         <div class="paginator">
             <p class="paginator-info">
                 {% if cl.result_count == 1 %}
-                    {% blocktrans count counter=cl.result_count %}1 {{ name }}{% plural %}{{ counter }} {{ name }}s{% endblocktrans %}
+                    1 {{ opts.verbose_name }}
                 {% else %}
-                    {% blocktrans count counter=cl.result_count with counter=cl.result_count name=opts.verbose_name_plural %}{{ counter }} {{ name }}{% endblocktrans %}
+                    {{ cl.result_count }} {{ opts.verbose_name_plural }}
                 {% endif %}
                 {% if cl.full_result_count != cl.result_count %}
                     <span class="small quiet">
-                        {% blocktrans with full_result_count=cl.full_result_count %}({{ full_result_count }} total){% endblocktrans %}
+                        ({{ cl.full_result_count }} total)
                     </span>
                 {% endif %}
             </p>

@@ -232,7 +232,7 @@ class User(AbstractUser):
     def get_dashboard_url(self):
         """Get appropriate dashboard URL based on role"""
         if self.is_admin():
-            return reverse('users:admin_dashboard')
+            return reverse('admin:index')
         elif self.is_supervisor():
             return reverse('users:supervisor_dashboard')
         elif self.is_pg():
