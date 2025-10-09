@@ -36,9 +36,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="logbookentry",
             name="management_action",
-            field=models.TextField(
-                default="", help_text="Management action (narrative text)"
-            ),
+            field=models.TextField(default="", help_text="Management action (narrative text)"),
         ),
         migrations.AddField(
             model_name="logbookentry",
@@ -70,16 +68,12 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="logbookentry",
             name="case_title",
-            field=models.CharField(
-                help_text="Title of case or diagnosis", max_length=300
-            ),
+            field=models.CharField(help_text="Title of case or diagnosis", max_length=300),
         ),
         migrations.AlterField(
             model_name="logbookentry",
             name="clinical_reasoning",
-            field=models.TextField(
-                blank=True, help_text="Clinical reasoning and thought process"
-            ),
+            field=models.TextField(blank=True, help_text="Clinical reasoning and thought process"),
         ),
         migrations.AlterField(
             model_name="logbookentry",
@@ -109,9 +103,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="logbookentry",
             name="learning_points",
-            field=models.TextField(
-                blank=True, help_text="Key learning points from this case"
-            ),
+            field=models.TextField(blank=True, help_text="Key learning points from this case"),
         ),
         migrations.AlterField(
             model_name="logbookentry",
@@ -152,9 +144,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="logbookentry",
             name="patient_history_summary",
-            field=models.TextField(
-                default="", help_text="Brief history (narrative text)"
-            ),
+            field=models.TextField(default="", help_text="Brief history (narrative text)"),
         ),
         migrations.AlterField(
             model_name="logbookentry",
