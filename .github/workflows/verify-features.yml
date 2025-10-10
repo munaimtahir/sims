@@ -1,0 +1,41 @@
+name: Verify SIMS features
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; else pip install "Django>=4.2,<6.0"; fi
+          if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
+
+      - name: Environment setup
+        run: |
+          echo "DJANGO_SETTINGS_MODULE=sims_project.settings" >> $GITHUB_ENV
+          echo "SECRET_KEY=test-secret-key" >> $GITHUB_ENV
+          echo "DEBUG=1" >> $GITHUB_ENV
+
+      - name: Migrate
+        run: |
+          python manage.py migrate --noinput
+
+      - name: Seed test users (optional)
+        run: |
+          python utils/check_users_and_create.py || true
+
+      - name: Run tests
+        run: |
+          python -m pytest --maxfail=1 --disable-warnings -q
