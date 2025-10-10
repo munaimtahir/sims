@@ -83,6 +83,7 @@ class CertificateModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
             first_name="Super",
             last_name="Visor",
         )
@@ -92,8 +93,8 @@ class CertificateModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
-            first_name="Post",
-            last_name="Graduate",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -255,6 +256,7 @@ class CertificateReviewModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -262,6 +264,8 @@ class CertificateReviewModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -412,6 +416,7 @@ class CertificateViewTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -419,6 +424,8 @@ class CertificateViewTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -503,6 +510,7 @@ class CertificateViewTests(TestCase):
             email="other@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         other_pg = User.objects.create_user(
@@ -510,6 +518,8 @@ class CertificateViewTests(TestCase):
             email="otherpg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=other_supervisor,
         )
 
@@ -553,6 +563,7 @@ class CertificateFormTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -560,6 +571,8 @@ class CertificateFormTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -869,6 +882,7 @@ class CertificateIntegrationTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -876,6 +890,8 @@ class CertificateIntegrationTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 

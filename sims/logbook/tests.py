@@ -187,6 +187,7 @@ class LogbookEntryModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
             first_name="Super",
             last_name="Visor",
         )
@@ -196,8 +197,8 @@ class LogbookEntryModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
-            first_name="Post",
-            last_name="Graduate",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -430,6 +431,7 @@ class LogbookReviewModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -437,6 +439,8 @@ class LogbookReviewModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -649,6 +653,7 @@ class LogbookViewTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -656,6 +661,8 @@ class LogbookViewTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -737,6 +744,7 @@ class LogbookViewTests(TestCase):
             email="other@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         other_pg = User.objects.create_user(
@@ -744,6 +752,8 @@ class LogbookViewTests(TestCase):
             email="otherpg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=other_supervisor,
         )
 
@@ -787,6 +797,7 @@ class LogbookFormTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -794,6 +805,8 @@ class LogbookFormTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -1105,6 +1118,7 @@ class LogbookIntegrationTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -1112,6 +1126,8 @@ class LogbookIntegrationTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 

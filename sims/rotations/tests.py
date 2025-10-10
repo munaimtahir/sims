@@ -49,6 +49,7 @@ class RotationModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
             first_name="Super",
             last_name="Visor",
         )
@@ -58,8 +59,8 @@ class RotationModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
-            first_name="Post",
-            last_name="Graduate",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -249,6 +250,7 @@ class RotationEvaluationModelTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -256,6 +258,8 @@ class RotationEvaluationModelTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -357,6 +361,7 @@ class RotationViewTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -364,6 +369,8 @@ class RotationViewTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -436,6 +443,7 @@ class RotationFormTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -443,6 +451,8 @@ class RotationFormTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -539,6 +549,7 @@ class RotationAPITests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -546,6 +557,8 @@ class RotationAPITests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -617,6 +630,7 @@ class RotationExportTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -624,6 +638,8 @@ class RotationExportTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -675,6 +691,7 @@ class RotationIntegrationTests(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.pg_user = User.objects.create_user(
@@ -682,6 +699,8 @@ class RotationIntegrationTests(TestCase):
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 

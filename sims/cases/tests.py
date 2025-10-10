@@ -46,6 +46,7 @@ class ClinicalCaseModelTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         # Create test category
@@ -126,6 +127,7 @@ class CaseReviewModelTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.category = CaseCategory.objects.create(name="Pediatrics", color_code="#4CAF50")
@@ -190,6 +192,7 @@ class CaseStatisticsModelTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.category = CaseCategory.objects.create(name="Internal Medicine", color_code="#2196F3")
@@ -235,6 +238,7 @@ class CaseFormsTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
@@ -315,6 +319,7 @@ class CaseViewsTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.admin = User.objects.create_user(
@@ -477,6 +482,7 @@ class CaseIntegrationTest(TestCase):
             email="supervisor@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         self.category = CaseCategory.objects.create(name="Neurology", color_code="#9C27B0")
