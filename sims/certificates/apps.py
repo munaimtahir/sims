@@ -28,7 +28,7 @@ class CertificatesConfig(AppConfig):
         """
         try:
             # Import signals for certificate management
-            import sims.certificates.signals
+            pass
 
             # Register any custom model permissions
             from django.contrib.auth.models import Permission

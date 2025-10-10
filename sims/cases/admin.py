@@ -3,11 +3,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.db.models import Q, Count, Sum, Avg
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
-from datetime import date, timedelta
+from django.db.models import Q, Count
 
 from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
 
@@ -400,7 +396,6 @@ mark_cases_as_reviewed.short_description = "Mark selected cases as reviewed"
 
 def generate_case_statistics(modeladmin, request, queryset):
     """Bulk action to regenerate statistics for selected PGs"""
-    from .models import CaseStatistics
 
     for case_stat in queryset:
         case_stat.refresh_statistics()

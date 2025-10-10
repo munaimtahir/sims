@@ -3,13 +3,9 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.db.models import Q, Count, Sum, Avg
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from datetime import date, timedelta
 
 from .models import (
     LogbookEntry,
@@ -449,7 +445,7 @@ class LogbookEntryAdmin(ImportExportModelAdmin):
         if count > 0:
             procedures = ", ".join([p.name for p in obj.procedures.all()[:3]])
             if count > 3:
-                procedures += f" (+{count-3} more)"
+                procedures += f" (+{count - 3} more)"
             return format_html('<span title="{}">{} procedures</span>', procedures, count)
         return "0 procedures"
 

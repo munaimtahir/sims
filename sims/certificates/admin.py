@@ -3,9 +3,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.db.models import Q, Count
-from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from .models import Certificate, CertificateType, CertificateReview
@@ -603,7 +601,6 @@ class CertificateReportAdmin:
     def compliance_report(self, request):
         """Generate compliance report"""
         from django.template.response import TemplateResponse
-        from django.db.models import Count
 
         # Get required certificate types
         required_types = CertificateType.objects.filter(is_required=True)

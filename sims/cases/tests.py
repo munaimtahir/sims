@@ -1,7 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from datetime import date, timedelta
 
@@ -199,13 +198,13 @@ class CaseStatisticsModelTest(TestCase):
         for i in range(5):
             ClinicalCase.objects.create(
                 pg=self.pg,
-                case_title=f"Case {i+1}",
+                case_title=f"Case {i + 1}",
                 category=self.category,
                 date=date.today() - timedelta(days=i),
-                patient_initials=f"P.{i+1}",
+                patient_initials=f"P.{i + 1}",
                 patient_age=30 + i,
                 patient_gender="male" if i % 2 == 0 else "female",
-                learning_points=f"Learning points for case {i+1}",
+                learning_points=f"Learning points for case {i + 1}",
                 supervisor=self.supervisor,
                 status="approved" if i < 3 else "draft",
                 completion_score=80 + i if i < 3 else None,
@@ -445,7 +444,7 @@ class CaseViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test PG accessing other PG's case
-        other_pg = User.objects.create_user(
+        _other_pg = User.objects.create_user(
             username="otherpg", email="otherpg@test.com", password="testpass123", role="pg"
         )
 

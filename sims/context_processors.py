@@ -3,7 +3,6 @@ Context processor for admin dashboard statistics
 """
 
 from django.utils import timezone
-from django.db.models import Count
 
 
 def admin_stats_context(request):

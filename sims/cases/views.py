@@ -3,12 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.db.models import Q, Count, Avg
 from django.utils import timezone
-from datetime import datetime, timedelta
 
 from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
 from .forms import ClinicalCaseForm, CaseReviewForm, CaseSearchForm, CaseFilterForm

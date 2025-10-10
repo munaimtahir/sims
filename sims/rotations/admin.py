@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.db.models import Q, Count
+from django.db.models import Q
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from .models import Rotation, RotationEvaluation, Department, Hospital
@@ -365,7 +365,7 @@ class RotationAdmin(ImportExportModelAdmin):
             if rotation.supervisor and rotation.supervisor != rotation.pg:
                 Notification.objects.create(
                     user=rotation.supervisor,
-                    title=f"New Rotation Assignment",
+                    title="New Rotation Assignment",
                     message=f"You have been assigned to supervise {rotation.pg.get_full_name()} "
                     f"in {rotation.department}.",
                     type="rotation",

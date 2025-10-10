@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
@@ -13,15 +13,13 @@ from django.views.generic import (
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy, reverse
 from django.http import JsonResponse, HttpResponse, Http404, FileResponse
-from django.db.models import Q, Count, Sum, Avg
+from django.db.models import Q, Count
 from django.utils import timezone
-from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth import get_user_model
-from datetime import date, timedelta
+from datetime import timedelta
 import json
 import csv
-from io import StringIO
 
 from .models import Certificate, CertificateReview, CertificateType, CertificateStatistics
 from .forms import (
@@ -29,7 +27,6 @@ from .forms import (
     CertificateUpdateForm,
     CertificateReviewForm,
     CertificateSearchForm,
-    CertificateFilterForm,
     BulkCertificateApprovalForm,
 )
 

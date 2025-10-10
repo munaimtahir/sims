@@ -27,7 +27,7 @@ class RotationsConfig(AppConfig):
         """
         try:
             # Import signals for rotation management
-            import sims.rotations.signals
+            pass
 
             # Register any custom model permissions
             from django.contrib.auth.models import Permission

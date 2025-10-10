@@ -1,3 +1,4 @@
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
@@ -466,8 +467,6 @@ class UserActivateView(AdminRequiredMixin, View):
 class UserDeactivateView(UserActivateView):
     """Deactivate user (admin only) - same as UserActivateView"""
 
-    pass
-
 
 class UserArchiveView(AdminRequiredMixin, View):
     """Archive user (admin only)"""
@@ -737,6 +736,7 @@ def admin_analytics_view(request):
     total_supervisors = User.objects.filter(role="supervisor", is_archived=False).count()
     # Monthly user registration stats
     from django.db.models import Count
+
     # Specialty distribution
     specialty_distribution = (
         User.objects.filter(role__in=["pg", "supervisor"], is_archived=False)
@@ -921,14 +921,10 @@ def pg_analytics_view(request):
     return render(request, "users/pg_analytics.html", context)
 
 
-from django.contrib.admin.views.decorators import staff_member_required
-
-
 @staff_member_required
 def admin_stats_api(request):
     """Enhanced API endpoint for admin dashboard statistics with filters"""
     from django.http import JsonResponse
-    from datetime import datetime
 
     # Get filter parameters
     role_filter = request.GET.get("role", "all")

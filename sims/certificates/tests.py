@@ -1,19 +1,15 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import date, timedelta
-import os
-import tempfile
 
 from .models import Certificate, CertificateReview, CertificateType, CertificateStatistics
 from .forms import (
     CertificateCreateForm,
     CertificateReviewForm,
     BulkCertificateApprovalForm,
-    CertificateSearchForm,
     QuickCertificateUploadForm,
 )
 
@@ -299,7 +295,7 @@ class CertificateReviewModelTests(TestCase):
     def test_review_updates_certificate_status(self):
         """Test that review status updates certificate status"""
         # Create approval review
-        review = CertificateReview.objects.create(
+        _review = CertificateReview.objects.create(
             certificate=self.certificate,
             reviewer=self.supervisor,
             status="approved",

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.urls import reverse
-from datetime import date, timedelta
+from datetime import timedelta
 import os
 
 User = get_user_model()

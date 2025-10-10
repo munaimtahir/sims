@@ -1,10 +1,8 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import date, timedelta
-from dateutil.relativedelta import relativedelta
 
 from .models import Rotation, RotationEvaluation, Department, Hospital
 from .forms import RotationCreateForm, RotationEvaluationForm, BulkRotationAssignmentForm

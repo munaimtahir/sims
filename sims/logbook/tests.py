@@ -3,11 +3,8 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import date, timedelta
-import json
 from django.conf import settings  # Import settings
-import urllib.parse  # Import for URL encoding
 
 from .models import (
     LogbookEntry,
@@ -22,7 +19,6 @@ from .forms import (
     LogbookEntryCreateForm,
     LogbookReviewForm,
     BulkLogbookActionForm,
-    LogbookSearchForm,
     QuickLogbookEntryForm,
 )
 
@@ -477,7 +473,7 @@ class LogbookReviewModelTests(TestCase):
 
     def test_review_updates_entry_status(self):
         """Test that review status updates entry status"""
-        review = LogbookReview.objects.create(
+        _review = LogbookReview.objects.create(
             logbook_entry=self.entry,
             reviewer=self.supervisor,
             status="approved",
@@ -585,7 +581,7 @@ class LogbookStatisticsModelTests(TestCase):
         )
         approved_entry.procedures.add(self.procedure)
 
-        draft_entry = LogbookEntry.objects.create(
+        _draft_entry = LogbookEntry.objects.create(
             pg=self.pg_user,
             date=date.today(),
             patient_age=25,
@@ -1406,7 +1402,7 @@ class LogbookWorkflowTests(TestCase):
         self.assertIsNone(entry.supervisor)
         self.assertIsNone(entry.submitted_to_supervisor_at)
 
-    def test_pg_creates_entry_without_supervisor(self):
+    def test_pg_creates_entry_without_supervisor_second_attempt(self):
         # Temporarily remove supervisor attribute from the instance for this test
         # The User model's clean() method prevents saving a PG without a supervisor.
         # The view logic relies on request.user.supervisor being None.

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import date, timedelta
+from datetime import timedelta
 import os
 
 from .models import Certificate, CertificateReview, CertificateType
