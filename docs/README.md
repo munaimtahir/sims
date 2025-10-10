@@ -1,351 +1,56 @@
-# SIMS - Surgical Information Management System
+# SIMS Documentation Index
 
-A comprehensive Django web application for managing postgraduate medical residents' academic and training records.
+This directory consolidates every project guide, operational report, and deployment reference that previously lived across the repository root. No information has been removed during the reorganization—each original document now resides here with its content intact.
 
-[![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Django Version](https://img.shields.io/badge/django-4.2+-green.svg)](https://www.djangoproject.com/)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Linter: flake8](https://img.shields.io/badge/linter-flake8-blue.svg)](https://flake8.pycqa.org/)
+## How to Navigate
 
-## 📋 Table of Contents
+- Start with **PROJECT_SUMMARY.md** for a one-page status briefing.
+- Use **PROJECT_STRUCTURE.md** together with **PROJECT_ORGANIZATION_GUIDE.md** and **COMPLETE_ORGANIZATION_GUIDE.md** for the complete directory layout history. These files were moved from the repository root and retain their original details.
+- Consult the categorized lists below to jump directly to the information you need.
 
-- [Overview](#overview)
-- [Features](#features)
-- [Development Status](#development-status)
-- [Quick Start](#quick-start)
-- [Project Structure](#project-structure)
-- [User Roles](#user-roles)
-- [Development Guidelines](#development-guidelines)
-- [Testing](#testing)
-- [Deployment](#deployment)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
+## Project & Architecture Guides
 
-## 🎯 Overview
+- `PROJECT_STRUCTURE.md` – Current directory layout with context for each folder.
+- `PROJECT_ORGANIZATION_GUIDE.md` – Step-by-step organization procedure (migrated from the repository root).
+- `COMPLETE_ORGANIZATION_GUIDE.md` – Expanded rationale for the standardized structure (migrated from the repository root).
+- `PROJECT_ORGANIZATION_COMPLETION_REPORT.md` – Verification of the reorganization work.
+- `PROJECT_SUMMARY.md` – Executive summary of the SIMS platform.
+- `DEVELOPMENT_GUIDELINES.md` & `CONTRIBUTING.md` – Engineering processes and contribution workflow.
 
-SIMS (Surgical Information Management System) is a comprehensive web-based management system designed specifically for postgraduate medical training programs. It provides a complete solution for tracking trainee progress, managing rotations, maintaining digital logbooks, and handling clinical case submissions.
+## Deployment & Infrastructure
 
-**Current Status**: ✅ **Production-Ready for Pilot Deployment**
+- `NGINX_DEPLOYMENT_172.236.152.35.md`, `NGINX_SERVER_172.236.152.35_COMPLETE.md` – Reverse proxy setup records.
+- `SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md`, `SERVER_172.236.152.35_READY.md`, `SERVER_MIGRATION_FIX_REPORT.md`, `MIGRATION_FIX_COMPLETION_REPORT.md` – Server provisioning and migration logs.
+- `API.md` – Overview of available endpoints.
 
-## ✨ Features
+## Feature, UI, and Bug-Fix Reports
 
-### Core Features (Ready to Use)
+The following reports document historical fixes and validation notes. They remain unchanged from their pre-reorganization versions:
 
-- **👥 User Management**: Role-based access control for admins, supervisors, and postgraduate students
-- **📊 Dashboard System**: Customized dashboards for each user role with analytics
-- **🔄 Rotation Management**: Track and manage training rotations across different departments
-- **📜 Certificate Management**: Manage and track certifications and achievements
-- **📚 Digital Logbook**: Record training activities, procedures, and evaluations
-- **🏥 Clinical Cases**: Submit, review, and manage clinical cases with detailed documentation
-- **📈 Analytics & Reporting**: Comprehensive statistics and data visualization
-- **🔍 Advanced Filtering**: Search and filter capabilities across all modules
-- **📤 Data Export**: Export data to CSV format for all major modules
-- **🔐 Security**: Role-based permissions, secure authentication, and session management
+- `ADMIN_CONSOLIDATION_REPORT.md`, `ADMIN_LOGIN_FIXED_SUMMARY.md`, `ADMIN_SYSTEM_COMPLETION_REPORT.md`, `ADMIN_DASHBOARD_FIXES_REPORT.md`
+- `AUTHENTICATION_SYSTEM_COMPLETION_REPORT.md`, `LOGIN_CONSOLIDATION_COMPLETION_REPORT.md`, `LOGIN_ISSUES_RESOLVED.md`
+- `HOMEPAGE_COMPLETION_REPORT.md`, `LAYOUT_UPDATES_COMPLETION_REPORT.md`, `WELCOME_SECTION_FIX_REPORT.md`, `THEME_SYSTEM_COMPLETION_REPORT.md`
+- `FONTAWESOME_RESTORATION_FINAL_REPORT.md`, `ICON_BULLET_FIXES_REPORT.md`, `ICON_RECOVERY_REPORT.md`, `WHITE_BULLETS_REMOVAL_REPORT.md`
+- `HOVER_VISIBILITY_FIX_REPORT.md`, `SYSTEM_STATUS_ICONS_REPORT.md`, `ICON_BULLET_FIXES_REPORT.md`, `ICON_RECOVERY_REPORT.md`
+- `USER_PROFILE_FIX_REPORT.md`, `SUPERVISOR_PAGES_FIX_REPORT.md`, `WELCOME_SECTION_FIX_REPORT.md`, `LOGBOOK_FORM_ENHANCEMENT_REPORT.md`
+- Additional completion reports (`FEATURES_STATUS.md`, `FIXES_REPORT.md`, `SYSTEMATIC_EXAMINATION_COMPLETION_REPORT.md`, `SYSTEM_STATUS.md`, `DEVELOPMENT_STATUS_REVIEW.md`, `CODE_QUALITY_REPORT.md`).
 
-### Additional Features
+> **Note:** Filenames retain their historical titles to preserve traceability with previous tickets and change logs.
 
-- **Admin Interface**: Comprehensive Django admin with custom branding
-- **RESTful APIs**: JSON endpoints for statistics and data retrieval
-- **File Management**: Upload and manage documents and images
-- **Responsive Design**: Mobile-friendly Bootstrap 5 interface
-- **PMC Theme**: Professional medical college branding throughout
+## Testing Artifacts
 
-For a detailed breakdown of all features by development status, see [FEATURES_STATUS.md](docs/FEATURES_STATUS.md).
+- Manual logbook routing test: `LOGBOOK_ROUTING_TEST.md`.
+- Archived CLI consolidation helper script: `CONSOLIDATION_COMPLETE.py`.
 
-## 📊 Development Status
+## Support & Troubleshooting
 
-The SIMS application has completed its initial development phase with the following status:
-
-- **✅ Ready to Use**: ~90 features (60%) - Fully functional and production-ready
-- **⚠️ Needs Work**: ~25 features (17%) - Implemented but requires debugging or completion
-- **🔜 Planned**: ~35 features (23%) - Yet to be built
-
-### Module Status Summary
-
-| Module | Completion | Status |
-|--------|------------|--------|
-| Authentication | 100% | ✅ Complete |
-| User Management | 95% | ✅ Nearly Complete |
-| Dashboards | 100% | ✅ Complete |
-| Clinical Cases | 90% | ✅ Functional |
-| Digital Logbook | 95% | ✅ Nearly Complete |
-| Certificates | 95% | ✅ Nearly Complete |
-| Rotations | 90% | ✅ Functional |
-| Admin Interface | 100% | ✅ Complete |
-| UI/UX | 95% | ✅ Nearly Complete |
-
-See [docs/FEATURES_STATUS.md](docs/FEATURES_STATUS.md) for complete feature categorization.
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.11 or higher
-- pip (Python package manager)
-- Git
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/munaimtahir/sims.git
-cd sims
-```
-
-### 2. Create Virtual Environment (Recommended)
-
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### 3. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Run Database Migrations
-
-```bash
-python manage.py migrate
-```
-
-### 5. Create Superuser (Optional)
-
-```bash
-python manage.py createsuperuser
-```
-
-Or use the default credentials:
-- Username: `admin`
-- Password: `admin123`
-
-### 6. Start Development Server
-
-```bash
-python manage.py runserver
-```
-
-### 7. Access the Application
-
-- **Main Application**: http://127.0.0.1:8000
-- **Admin Interface**: http://127.0.0.1:8000/admin
-- **Login**: Use admin credentials
-
-## 📁 Project Structure
-
-```
-sims/
-├── manage.py                   # Django management script
-├── requirements.txt            # Python dependencies
-├── pytest.ini                  # Test configuration
-├── .flake8                     # Flake8 configuration
-├── README.md                   # This file
-├── sims_project/               # Main project settings
-│   ├── settings.py            # Django configuration
-│   ├── urls.py                # Root URL patterns
-│   └── wsgi.py                # WSGI configuration
-├── sims/                       # SIMS applications
-│   ├── users/                 # User management and authentication
-│   ├── cases/                 # Clinical case management
-│   ├── logbook/               # Digital logbook functionality
-│   ├── certificates/          # Certification tracking
-│   └── rotations/             # Training rotation management
-├── templates/                  # HTML templates
-│   ├── base/                  # Base templates
-│   ├── users/                 # User-related templates
-│   ├── cases/                 # Case templates
-│   ├── logbook/               # Logbook templates
-│   ├── certificates/          # Certificate templates
-│   └── rotations/             # Rotation templates
-├── static/                     # Static files (CSS, JS, images)
-├── media/                      # User uploaded files
-├── docs/                       # Project documentation
-├── tests/                      # Test files
-└── scripts/                    # Utility scripts
-```
+- `TROUBLESHOOTING.md` – Known issues and remediation steps.
+- `LOGBOOK_FORM_ENHANCEMENT_REPORT.md` & `LOGBOOK_ROUTING_TEST.md` – Logbook-specific adjustments.
 
-## 👥 User Roles
+## Verification Checklist
 
-The system supports three primary user roles:
+- ✅ `COMPLETE_ORGANIZATION_GUIDE.md`, `PROJECT_ORGANIZATION_GUIDE.md`, and `PROJECT_STRUCTURE.md` are present with their full original content.
+- ✅ All deployment, bug-fix, and feature status documents from the repository root have been preserved in this directory.
+- ✅ New directory structure is documented in the root `README.md` (see the *Project Structure* section) and cross-referenced here.
 
-### 1. **Admin** 
-- Full system access
-- User management and creation
-- System configuration
-- View all data and analytics
-- Manage all modules
-
-### 2. **Supervisor**
-- Manage assigned postgraduate students
-- Review and approve logbook entries
-- Review clinical cases
-- Evaluate rotations
-- View trainee progress and analytics
-
-### 3. **Postgraduate (PG)**
-- Maintain personal digital logbook
-- Submit clinical cases for review
-- Track certifications and achievements
-- View rotation schedule
-- Access personal analytics and progress
-
-## 🛠️ Development Guidelines
-
-### Code Style
-
-This project follows Python and Django best practices:
-
-- **Code Formatting**: [Black](https://github.com/psf/black) with 100 character line length
-- **Linting**: [Flake8](https://flake8.pycqa.org/) for code quality checks
-- **Style Guide**: [PEP 8](https://www.python.org/dev/peps/pep-0008/)
-
-### Running Code Quality Checks
-
-```bash
-# Format code with Black
-black sims/ --line-length 100
-
-# Run Flake8 linter
-flake8 sims/ --count --statistics
-
-# Run both
-black sims/ --line-length 100 && flake8 sims/ --count --statistics
-```
-
-### Git Workflow
-
-1. Create a feature branch: `git checkout -b feature/your-feature-name`
-2. Make your changes and commit: `git commit -m "Description of changes"`
-3. Push to the branch: `git push origin feature/your-feature-name`
-4. Create a Pull Request
-
-### Commit Messages
-
-Follow conventional commit format:
-- `feat:` New feature
-- `fix:` Bug fix
-- `docs:` Documentation changes
-- `style:` Code style changes (formatting, etc.)
-- `refactor:` Code refactoring
-- `test:` Adding or updating tests
-- `chore:` Maintenance tasks
-
-## 🧪 Testing
-
-### Running Tests
-
-```bash
-# Run all tests
-python manage.py test
-
-# Run tests for a specific app
-python manage.py test sims.users
-
-# Run with pytest (if configured)
-pytest
-```
-
-### Writing Tests
-
-- Place tests in `tests.py` within each app
-- Follow Django testing best practices
-- Aim for good test coverage of critical functionality
-- Test both success and error cases
-
-## 🚀 Deployment
-
-### Development Deployment
-
-The application is ready for development/testing deployment using the built-in Django development server.
-
-### Production Deployment
-
-For production deployment, consider:
-
-1. **Environment Configuration**
-   - Set `DEBUG = False` in settings
-   - Use environment variables for sensitive data
-   - Configure `ALLOWED_HOSTS`
-
-2. **Database**
-   - Use PostgreSQL or MySQL for production
-   - Configure proper database backup
-
-3. **Static Files**
-   - Collect static files: `python manage.py collectstatic`
-   - Serve via nginx or CDN
-
-4. **Web Server**
-   - Use Gunicorn or uWSGI
-   - Configure nginx as reverse proxy
-   - Set up SSL/TLS certificates
-
-5. **Security**
-   - Enable security middleware
-   - Configure HTTPS
-   - Set up proper logging
-   - Implement backup strategy
-
-See [docs/SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md](docs/SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md) for detailed deployment instructions.
-
-## 📖 Documentation
-
-Comprehensive documentation is available in the `docs/` directory:
-
-- [FEATURES_STATUS.md](docs/FEATURES_STATUS.md) - Complete feature categorization and status
-- [PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) - Project completion summary
-- [SYSTEM_STATUS.md](docs/SYSTEM_STATUS.md) - System status report
-- [SYSTEMATIC_EXAMINATION_COMPLETION_REPORT.md](docs/SYSTEMATIC_EXAMINATION_COMPLETION_REPORT.md) - Detailed completion report
-- [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) - Project organization guide
-- [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - Common issues and solutions
-
-## 🤝 Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-1. **Fork the repository** and create your branch from `main`
-2. **Write clear commit messages** following the commit message format
-3. **Follow the code style** guidelines (Black + Flake8)
-4. **Add tests** for new features
-5. **Update documentation** as needed
-6. **Submit a pull request** with a clear description of changes
-
-### Development Setup
-
-```bash
-# Install development dependencies
-pip install -r requirements.txt
-
-# Install pre-commit hooks (optional)
-pip install pre-commit
-pre-commit install
-
-# Run code quality checks before committing
-black sims/ --check
-flake8 sims/
-python manage.py test
-```
-
-## 📄 License
-
-This project is proprietary software developed for medical training management.
-
-## 📞 Support
-
-For support, issues, or questions:
-- **Issues**: Open an issue on GitHub
-- **Documentation**: Check the docs/ directory
-- **Email**: admin@sims.com
-
-## 🙏 Acknowledgments
-
-- Built with [Django](https://www.djangoproject.com/)
-- UI framework: [Bootstrap 5](https://getbootstrap.com/)
-- Icons: [Font Awesome](https://fontawesome.com/)
-
----
-
-**SIMS - Surgical Information Management System**  
-*Version 1.0 - January 2025*  
-*Production-Ready for Pilot Deployment*
+If you notice a documentation gap or need a new summary, open an issue or submit a pull request referencing this index.

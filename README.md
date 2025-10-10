@@ -137,32 +137,36 @@ python manage.py runserver
 ```
 sims/
 ├── manage.py                   # Django management script
+├── README.md                   # Project overview and documentation
 ├── requirements.txt            # Python dependencies
-├── pytest.ini                  # Test configuration
-├── .flake8                     # Flake8 configuration
-├── README.md                   # This file
-├── sims_project/               # Main project settings
-│   ├── settings.py            # Django configuration
-│   ├── urls.py                # Root URL patterns
-│   └── wsgi.py                # WSGI configuration
-├── sims/                       # SIMS applications
-│   ├── users/                 # User management and authentication
-│   ├── cases/                 # Clinical case management
-│   ├── logbook/               # Digital logbook functionality
-│   ├── certificates/          # Certification tracking
-│   └── rotations/             # Training rotation management
-├── templates/                  # HTML templates
-│   ├── base/                  # Base templates
-│   ├── users/                 # User-related templates
-│   ├── cases/                 # Case templates
-│   ├── logbook/               # Logbook templates
-│   ├── certificates/          # Certificate templates
-│   └── rotations/             # Rotation templates
-├── static/                     # Static files (CSS, JS, images)
-├── media/                      # User uploaded files
-├── docs/                       # Project documentation
-├── tests/                      # Test files
-└── scripts/                    # Utility scripts
+├── pytest.ini                  # Pytest configuration
+├── db.sqlite3                  # SQLite development database
+├── deployment/                 # Deployment configuration and scripts
+├── docs/                       # Project documentation and reports
+├── logs/                       # Runtime and diagnostic logs
+│   └── test_reports/           # Archived manual test output
+├── scripts/                    # Cross-platform helper scripts
+├── sims_project/               # Django project configuration
+│   ├── settings.py             # Django settings module
+│   ├── urls.py                 # Root URL patterns
+│   └── wsgi.py                 # WSGI configuration
+├── sims/                       # Core Django applications
+│   ├── users/                  # User management and authentication
+│   ├── cases/                  # Clinical case management
+│   ├── logbook/                # Digital logbook functionality
+│   ├── certificates/           # Certification tracking
+│   └── rotations/              # Training rotation management
+├── static/                     # Project static assets
+│   ├── css/                    # Compiled CSS
+│   ├── images/                 # Shared imagery and icons
+│   └── js/                     # JavaScript bundles
+├── staticfiles/                # Collected static files for deployment
+├── templates/                  # Django template files
+├── tests/                      # Automated and manual verification scripts
+│   ├── manual/                 # CLI utilities for manual validation
+│   ├── resources/              # Supplementary fixtures (HTML, JSON, etc.)
+│   └── results/                # Reserved for generated test artefacts
+└── utils/                      # Data setup and diagnostic utilities
 ```
 
 ## 👥 User Roles
@@ -291,14 +295,15 @@ See [docs/SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md](docs/SERVER_DEPLOYMENT_GUID
 
 ## 📖 Documentation
 
-Comprehensive documentation is available in the `docs/` directory:
+All documentation has been consolidated under `docs/` for consistency. Start with the [documentation index](docs/README.md) to see every guide, report, and checklist that previously lived in the project root.
 
-- [FEATURES_STATUS.md](docs/FEATURES_STATUS.md) - Complete feature categorization and status
-- [PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) - Project completion summary
-- [SYSTEM_STATUS.md](docs/SYSTEM_STATUS.md) - System status report
-- [SYSTEMATIC_EXAMINATION_COMPLETION_REPORT.md](docs/SYSTEMATIC_EXAMINATION_COMPLETION_REPORT.md) - Detailed completion report
-- [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) - Project organization guide
-- [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - Common issues and solutions
+Key references:
+
+- [PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md) – Up-to-date directory layout.
+- [PROJECT_ORGANIZATION_GUIDE.md](docs/PROJECT_ORGANIZATION_GUIDE.md) & [COMPLETE_ORGANIZATION_GUIDE.md](docs/COMPLETE_ORGANIZATION_GUIDE.md) – Detailed notes that were relocated from the root without content changes.
+- [PROJECT_SUMMARY.md](docs/PROJECT_SUMMARY.md) – Overall platform overview and readiness summary.
+- [FEATURES_STATUS.md](docs/FEATURES_STATUS.md) & [SYSTEM_STATUS.md](docs/SYSTEM_STATUS.md) – Feature completeness and system health tracking.
+- [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) – Common issues and remediation steps.
 
 ## 🤝 Contributing
 
