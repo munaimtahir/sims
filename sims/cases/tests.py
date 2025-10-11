@@ -42,14 +42,14 @@ class ClinicalCaseModelTest(TestCase):
         # Create test users and case using factories
         self.supervisor = SupervisorFactory(specialty="medicine")
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
-        
+
         # Create test case using factory (handles all required fields)
         self.case = ClinicalCaseFactory(
             pg=self.pg,
             supervisor=self.supervisor,
             case_title="Acute Myocardial Infarction",
             complexity="complex",
-            status="draft"
+            status="draft",
         )
         self.category = self.case.category
 
@@ -112,12 +112,12 @@ class CaseReviewModelTest(TestCase):
             case_title="Pediatric Asthma",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=8,
             patient_gender="F",
             learning_points="Asthma management in children",
             supervisor=self.supervisor,
-            status="submitted")
+            status="submitted",
+        )
 
     def test_review_creation(self):
         """Test case review creation"""
@@ -130,7 +130,8 @@ class CaseReviewModelTest(TestCase):
             professionalism_score=10,
             overall_rating=8,
             recommendation="approved",
-            comments="Excellent case presentation and analysis.")
+            comments="Excellent case presentation and analysis.",
+        )
 
         self.assertEqual(review.case, self.case)
         self.assertEqual(review.reviewer, self.supervisor)
@@ -145,7 +146,8 @@ class CaseReviewModelTest(TestCase):
             clinical_accuracy_score=8,
             documentation_quality_score=6,
             learning_demonstration_score=7,
-            professionalism_score=9)
+            professionalism_score=9,
+        )
 
         expected_average = (8 + 6 + 7 + 9) / 4
         self.assertEqual(review.calculate_average_score(), expected_average)
@@ -167,13 +169,13 @@ class CaseStatisticsModelTest(TestCase):
                 case_title=f"Case {i + 1}",
                 category=self.category,
                 date_encountered=date.today() - timedelta(days=i),
-                
                 patient_age=30 + i,
                 patient_gender="M" if i % 2 == 0 else "female",
                 learning_points=f"Learning points for case {i + 1}",
                 supervisor=self.supervisor,
                 status="approved" if i < 3 else "draft",
-                completion_score=80 + i if i < 3 else None)
+                completion_score=80 + i if i < 3 else None,
+            )
 
     def test_statistics_calculation(self):
         """Test automatic statistics calculation"""
@@ -232,12 +234,12 @@ class CaseFormsTest(TestCase):
             case_title="Test Case",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=30,
             patient_gender="M",
             learning_points="Test learning points",
             supervisor=self.supervisor,
-            status="submitted")
+            status="submitted",
+        )
 
         form_data = {
             "clinical_accuracy_score": 8,
@@ -274,11 +276,11 @@ class CaseViewsTest(TestCase):
             case_title="Fracture Management",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=45,
             patient_gender="M",
             learning_points="Fracture classification and treatment",
-            supervisor=self.supervisor)
+            supervisor=self.supervisor,
+        )
 
     def test_case_list_view_pg(self):
         """Test case list view for PG user"""

@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 
 from django.http import HttpResponse
-from django.utils import timezone
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
@@ -39,9 +38,7 @@ class ActivityLogViewSet(viewsets.ReadOnlyModelViewSet):
         return response
 
 
-class AuditReportViewSet(
-    mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
-):
+class AuditReportViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = AuditReportSerializer
     permission_classes = [IsAdminUser]
     queryset = AuditReport.objects.all()
@@ -73,9 +70,7 @@ class AuditReportViewSet(
         report = AuditReport.generate(start=start, end=end, created_by=request.user)
         serializer = self.get_serializer(report)
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @action(detail=False, methods=["get"], url_path="latest")
     def latest(self, request, *args, **kwargs):

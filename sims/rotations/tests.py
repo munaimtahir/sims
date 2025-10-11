@@ -7,7 +7,7 @@ from datetime import date, timedelta
 from .models import Rotation, RotationEvaluation, Department, Hospital
 from .forms import RotationCreateForm, RotationEvaluationForm, BulkRotationAssignmentForm
 
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from sims.tests.factories.user_factories import SupervisorFactory, PGFactory
 
 User = get_user_model()
 

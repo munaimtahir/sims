@@ -2,6 +2,7 @@
 Comprehensive user factories for SIMS testing.
 All factories ensure valid model creation with required fields.
 """
+
 import factory
 from factory.django import DjangoModelFactory
 from django.contrib.auth import get_user_model
@@ -21,7 +22,7 @@ class UserFactory(DjangoModelFactory):
     email = factory.LazyAttribute(lambda obj: f"{obj.username}@sims.test")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    password = factory.LazyFunction(lambda: make_password('testpass123'))
+    password = factory.LazyFunction(lambda: make_password("testpass123"))
     is_active = True
     is_archived = False
     role = "admin"

@@ -20179,3 +20179,6 @@ django.core.exceptions.PermissionDenied: Admin access required
 WARNING 2025-10-11 13:58:38,304 apps 3589 140129585655936 Error in rotations app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:58:38,304 apps 3589 140129585655936 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:58:38,305 apps 3589 140129585655936 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,712 apps 3712 140465333457024 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,713 apps 3712 140465333457024 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,714 apps 3712 140465333457024 Error in logbook app ready(): no such table: django_content_type

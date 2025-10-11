@@ -44,9 +44,7 @@ def log_mutation(
     ActivityLog.log(
         actor=(
             getattr(request, "user", None)
-            if request
-            and getattr(request, "user", None)
-            and request.user.is_authenticated
+            if request and getattr(request, "user", None) and request.user.is_authenticated
             else None
         ),
         action=action,

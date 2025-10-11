@@ -16,9 +16,7 @@ def validate_chronology(
     start: Optional[date], end: Optional[date], start_field: str, end_field: str
 ) -> None:
     if start and end and end < start:
-        raise ValidationError(
-            {end_field: "End date must be on or after the start date."}
-        )
+        raise ValidationError({end_field: "End date must be on or after the start date."})
 
 
 def validate_same_supervisor(pg, supervisor) -> None:
