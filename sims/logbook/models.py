@@ -17,9 +17,7 @@ try:
     from sims.users.models import USER_ROLES
 
     PG_ROLE_STRING = next(role[0] for role in USER_ROLES if role[1] == "Postgraduate")
-    SUPERVISOR_ROLE_STRING = next(
-        role[0] for role in USER_ROLES if role[1] == "Supervisor"
-    )
+    SUPERVISOR_ROLE_STRING = next(role[0] for role in USER_ROLES if role[1] == "Supervisor")
     ADMIN_ROLE_STRING = next(role[0] for role in USER_ROLES if role[1] == "Admin")
 except (
     ImportError,
@@ -50,9 +48,7 @@ class Procedure(models.Model):
         ("emergency", "Emergency Procedures"),
     ]
 
-    name = models.CharField(
-        max_length=200, unique=True, help_text="Name of the procedure"
-    )
+    name = models.CharField(max_length=200, unique=True, help_text="Name of the procedure")
 
     category = models.CharField(
         max_length=20,
@@ -61,9 +57,7 @@ class Procedure(models.Model):
         help_text="Category of the procedure",
     )
 
-    description = models.TextField(
-        blank=True, help_text="Detailed description of the procedure"
-    )
+    description = models.TextField(blank=True, help_text="Detailed description of the procedure")
 
     difficulty_level = models.PositiveIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)],
@@ -127,9 +121,9 @@ class Procedure(models.Model):
         """Get average assessment score for this procedure"""
         entries = self.logbook_entries.filter(supervisor_assessment_score__isnull=False)
         if entries.exists():
-            return entries.aggregate(
-                avg_score=models.Avg("supervisor_assessment_score")
-            )["avg_score"]
+            return entries.aggregate(avg_score=models.Avg("supervisor_assessment_score"))[
+                "avg_score"
+            ]
         return None
 
     def get_difficulty_display_color(self):
@@ -177,17 +171,11 @@ class Diagnosis(models.Model):
         help_text="Medical category of the diagnosis",
     )
 
-    icd_code = models.CharField(
-        max_length=20, blank=True, help_text="ICD-10 or ICD-11 code"
-    )
+    icd_code = models.CharField(max_length=20, blank=True, help_text="ICD-10 or ICD-11 code")
 
-    description = models.TextField(
-        blank=True, help_text="Detailed description of the diagnosis"
-    )
+    description = models.TextField(blank=True, help_text="Detailed description of the diagnosis")
 
-    typical_presentation = models.TextField(
-        blank=True, help_text="Typical clinical presentation"
-    )
+    typical_presentation = models.TextField(blank=True, help_text="Typical clinical presentation")
 
     common_procedures = models.ManyToManyField(
         Procedure,
@@ -276,17 +264,13 @@ class Skill(models.Model):
         help_text="Expected competency level",
     )
 
-    description = models.TextField(
-        blank=True, help_text="Detailed description of the skill"
-    )
+    description = models.TextField(blank=True, help_text="Detailed description of the skill")
 
     competency_requirements = models.TextField(
         blank=True, help_text="Requirements to demonstrate competency"
     )
 
-    assessment_methods = models.TextField(
-        blank=True, help_text="Methods for assessing this skill"
-    )
+    assessment_methods = models.TextField(blank=True, help_text="Methods for assessing this skill")
 
     is_active = models.BooleanField(
         default=True, help_text="Whether this skill is currently active"
@@ -306,9 +290,7 @@ class Skill(models.Model):
             models.Index(fields=["is_active"]),
         ]
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "category"], name="unique_skill_per_category"
-            ),
+            models.UniqueConstraint(fields=["name", "category"], name="unique_skill_per_category"),
         ]
 
     def __str__(self):
@@ -348,9 +330,7 @@ class LogbookTemplate(models.Model):
         ("quality", "Quality Improvement"),
     ]
 
-    name = models.CharField(
-        max_length=200, unique=True, help_text="Name of the template"
-    )
+    name = models.CharField(max_length=200, unique=True, help_text="Name of the template")
 
     template_type = models.CharField(
         max_length=20,
@@ -359,9 +339,7 @@ class LogbookTemplate(models.Model):
         help_text="Type of logbook entry this template is for",
     )
 
-    description = models.TextField(
-        blank=True, help_text="Description of when to use this template"
-    )
+    description = models.TextField(blank=True, help_text="Description of when to use this template")
 
     template_structure = models.JSONField(
         default=dict, help_text="JSON structure defining the template layout"
@@ -375,13 +353,9 @@ class LogbookTemplate(models.Model):
         blank=True, help_text="Guidelines for completing entries using this template"
     )
 
-    example_entries = models.TextField(
-        blank=True, help_text="Example entries using this template"
-    )
+    example_entries = models.TextField(blank=True, help_text="Example entries using this template")
 
-    is_default = models.BooleanField(
-        default=False, help_text="Whether this is a default template"
-    )
+    is_default = models.BooleanField(default=False, help_text="Whether this is a default template")
 
     is_active = models.BooleanField(
         default=True, help_text="Whether this template is currently active"
@@ -554,9 +528,7 @@ class LogbookEntry(models.Model):
     clinical_reasoning = models.TextField(
         blank=True, help_text="Clinical reasoning and thought process"
     )
-    learning_points = models.TextField(
-        blank=True, help_text="Key learning points from this case"
-    )
+    learning_points = models.TextField(blank=True, help_text="Key learning points from this case")
     challenges_faced = models.TextField(
         blank=True, help_text="Challenges encountered and how they were addressed"
     )
@@ -595,9 +567,7 @@ class LogbookEntry(models.Model):
     supervisor_action_at = models.DateTimeField(
         null=True, blank=True, help_text="Timestamp when supervisor last took action"
     )
-    updated_at = models.DateTimeField(
-        auto_now=True, help_text="Timestamp of the last modification"
-    )
+    updated_at = models.DateTimeField(auto_now=True, help_text="Timestamp of the last modification")
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -640,7 +610,6 @@ class LogbookEntry(models.Model):
         # Database CHECK constraints with dynamic dates don't work correctly
         constraints = []
 
-
     def __str__(self):
         title = self.case_title
         pg_name = self.pg.get_full_name() if self.pg else "No PG"
@@ -654,12 +623,8 @@ class LogbookEntry(models.Model):
         except ValidationError as exc:
             errors.update(exc.message_dict)
 
-        if self.patient_age is not None and (
-            self.patient_age < 0 or self.patient_age > 150
-        ):
-            errors.setdefault("patient_age", []).append(
-                "Patient age must be between 0 and 150."
-            )
+        if self.patient_age is not None and (self.patient_age < 0 or self.patient_age > 150):
+            errors.setdefault("patient_age", []).append("Patient age must be between 0 and 150.")
 
         # Sanitise free text inputs to prevent script injection.
         text_fields = [
@@ -717,11 +682,7 @@ class LogbookEntry(models.Model):
 
         if new_status_intended == "pending":
             if self.supervisor:
-                if (
-                    old_status == "draft"
-                    or old_status is None
-                    or old_status == "returned"
-                ):
+                if old_status == "draft" or old_status is None or old_status == "returned":
                     self.submitted_to_supervisor_at = now
                     self.supervisor_action_at = None
                     self._notify_supervisor_of_submission()
@@ -881,9 +842,7 @@ class LogbookReview(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="logbook_reviews_given",
-        limit_choices_to={
-            "role__in": [SUPERVISOR_ROLE_STRING, ADMIN_ROLE_STRING]
-        },  # Updated
+        limit_choices_to={"role__in": [SUPERVISOR_ROLE_STRING, ADMIN_ROLE_STRING]},  # Updated
         help_text="Person conducting the review",
     )
 
@@ -904,9 +863,7 @@ class LogbookReview(models.Model):
         blank=True, help_text="Strengths demonstrated in this case"
     )
 
-    areas_for_improvement = models.TextField(
-        blank=True, help_text="Areas requiring improvement"
-    )
+    areas_for_improvement = models.TextField(blank=True, help_text="Areas requiring improvement")
 
     recommendations = models.TextField(
         blank=True, help_text="Specific recommendations for future learning"
@@ -983,10 +940,7 @@ class LogbookReview(models.Model):
             # This check assumes LogbookEntry.supervisor is correctly populated from PG.supervisor
             if self.logbook_entry.supervisor != self.reviewer:
                 # Also check direct assignment on PG if entry.supervisor might be different (e.g. admin override)
-                if (
-                    self.logbook_entry.pg
-                    and self.logbook_entry.pg.supervisor != self.reviewer
-                ):
+                if self.logbook_entry.pg and self.logbook_entry.pg.supervisor != self.reviewer:
                     raise ValidationError(
                         "Supervisors can only review entries of PGs they directly supervise or entries explicitly assigned to them."
                     )
@@ -1030,11 +984,7 @@ class LogbookReview(models.Model):
         return status_colors.get(self.status, "#6c757d")
 
     def is_complete(self):
-        return (
-            self.feedback
-            and self.status != "pending"
-            and self.overall_score is not None
-        )
+        return self.feedback and self.status != "pending" and self.overall_score is not None
 
 
 class LogbookStatistics(models.Model):
@@ -1107,9 +1057,7 @@ class LogbookStatistics(models.Model):
 
         procedure_entries = entries.filter(procedures__isnull=False).distinct()
         self.total_procedures = sum(e.procedures.count() for e in procedure_entries)
-        self.unique_procedures = (
-            procedure_entries.values("procedures").distinct().count()
-        )
+        self.unique_procedures = procedure_entries.values("procedures").distinct().count()
 
         skill_entries = entries.filter(skills__isnull=False).distinct()
         self.total_skills = sum(e.skills.count() for e in skill_entries)
@@ -1128,9 +1076,7 @@ class LogbookStatistics(models.Model):
         else:
             self.completion_rate = 0.0
 
-        self.last_entry_date = (
-            entries.order_by("-date").first().date if entries.exists() else None
-        )
+        self.last_entry_date = entries.order_by("-date").first().date if entries.exists() else None
 
         actioned_entries = entries.filter(
             submitted_to_supervisor_at__isnull=False,
@@ -1143,9 +1089,7 @@ class LogbookStatistics(models.Model):
             if e.supervisor_action_at and e.submitted_to_supervisor_at
         ]
         if review_times_seconds:
-            self.average_review_time = (
-                sum(review_times_seconds) / len(review_times_seconds)
-            ) / (
+            self.average_review_time = (sum(review_times_seconds) / len(review_times_seconds)) / (
                 60 * 60 * 24
             )  # Corrected field name
         else:
@@ -1162,9 +1106,7 @@ class LogbookStatistics(models.Model):
             self.entries_needing_revision_rate = 0.0
 
         # Scores (example, adapt as needed)
-        self.average_self_score = entries.aggregate(
-            avg=models.Avg("self_assessment_score")
-        )["avg"]
+        self.average_self_score = entries.aggregate(avg=models.Avg("self_assessment_score"))["avg"]
         self.average_supervisor_score = entries.aggregate(
             avg=models.Avg("supervisor_assessment_score")
         )["avg"]

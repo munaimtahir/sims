@@ -9,17 +9,13 @@ from .models import SavedSearchSuggestion, SearchQueryLog
 
 
 @receiver(post_save, sender=SearchQueryLog)
-def update_suggestions(
-    sender, instance: SearchQueryLog, created: bool, **_: object
-) -> None:
+def update_suggestions(sender, instance: SearchQueryLog, created: bool, **_: object) -> None:
     """Keep suggestion table warm with most used queries."""
 
     if not created or not instance.query:
         return
 
-    suggestion, created = SavedSearchSuggestion.objects.get_or_create(
-        label=instance.query
-    )
+    suggestion, created = SavedSearchSuggestion.objects.get_or_create(label=instance.query)
     if created:
         return
 

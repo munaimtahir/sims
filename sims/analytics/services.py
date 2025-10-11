@@ -45,9 +45,7 @@ def validate_window(raw_window: Optional[str]) -> int:
 
     window = 30 if raw_window is None else int(raw_window)
     if window not in ALLOWED_WINDOWS:
-        raise ValueError(
-            f"Window must be one of {', '.join(map(str, ALLOWED_WINDOWS))}"
-        )
+        raise ValueError(f"Window must be one of {', '.join(map(str, ALLOWED_WINDOWS))}")
     return window
 
 
@@ -80,9 +78,7 @@ def trend_for_user(
     from django.db.models import Q
 
     if target_user not in get_accessible_users(acting_user):
-        raise PermissionError(
-            "You do not have permission to view this user's analytics."
-        )
+        raise PermissionError("You do not have permission to view this user's analytics.")
 
     cache_key = params.cache_key(
         target_user.pk, extra_filters="|".join(status_filter) if status_filter else None
@@ -125,9 +121,7 @@ def trend_for_user(
         if len(rolling_window) > params.window:
             rolling_window.pop(0)
         moving_average = (
-            sum(rolling_window) / len(rolling_window)
-            if params.include_moving_average
-            else None
+            sum(rolling_window) / len(rolling_window) if params.include_moving_average else None
         )
         series.append(
             {
@@ -135,9 +129,7 @@ def trend_for_user(
                 "count": count,
                 "approved": int(bucket["approved"]),
                 "avg_score": (
-                    float(bucket["avg_score"])
-                    if bucket["avg_score"] is not None
-                    else None
+                    float(bucket["avg_score"]) if bucket["avg_score"] is not None else None
                 ),
                 "moving_average": (
                     round(moving_average, 2) if moving_average is not None else None
@@ -187,9 +179,7 @@ def _comparative_block(
     subset = queryset.filter(pg_id__in=user_ids)
     total_entries = subset.count()
     approved_count = subset.filter(status="approved").count()
-    average_score = (
-        subset.aggregate(avg=Avg("supervisor_assessment_score"))["avg"] or 0.0
-    )
+    average_score = subset.aggregate(avg=Avg("supervisor_assessment_score"))["avg"] or 0.0
     if metric == "approval_rate":
         value: float = approved_count / total_entries if total_entries else 0.0
     elif metric == "avg_score":

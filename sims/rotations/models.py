@@ -38,9 +38,7 @@ class Hospital(models.Model):
 
     address = models.TextField(blank=True, help_text="Complete hospital address")
 
-    phone = models.CharField(
-        max_length=20, blank=True, help_text="Hospital contact phone number"
-    )
+    phone = models.CharField(max_length=20, blank=True, help_text="Hospital contact phone number")
 
     email = models.EmailField(blank=True, help_text="Hospital contact email")
 
@@ -50,9 +48,7 @@ class Hospital(models.Model):
         blank=True, help_text="Description of hospital and its specialties"
     )
 
-    facilities = models.TextField(
-        blank=True, help_text="Available facilities and equipment"
-    )
+    facilities = models.TextField(blank=True, help_text="Available facilities and equipment")
 
     is_active = models.BooleanField(
         default=True, help_text="Whether this hospital is currently accepting rotations"
@@ -317,9 +313,7 @@ class Rotation(models.Model):
             errors.update(exc.message_dict)
 
         try:
-            validate_chronology(
-                self.start_date, self.end_date, "start_date", "end_date"
-            )
+            validate_chronology(self.start_date, self.end_date, "start_date", "end_date")
         except ValidationError as exc:
             errors.update(exc.message_dict)
 
@@ -330,10 +324,7 @@ class Rotation(models.Model):
             ).exclude(pk=self.pk)
 
             for rotation in overlapping:
-                if (
-                    self.start_date <= rotation.end_date
-                    and self.end_date >= rotation.start_date
-                ):
+                if self.start_date <= rotation.end_date and self.end_date >= rotation.start_date:
                     errors["start_date"] = (
                         f"This rotation overlaps with existing rotation: {rotation}"
                     )
@@ -520,15 +511,11 @@ class RotationEvaluation(models.Model):
         max_length=20, choices=EVALUATION_TYPES, help_text="Type of evaluation"
     )
 
-    score = models.IntegerField(
-        null=True, blank=True, help_text="Numerical score (0-100)"
-    )
+    score = models.IntegerField(null=True, blank=True, help_text="Numerical score (0-100)")
 
     comments = models.TextField(blank=True, help_text="Detailed comments and feedback")
 
-    recommendations = models.TextField(
-        blank=True, help_text="Recommendations for improvement"
-    )
+    recommendations = models.TextField(blank=True, help_text="Recommendations for improvement")
 
     status = models.CharField(
         max_length=20,
@@ -566,7 +553,7 @@ class RotationEvaluation(models.Model):
         # Guard: only validate if both FKs are set (avoids RelatedObjectDoesNotExist before save)
         if not (self.evaluator_id and self.rotation_id):
             return
-            
+
         # Ensure evaluator has permission to evaluate this rotation
         if self.evaluator and self.rotation:
             if (
@@ -574,9 +561,7 @@ class RotationEvaluation(models.Model):
                 and self.evaluator != self.rotation.supervisor
                 and self.evaluator != self.rotation.pg.supervisor
             ):
-                raise ValidationError(
-                    "Supervisor can only evaluate rotations they supervise"
-                )
+                raise ValidationError("Supervisor can only evaluate rotations they supervise")
 
             if (
                 self.evaluator.role == "pg"

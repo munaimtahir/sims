@@ -167,9 +167,7 @@ class User(AbstractUser):
 
         # Supervisors must have specialty
         if self.role == "supervisor" and not self.specialty:
-            raise ValidationError(
-                {"specialty": "Specialty is required for Supervisors"}
-            )
+            raise ValidationError({"specialty": "Specialty is required for Supervisors"})
 
         # Admins don't need specialty/year/supervisor
         if self.role == "admin":
@@ -182,9 +180,7 @@ class User(AbstractUser):
 
         # Ensure supervisor is actually a supervisor
         if self.supervisor and self.supervisor.role != "supervisor":
-            raise ValidationError(
-                {"supervisor": "Assigned supervisor must have supervisor role"}
-            )
+            raise ValidationError({"supervisor": "Assigned supervisor must have supervisor role"})
 
     def save(self, *args, **kwargs):
         """Override save to handle archiving and validation"""
@@ -285,17 +281,13 @@ class User(AbstractUser):
                 from sims.logbook.models import LogbookEntry
 
                 for pg in self.get_assigned_pgs():
-                    count += LogbookEntry.objects.filter(
-                        pg=pg, status="pending"
-                    ).count()
+                    count += LogbookEntry.objects.filter(pg=pg, status="pending").count()
 
             if apps.is_installed("sims.cases"):
                 from sims.cases.models import ClinicalCase
 
                 for pg in self.get_assigned_pgs():
-                    count += ClinicalCase.objects.filter(
-                        pg=pg, status="pending"
-                    ).count()
+                    count += ClinicalCase.objects.filter(pg=pg, status="pending").count()
 
         except ImportError:
             # Handle case where related models don't exist yet
