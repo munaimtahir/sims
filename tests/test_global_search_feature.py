@@ -5,8 +5,6 @@ import django
 import pytest
 from django.urls import reverse
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "sims_project.settings")
-django.setup()
 
 pytestmark = pytest.mark.django_db
 
