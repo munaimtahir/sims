@@ -328,11 +328,9 @@ class ClinicalCase(models.Model):
             models.Index(fields=["is_featured"]),
             models.Index(fields=["created_at"]),
         ]
+        # Note: Date validation is handled in the clean() method
+        # Database CHECK constraints with dynamic dates don't work correctly
         constraints = [
-            models.CheckConstraint(
-                check=models.Q(date_encountered__lte=timezone.now().date()),
-                name="case_date_not_future",
-            ),
             models.CheckConstraint(
                 check=models.Q(patient_age__gte=0) & models.Q(patient_age__lte=150),
                 name="case_valid_age",
