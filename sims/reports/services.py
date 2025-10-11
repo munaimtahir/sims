@@ -6,20 +6,21 @@ import base64
 import io
 from dataclasses import dataclass
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, Iterable, List
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.mail import EmailMessage
 from django.utils import timezone
-from pathlib import Path
 from openpyxl import Workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import (Paragraph, SimpleDocTemplate, Spacer, Table,
+                                TableStyle)
 
 from sims.analytics.services import get_accessible_users
 from sims.logbook.models import LogbookEntry

@@ -12,20 +12,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from sims.analytics.serializers import (
-    ComparativeResponseSerializer,
-    PerformanceMetricsSerializer,
-    TrendPointSerializer,
-    TrendResponseSerializer,
-)
-from sims.analytics.services import (
-    TrendRequest,
-    comparative_summary,
-    get_accessible_users,
-    performance_metrics,
-    trend_for_user,
-    validate_window,
-)
+from sims.analytics.serializers import (ComparativeResponseSerializer,
+                                        PerformanceMetricsSerializer,
+                                        TrendPointSerializer,
+                                        TrendResponseSerializer)
+from sims.analytics.services import (TrendRequest, comparative_summary,
+                                     get_accessible_users, performance_metrics,
+                                     trend_for_user, validate_window)
 
 User = get_user_model()
 

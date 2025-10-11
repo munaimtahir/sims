@@ -1,32 +1,23 @@
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
-from django.views.generic.edit import FormView
-from django.urls import reverse_lazy, reverse
-from django.http import JsonResponse, HttpResponse
-from django.db.models import Q, Count, Avg
-from django.utils import timezone
-from django.core.exceptions import PermissionDenied
-from django.contrib.auth import get_user_model
 import csv
 
-from .models import Rotation, RotationEvaluation, Department, Hospital
-from .forms import (
-    RotationCreateForm,
-    RotationUpdateForm,
-    RotationEvaluationForm,
-    RotationSearchForm,
-    BulkRotationAssignmentForm,
-)
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
+from django.db.models import Avg, Count, Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView)
+from django.views.generic.edit import FormView
+
+from .forms import (BulkRotationAssignmentForm, RotationCreateForm,
+                    RotationEvaluationForm, RotationSearchForm,
+                    RotationUpdateForm)
+from .models import Department, Hospital, Rotation, RotationEvaluation
 
 User = get_user_model()
 

@@ -1,29 +1,25 @@
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
+import json
+
 from django.contrib import messages
-from django.http import JsonResponse
-from django.core.paginator import Paginator
-from django.db.models import Q, Count
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, UpdateView, View
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator
+from django.db.models import Count, Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.views.generic import DetailView, ListView, UpdateView, View
+
+from .decorators import (AdminRequiredMixin, PGRequiredMixin,
+                         SupervisorOrAdminRequiredMixin,
+                         SupervisorRequiredMixin, admin_required, pg_required,
+                         supervisor_or_admin_required, supervisor_required)
+from .forms import PGSearchForm, SupervisorAssignmentForm, UserProfileForm
 from .models import User
-from .forms import UserProfileForm, PGSearchForm, SupervisorAssignmentForm
-from .decorators import (
-    admin_required,
-    supervisor_required,
-    pg_required,
-    AdminRequiredMixin,
-    SupervisorRequiredMixin,
-    PGRequiredMixin,
-    SupervisorOrAdminRequiredMixin,
-    supervisor_or_admin_required,
-)
-import json
 
 
 # Authentication Views

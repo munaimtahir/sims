@@ -2,11 +2,8 @@
 
 from django.urls import path
 
-from sims.analytics.views import (
-    ComparativeAnalyticsView,
-    PerformanceMetricsView,
-    TrendAnalyticsView,
-)
+from sims.analytics.views import (ComparativeAnalyticsView,
+                                  PerformanceMetricsView, TrendAnalyticsView)
 
 app_name = "analytics_api"
 

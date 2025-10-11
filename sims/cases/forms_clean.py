@@ -1,7 +1,8 @@
+from datetime import date, timedelta
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from datetime import date, timedelta
 
 from .models import CaseCategory, ClinicalCase
 

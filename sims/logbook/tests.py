@@ -1,28 +1,19 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from datetime import date, timedelta
+
 from django.conf import settings  # Import settings
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.test import Client, TestCase
+from django.urls import reverse
+from django.utils import timezone
 
-from .models import (
-    LogbookEntry,
-    LogbookReview,
-    LogbookTemplate,
-    Procedure,
-    Diagnosis,
-    Skill,
-    LogbookStatistics,
-)
-from .forms import (
-    LogbookEntryCreateForm,
-    LogbookReviewForm,
-    BulkLogbookActionForm,
-    QuickLogbookEntryForm,
-)
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
 
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from .forms import (BulkLogbookActionForm, LogbookEntryCreateForm,
+                    LogbookReviewForm, QuickLogbookEntryForm)
+from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
+                     LogbookTemplate, Procedure, Skill)
 
 User = get_user_model()
 

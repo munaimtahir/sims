@@ -1,12 +1,8 @@
-from datetime import date, timedelta
-import json
-
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
-from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
 

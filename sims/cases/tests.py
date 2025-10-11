@@ -1,14 +1,18 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.utils import timezone
 from datetime import date, timedelta
 
-from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
-from .forms import ClinicalCaseForm, CaseReviewForm
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from sims.tests.factories.case_factories import (CaseCategoryFactory,
+                                                 ClinicalCaseFactory)
 from sims.tests.factories.logbook_factories import DiagnosisFactory
-from sims.tests.factories.case_factories import ClinicalCaseFactory, CaseCategoryFactory
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
+
+from .forms import CaseReviewForm, ClinicalCaseForm
+from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase
 
 User = get_user_model()
 

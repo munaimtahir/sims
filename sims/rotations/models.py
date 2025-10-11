@@ -1,19 +1,16 @@
 from datetime import date, timedelta
 
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from dateutil.relativedelta import relativedelta
 from simple_history.models import HistoricalRecords
 
-from sims.domain.validators import (
-    sanitize_free_text,
-    validate_chronology,
-    validate_not_future,
-    validate_same_supervisor,
-)
+from sims.domain.validators import (sanitize_free_text, validate_chronology,
+                                    validate_not_future,
+                                    validate_same_supervisor)
 
 User = get_user_model()
 

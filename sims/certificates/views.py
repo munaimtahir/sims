@@ -1,34 +1,26 @@
-from django.shortcuts import get_object_or_404
+import csv
+import json
+from datetime import timedelta
+
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-)
-from django.views.generic.edit import FormView
-from django.urls import reverse_lazy, reverse
-from django.http import JsonResponse, HttpResponse, Http404, FileResponse
-from django.db.models import Q, Count
-from django.utils import timezone
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth import get_user_model
-from datetime import timedelta
-import json
-import csv
+from django.db.models import Count, Q
+from django.http import FileResponse, Http404, HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  TemplateView, UpdateView)
+from django.views.generic.edit import FormView
 
-from .models import Certificate, CertificateReview, CertificateType, CertificateStatistics
-from .forms import (
-    CertificateCreateForm,
-    CertificateUpdateForm,
-    CertificateReviewForm,
-    CertificateSearchForm,
-    BulkCertificateApprovalForm,
-)
+from .forms import (BulkCertificateApprovalForm, CertificateCreateForm,
+                    CertificateReviewForm, CertificateSearchForm,
+                    CertificateUpdateForm)
+from .models import (Certificate, CertificateReview, CertificateStatistics,
+                     CertificateType)
 
 User = get_user_model()
 

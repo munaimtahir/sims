@@ -1,11 +1,14 @@
 """Factories for Cases models"""
 
+from datetime import date
+
 import factory
 from factory.django import DjangoModelFactory
-from datetime import date
+
 from sims.cases.models import CaseCategory, ClinicalCase
-from .user_factories import SupervisorFactory, PGFactory
+
 from .logbook_factories import DiagnosisFactory
+from .user_factories import PGFactory, SupervisorFactory
 
 
 class CaseCategoryFactory(DjangoModelFactory):

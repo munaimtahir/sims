@@ -1,9 +1,12 @@
 """Factories for Logbook models"""
 
+from datetime import date
+
 import factory
 from factory.django import DjangoModelFactory
-from datetime import date
+
 from sims.logbook.models import Diagnosis, Procedure
+
 from .user_factories import PGFactory
 
 
