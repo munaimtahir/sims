@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",  # For number formatting
+    "django.contrib.postgres",
     # Third-party apps
     "crispy_forms",  # For better form rendering
     "crispy_bootstrap5",  # Bootstrap 5 support for forms
@@ -53,16 +54,15 @@ INSTALLED_APPS = [
     "rest_framework",  # For API endpoints
     "django_filters",  # For advanced filtering
     "widget_tweaks",  # For form widget customization
+    "simple_history",  # For audit history
     # SIMS apps
     "sims.users",
     "sims.rotations",
     "sims.certificates",
     "sims.logbook",
     "sims.cases",
-    "sims.analytics",
-    "sims.notifications",
-    "sims.bulk",
-    "sims.reports",
+    "sims.search",
+    "sims.audit",
 ]
 
 MIDDLEWARE = [
@@ -73,6 +73,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 ROOT_URLCONF = "sims_project.urls"
@@ -153,6 +154,15 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
+
 # Only include static directory if it exists and has content
 STATICFILES_DIRS = []
 static_dir = BASE_DIR / "static"
@@ -219,6 +229,13 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "user": "120/min",
+        "search": "30/min",
+    },
 }
 
 # Email Configuration (for notifications)
@@ -293,6 +310,13 @@ SIMS_SETTINGS = {
     "BACKUP_LOCATION": BASE_DIR / "backups",
 }
 
+GLOBAL_SEARCH_CONFIG = {
+    "MAX_RESULTS": int(os.environ.get("SEARCH_MAX_RESULTS", "100")),
+    "RECENT_HISTORY_LIMIT": 10,
+    "SUGGESTION_LIMIT": 8,
+    "DEBOUNCE_MS": 250,
+}
+
 # Logging Configuration
 LOGGING = {
     "version": 1,
@@ -342,28 +366,30 @@ LOGGING = {
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
-# Cache Configuration (for production)
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "unique-snowflake",
-        "TIMEOUT": 300,  # 5 minutes
-        "OPTIONS": {
-            "MAX_ENTRIES": 1000,
-        },
+# Cache Configuration (Redis preferred)
+REDIS_URL = os.environ.get("REDIS_URL")
+if REDIS_URL:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
+            "TIMEOUT": int(os.environ.get("CACHE_TIMEOUT", "300")),
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            },
+        }
     }
-}
-
-# For production with Redis:
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-#         'LOCATION': 'redis://127.0.0.1:6379/1',
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         }
-#     }
-# }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "unique-snowflake",
+            "TIMEOUT": 300,  # 5 minutes
+            "OPTIONS": {
+                "MAX_ENTRIES": 1000,
+            },
+        }
+    }
 
 # Celery Configuration (for background tasks)
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'

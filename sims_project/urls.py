@@ -19,7 +19,7 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.views import LogoutView
 
 # Import test view
-# from test_crispy_view import test_crispy_view
+from tests.test_crispy_view import test_crispy_view
 
 
 # Custom admin logout view that handles GET requests
@@ -86,13 +86,8 @@ urlpatterns = [
     path("certificates/", include("sims.certificates.urls")),
     path("logbook/", include("sims.logbook.urls")),
     path("cases/", include("sims.cases.urls")),
-    path("api/analytics/", include("sims.analytics.urls", namespace="analytics_api")),
-    path(
-        "api/notifications/",
-        include("sims.notifications.urls", namespace="notifications_api"),
-    ),
-    path("api/bulk/", include("sims.bulk.urls", namespace="bulk_api")),
-    path("api/reports/", include("sims.reports.urls", namespace="reports_api")),
+    path("api/audit/", include("sims.audit.urls")),
+    path("api/search/", include("sims.search.urls")),
 ]
 
 # Serve media files in development
