@@ -20232,3 +20232,143 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
     raise PermissionDenied(self.get_permission_denied_message())
 django.core.exceptions.PermissionDenied
+INFO 2025-10-11 14:02:15,712 apps 3565 140450939216000 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:02:15,717 apps 3565 140450939216000 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:03:15,116 apps 3576 140569544073344 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:03:15,122 apps 3576 140569544073344 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:03:53,869 apps 3585 139633256722560 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:03:53,874 apps 3585 139633256722560 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:04:14,244 apps 3591 139949770240128 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:04:14,249 apps 3591 139949770240128 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:05:40,177 apps 3611 140629046554752 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:05:40,183 apps 3611 140629046554752 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:05:53,560 apps 3615 139661392240768 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:05:53,566 apps 3615 139661392240768 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:06:21,124 apps 3619 140218063466624 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:06:21,129 apps 3619 140218063466624 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:06:42,151 apps 3625 140620612567168 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:06:42,156 apps 3625 140620612567168 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:09:36,839 apps 3724 140619455008896 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:09:36,844 apps 3724 140619455008896 Logbook periodic tasks setup completed
+ERROR 2025-10-11 14:09:40,805 log 3724 140619455008896 Internal Server Error: /cases/create/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/cases/views.py", line 24, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 152, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/runner/work/sims/sims/sims/cases/models.py", line 360, in clean
+    if self.supervisor and self.pg and self.rotation:
+                           ^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/fields/related_descriptors.py", line 246, in __get__
+    raise self.RelatedObjectDoesNotExist(
+sims.cases.models.ClinicalCase.pg.RelatedObjectDoesNotExist: ClinicalCase has no pg.
+ERROR 2025-10-11 14:09:42,598 log 3724 140619455008896 Internal Server Error: /cases/create/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/cases/views.py", line 24, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 152, in post
+    if form.is_valid():
+       ^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 201, in is_valid
+    return self.is_bound and not self.errors
+                                 ^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 196, in errors
+    self.full_clean()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/forms.py", line 435, in full_clean
+    self._post_clean()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/forms/models.py", line 486, in _post_clean
+    self.instance.full_clean(exclude=exclude, validate_unique=False)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1477, in full_clean
+    self.clean()
+  File "/home/runner/work/sims/sims/sims/cases/models.py", line 360, in clean
+    if self.supervisor and self.pg and self.rotation:
+                           ^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/fields/related_descriptors.py", line 246, in __get__
+    raise self.RelatedObjectDoesNotExist(
+sims.cases.models.ClinicalCase.pg.RelatedObjectDoesNotExist: ClinicalCase has no pg.
+ERROR 2025-10-11 14:09:43,170 log 3724 140619455008896 Internal Server Error: /cases/1/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/detail.py", line 108, in get
+    self.object = self.get_object()
+                  ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/detail.py", line 53, in get_object
+    obj = queryset.get()
+          ^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 633, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 380, in __len__
+    self._fetch_all()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1883, in _fetch_all
+    self._prefetch_related_objects()
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1273, in _prefetch_related_objects
+    prefetch_related_objects(self._result_cache, *self._prefetch_related_lookups)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 2296, in prefetch_related_objects
+    raise AttributeError(
+AttributeError: Cannot find 'competencies_achieved' on ClinicalCase object, 'competencies_achieved' is an invalid parameter to prefetch_related()
+WARNING 2025-10-11 14:09:47,201 log 3724 140619455008896 Not Found: /cases/1/

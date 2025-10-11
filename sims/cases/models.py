@@ -397,6 +397,40 @@ class ClinicalCase(models.Model):
         """Check if case can be deleted"""
         return self.status == "draft"
 
+    def can_be_submitted(self):
+        """Check if case can be submitted for review"""
+        return self.status == "draft"
+
+    def can_be_reviewed(self):
+        """Check if case can be reviewed"""
+        return self.status in ["submitted", "under_review"]
+
+    def is_complete(self):
+        """Check if case has all required fields filled"""
+        required_fields = [
+            self.case_title,
+            self.chief_complaint,
+            self.history_of_present_illness,
+            self.physical_examination,
+            self.management_plan,
+            self.clinical_reasoning,
+            self.learning_points,
+        ]
+        return all(field for field in required_fields)
+
+    def can_edit(self, user):
+        """Check if user can edit this case"""
+        # Admin can edit any case
+        if user.is_admin():
+            return True
+        # PG can edit their own draft cases
+        if user == self.pg and self.status in ["draft", "needs_revision"]:
+            return True
+        # Supervisor can edit cases assigned to them
+        if user == self.supervisor:
+            return True
+        return False
+
     def is_overdue(self):
         """Check if case submission is overdue"""
         if self.status != "draft":
