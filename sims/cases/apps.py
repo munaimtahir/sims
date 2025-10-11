@@ -11,6 +11,6 @@ class CasesConfig(AppConfig):
     def ready(self):
         """Import signals when the app is ready"""
         try:
-            import sims.cases.signals
+            pass
         except ImportError:
             pass

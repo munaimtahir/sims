@@ -3,11 +3,8 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.core.files.uploadedfile import SimpleUploadedFile
 from datetime import date, timedelta
-import json
 from django.conf import settings  # Import settings
-import urllib.parse  # Import for URL encoding
 
 from .models import (
     LogbookEntry,
@@ -22,9 +19,10 @@ from .forms import (
     LogbookEntryCreateForm,
     LogbookReviewForm,
     BulkLogbookActionForm,
-    LogbookSearchForm,
     QuickLogbookEntryForm,
 )
+
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
 
 User = get_user_model()
 
@@ -186,22 +184,16 @@ class LogbookEntryModelTests(TestCase):
             last_name="User",
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            first_name="Super",
-            last_name="Visor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
-            first_name="Post",
-            last_name="Graduate",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -429,18 +421,16 @@ class LogbookReviewModelTests(TestCase):
 
     def setUp(self):
         """Set up test data"""
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -477,7 +467,7 @@ class LogbookReviewModelTests(TestCase):
 
     def test_review_updates_entry_status(self):
         """Test that review status updates entry status"""
-        review = LogbookReview.objects.create(
+        _review = LogbookReview.objects.create(
             logbook_entry=self.entry,
             reviewer=self.supervisor,
             status="approved",
@@ -550,6 +540,8 @@ class LogbookStatisticsModelTests(TestCase):
     """Test cases for the LogbookStatistics model"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.pg_user = User.objects.create_user(
             username="pg_test", email="pg@test.com", password="testpass123", role="pg"
@@ -585,7 +577,7 @@ class LogbookStatisticsModelTests(TestCase):
         )
         approved_entry.procedures.add(self.procedure)
 
-        draft_entry = LogbookEntry.objects.create(
+        _draft_entry = LogbookEntry.objects.create(
             pg=self.pg_user,
             date=date.today(),
             patient_age=25,
@@ -648,18 +640,16 @@ class LogbookViewTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -741,6 +731,7 @@ class LogbookViewTests(TestCase):
             email="other@test.com",
             password="testpass123",
             role="supervisor",
+            specialty="medicine",
         )
 
         other_pg = User.objects.create_user(
@@ -748,6 +739,8 @@ class LogbookViewTests(TestCase):
             email="otherpg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=other_supervisor,
         )
 
@@ -786,18 +779,16 @@ class LogbookFormTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -975,6 +966,8 @@ class LogbookAPITests(TestCase):
     """Test cases for logbook API endpoints"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -1049,6 +1042,8 @@ class LogbookExportTests(TestCase):
     """Test cases for logbook export functionality"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -1104,18 +1099,16 @@ class LogbookIntegrationTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -1406,7 +1399,7 @@ class LogbookWorkflowTests(TestCase):
         self.assertIsNone(entry.supervisor)
         self.assertIsNone(entry.submitted_to_supervisor_at)
 
-    def test_pg_creates_entry_without_supervisor(self):
+    def test_pg_creates_entry_without_supervisor_second_attempt(self):
         # Temporarily remove supervisor attribute from the instance for this test
         # The User model's clean() method prevents saving a PG without a supervisor.
         # The view logic relies on request.user.supervisor being None.

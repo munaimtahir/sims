@@ -1,12 +1,14 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.core.files.uploadedfile import SimpleUploadedFile
 from django.utils import timezone
 from datetime import date, timedelta
 
 from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
 from .forms import ClinicalCaseForm, CaseReviewForm
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from sims.tests.factories.logbook_factories import DiagnosisFactory
+from sims.tests.factories.case_factories import ClinicalCaseFactory, CaseCategoryFactory
 
 User = get_user_model()
 
@@ -37,35 +39,19 @@ class ClinicalCaseModelTest(TestCase):
     """Test the ClinicalCase model"""
 
     def setUp(self):
-        # Create test users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
-
-        # Create test category
-        self.category = CaseCategory.objects.create(name="Emergency Medicine", color_code="#F44336")
-
-        # Create test case
-        self.case = ClinicalCase.objects.create(
+        # Create test users and case using factories
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
+        
+        # Create test case using factory (handles all required fields)
+        self.case = ClinicalCaseFactory(
             pg=self.pg,
-            case_title="Acute Myocardial Infarction",
-            category=self.category,
-            date=date.today(),
-            patient_initials="J.D.",
-            patient_age=65,
-            patient_gender="male",
-            patient_history="Hypertension, Diabetes",
-            presenting_complaints="Chest pain, shortness of breath",
-            learning_points="ECG interpretation, STEMI management",
             supervisor=self.supervisor,
+            case_title="Acute Myocardial Infarction",
+            complexity="complex",
+            status="draft"
         )
+        self.category = self.case.category
 
     def test_case_creation(self):
         """Test clinical case creation"""
@@ -107,9 +93,7 @@ class ClinicalCaseModelTest(TestCase):
         self.assertTrue(self.case.can_edit(self.supervisor))
 
         # Other users cannot edit
-        other_user = User.objects.create_user(
-            username="other", email="other@test.com", password="testpass123", role="pg"
-        )
+        other_user = PGFactory()
         self.assertFalse(self.case.can_edit(other_user))
 
 
@@ -118,16 +102,8 @@ class CaseReviewModelTest(TestCase):
 
     def setUp(self):
         # Create test users and case
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.category = CaseCategory.objects.create(name="Pediatrics", color_code="#4CAF50")
 
@@ -135,14 +111,13 @@ class CaseReviewModelTest(TestCase):
             pg=self.pg,
             case_title="Pediatric Asthma",
             category=self.category,
-            date=date.today(),
-            patient_initials="A.B.",
+            date_encountered=date.today(),
+            
             patient_age=8,
-            patient_gender="female",
+            patient_gender="F",
             learning_points="Asthma management in children",
             supervisor=self.supervisor,
-            status="submitted",
-        )
+            status="submitted")
 
     def test_review_creation(self):
         """Test case review creation"""
@@ -155,8 +130,7 @@ class CaseReviewModelTest(TestCase):
             professionalism_score=10,
             overall_rating=8,
             recommendation="approved",
-            comments="Excellent case presentation and analysis.",
-        )
+            comments="Excellent case presentation and analysis.")
 
         self.assertEqual(review.case, self.case)
         self.assertEqual(review.reviewer, self.supervisor)
@@ -171,8 +145,7 @@ class CaseReviewModelTest(TestCase):
             clinical_accuracy_score=8,
             documentation_quality_score=6,
             learning_demonstration_score=7,
-            professionalism_score=9,
-        )
+            professionalism_score=9)
 
         expected_average = (8 + 6 + 7 + 9) / 4
         self.assertEqual(review.calculate_average_score(), expected_average)
@@ -182,16 +155,8 @@ class CaseStatisticsModelTest(TestCase):
     """Test the CaseStatistics model"""
 
     def setUp(self):
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.category = CaseCategory.objects.create(name="Internal Medicine", color_code="#2196F3")
 
@@ -199,17 +164,16 @@ class CaseStatisticsModelTest(TestCase):
         for i in range(5):
             ClinicalCase.objects.create(
                 pg=self.pg,
-                case_title=f"Case {i+1}",
+                case_title=f"Case {i + 1}",
                 category=self.category,
-                date=date.today() - timedelta(days=i),
-                patient_initials=f"P.{i+1}",
+                date_encountered=date.today() - timedelta(days=i),
+                
                 patient_age=30 + i,
-                patient_gender="male" if i % 2 == 0 else "female",
-                learning_points=f"Learning points for case {i+1}",
+                patient_gender="M" if i % 2 == 0 else "female",
+                learning_points=f"Learning points for case {i + 1}",
                 supervisor=self.supervisor,
                 status="approved" if i < 3 else "draft",
-                completion_score=80 + i if i < 3 else None,
-            )
+                completion_score=80 + i if i < 3 else None)
 
     def test_statistics_calculation(self):
         """Test automatic statistics calculation"""
@@ -227,16 +191,7 @@ class CaseFormsTest(TestCase):
     """Test case-related forms"""
 
     def setUp(self):
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
@@ -276,14 +231,13 @@ class CaseFormsTest(TestCase):
             pg=self.pg,
             case_title="Test Case",
             category=self.category,
-            date=date.today(),
-            patient_initials="T.C.",
+            date_encountered=date.today(),
+            
             patient_age=30,
-            patient_gender="male",
+            patient_gender="M",
             learning_points="Test learning points",
             supervisor=self.supervisor,
-            status="submitted",
-        )
+            status="submitted")
 
         form_data = {
             "clinical_accuracy_score": 8,
@@ -307,24 +261,10 @@ class CaseViewsTest(TestCase):
         self.client = Client()
 
         # Create test users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
-
-        self.admin = User.objects.create_user(
-            username="testadmin",
-            email="admin@test.com",
-            password="testpass123",
-            role="admin",
-            is_staff=True,
-        )
+        self.admin = AdminFactory()
 
         # Create test data
         self.category = CaseCategory.objects.create(name="Orthopedics", color_code="#795548")
@@ -333,13 +273,12 @@ class CaseViewsTest(TestCase):
             pg=self.pg,
             case_title="Fracture Management",
             category=self.category,
-            date=date.today(),
-            patient_initials="F.M.",
+            date_encountered=date.today(),
+            
             patient_age=45,
-            patient_gender="male",
+            patient_gender="M",
             learning_points="Fracture classification and treatment",
-            supervisor=self.supervisor,
-        )
+            supervisor=self.supervisor)
 
     def test_case_list_view_pg(self):
         """Test case list view for PG user"""
@@ -445,9 +384,7 @@ class CaseViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test PG accessing other PG's case
-        other_pg = User.objects.create_user(
-            username="otherpg", email="otherpg@test.com", password="testpass123", role="pg"
-        )
+        _other_pg = PGFactory()
 
         self.client.login(username="otherpg", password="testpass123")
         response = self.client.get(reverse("cases:case_detail", kwargs={"pk": self.case.pk}))
@@ -469,16 +406,7 @@ class CaseIntegrationTest(TestCase):
         self.client = Client()
 
         # Create users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Neurology", color_code="#9C27B0")
 

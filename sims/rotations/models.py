@@ -563,6 +563,10 @@ class RotationEvaluation(models.Model):
 
     def clean(self):
         """Validate evaluation data"""
+        # Guard: only validate if both FKs are set (avoids RelatedObjectDoesNotExist before save)
+        if not (self.evaluator_id and self.rotation_id):
+            return
+            
         # Ensure evaluator has permission to evaluate this rotation
         if self.evaluator and self.rotation:
             if (

@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import date, timedelta
+from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 from .models import Rotation, RotationEvaluation, Department, Hospital
@@ -563,7 +563,7 @@ class BulkRotationAssignmentForm(forms.Form):
         pgs = cleaned_data.get("pgs")
         department = cleaned_data.get("department")
         hospital = cleaned_data.get("hospital")
-        supervisor = cleaned_data.get("supervisor")
+        cleaned_data.get("supervisor")
 
         # For supervisors, ensure they are set as the supervisor regardless of form input
         if self.user and self.user.role == "supervisor":

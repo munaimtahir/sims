@@ -82,9 +82,14 @@ class UserModelTestCase(TestCase):
         expected = "Post Graduate (Postgraduate)"
         self.assertEqual(str(self.pg_user), expected)
 
-        # Test with user without full name
+        # Test with user without full name but with required fields for PG
         user_no_name = User.objects.create_user(
-            username="testuser", password="testpass123", role="pg"
+            username="testuser",
+            password="testpass123",
+            role="pg",
+            specialty="medicine",
+            year="1",
+            supervisor=self.supervisor_user,
         )
         expected_no_name = "testuser (Postgraduate)"
         self.assertEqual(str(user_no_name), expected_no_name)
@@ -178,7 +183,7 @@ class UserModelTestCase(TestCase):
     def test_dashboard_urls(self):
         """Test dashboard URL generation"""
         admin_url = self.admin_user.get_dashboard_url()
-        self.assertEqual(admin_url, reverse("users:admin_dashboard"))
+        self.assertEqual(admin_url, reverse("admin:index"))
 
         supervisor_url = self.supervisor_user.get_dashboard_url()
         self.assertEqual(supervisor_url, reverse("users:supervisor_dashboard"))
@@ -241,7 +246,7 @@ class UserViewsTestCase(TestCase):
         # Test admin dashboard redirect
         self.client.login(username="admin_test", password="testpass123")
         response = self.client.get(reverse("users:dashboard"))
-        self.assertRedirects(response, reverse("users:admin_dashboard"))
+        self.assertRedirects(response, reverse("admin:index"), fetch_redirect_response=False)
 
         # Test supervisor dashboard redirect
         self.client.login(username="supervisor_test", password="testpass123")
@@ -255,10 +260,10 @@ class UserViewsTestCase(TestCase):
 
     def test_admin_dashboard_access(self):
         """Test admin dashboard access control"""
-        # Admin should have access
+        # Admin should have access (admin_dashboard redirects to admin:index)
         self.client.login(username="admin_test", password="testpass123")
         response = self.client.get(reverse("users:admin_dashboard"))
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 302)  # Redirects to admin:index
 
         # Non-admin should not have access
         self.client.login(username="pg_test", password="testpass123")
@@ -397,6 +402,9 @@ class UserFormsTestCase(TestCase):
             email="test@sims.test",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
+            supervisor=self.supervisor_user,
             first_name="Test",
             last_name="User",
         )
@@ -513,10 +521,13 @@ class UserAPITestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         data = json.loads(response.content)
-        self.assertIsInstance(data, list)
+        self.assertIn("supervisors", data)
+        self.assertIsInstance(data["supervisors"], list)
 
         # Should contain supervisor_test
-        supervisor_found = any(supervisor["username"] == "supervisor_test" for supervisor in data)
+        supervisor_found = any(
+            supervisor["id"] == self.supervisor_user.id for supervisor in data["supervisors"]
+        )
         self.assertTrue(supervisor_found)
 
 

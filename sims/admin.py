@@ -3,11 +3,7 @@ Custom Admin Configuration for SIMS
 Provides enhanced admin dashboard with statistics
 """
 
-from django.contrib import admin
 from django.contrib.admin import AdminSite
-from django.urls import path
-from django.template.response import TemplateResponse
-from django.db.models import Count
 from django.utils import timezone
 from sims.users.models import User
 

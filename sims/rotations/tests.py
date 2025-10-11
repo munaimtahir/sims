@@ -1,13 +1,13 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import date, timedelta
-from dateutil.relativedelta import relativedelta
 
 from .models import Rotation, RotationEvaluation, Department, Hospital
 from .forms import RotationCreateForm, RotationEvaluationForm, BulkRotationAssignmentForm
+
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
 
 User = get_user_model()
 
@@ -46,22 +46,16 @@ class RotationModelTests(TestCase):
             last_name="User",
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            first_name="Super",
-            last_name="Visor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
-            first_name="Post",
-            last_name="Graduate",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -246,18 +240,16 @@ class RotationEvaluationModelTests(TestCase):
             name="Internal Medicine", hospital=self.hospital
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -354,18 +346,16 @@ class RotationViewTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -433,18 +423,16 @@ class RotationFormTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -536,18 +524,16 @@ class RotationAPITests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -614,18 +600,16 @@ class RotationExportTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 
@@ -672,18 +656,16 @@ class RotationIntegrationTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
             email="pg@test.com",
             password="testpass123",
             role="pg",
+            specialty="medicine",
+            year="1",
             supervisor=self.supervisor,
         )
 

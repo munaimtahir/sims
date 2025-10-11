@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
@@ -558,7 +558,7 @@ class BulkRotationAssignmentView(LoginRequiredMixin, RotationAccessMixin, FormVi
                 if self.request.user.role == "supervisor" and pg.supervisor != self.request.user:
                     continue  # Skip PGs not supervised by current user
 
-                rotation = Rotation.objects.create(
+                _rotation = Rotation.objects.create(
                     pg=pg,
                     department=form.cleaned_data["department"],
                     hospital=form.cleaned_data["hospital"],

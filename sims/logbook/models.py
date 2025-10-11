@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
@@ -777,7 +778,7 @@ class LogbookEntry(models.Model):
                 )
         except ImportError:
             pass
-        except Exception as e:
+        except Exception:
             pass
 
     def get_duration_since_creation(self):
@@ -816,7 +817,7 @@ class LogbookEntry(models.Model):
             return "No procedures recorded"
         if procedures.count() <= 3:
             return ", ".join([p.name for p in procedures])
-        return f"{', '.join([p.name for p in procedures[:3]])} (+{procedures.count()-3} more)"
+        return f"{', '.join([p.name for p in procedures[:3]])} (+{procedures.count() - 3} more)"
 
     def get_skills_display(self):
         skills = self.skills.all()
@@ -824,7 +825,7 @@ class LogbookEntry(models.Model):
             return "No skills recorded"
         if skills.count() <= 3:
             return ", ".join([s.name for s in skills])
-        return f"{', '.join([s.name for s in skills[:3]])} (+{skills.count()-3} more)"
+        return f"{', '.join([s.name for s in skills[:3]])} (+{skills.count() - 3} more)"
 
     def get_complexity_score(self):
         procedure_complexity = sum(p.difficulty_level for p in self.procedures.all())
