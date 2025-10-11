@@ -1,13 +1,13 @@
-from django.contrib import admin
-from django.utils.html import format_html
+from django.contrib import admin, messages
+from django.db.models import Q
+from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.db.models import Q
-from import_export.admin import ImportExportModelAdmin
+from django.utils.html import format_html
 from import_export import resources
-from .models import Rotation, RotationEvaluation, Department, Hospital
+from import_export.admin import ImportExportModelAdmin
+
+from .models import Department, Hospital, Rotation, RotationEvaluation
 
 
 class RotationResource(resources.ModelResource):

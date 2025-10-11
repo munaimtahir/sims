@@ -54,8 +54,7 @@ class AnalyticsAPITests(APITestCase):
                 status="approved" if day_offset % 2 == 0 else "pending",
                 supervisor=self.supervisor,
                 submitted_to_supervisor_at=timezone.now() - timedelta(days=day_offset),
-                supervisor_action_at=timezone.now()
-                - timedelta(days=max(day_offset - 1, 0)),
+                supervisor_action_at=timezone.now() - timedelta(days=max(day_offset - 1, 0)),
             )
 
     def test_trend_api_returns_data(self) -> None:

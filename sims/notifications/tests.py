@@ -70,9 +70,7 @@ class NotificationTests(APITestCase):
 
         notification = Notification.objects.get(recipient=self.pg)
         url = reverse("notifications_api:mark_read")
-        response = self.client.post(
-            url, {"notification_ids": [notification.pk]}, format="json"
-        )
+        response = self.client.post(url, {"notification_ids": [notification.pk]}, format="json")
         self.assertEqual(response.status_code, 200)
         notification.refresh_from_db()
         self.assertIsNotNone(notification.read_at)
@@ -102,7 +100,5 @@ class NotificationTests(APITestCase):
         count = service.upcoming_rotation_deadlines(days=3)
         self.assertEqual(count, 1)
         self.assertTrue(
-            Notification.objects.filter(
-                recipient=self.pg, verb="rotation-ending"
-            ).exists()
+            Notification.objects.filter(recipient=self.pg, verb="rotation-ending").exists()
         )

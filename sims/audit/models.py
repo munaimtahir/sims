@@ -31,9 +31,7 @@ class ActivityLog(models.Model):
     )
     action = models.CharField(max_length=32, choices=ACTION_CHOICES)
     verb = models.CharField(max_length=64)
-    target_content_type = models.ForeignKey(
-        ContentType, on_delete=models.SET_NULL, null=True
-    )
+    target_content_type = models.ForeignKey(ContentType, on_delete=models.SET_NULL, null=True)
     target_object_id = models.CharField(max_length=64, blank=True)
     target = GenericForeignKey("target_content_type", "target_object_id")
     target_repr = models.CharField(max_length=255, blank=True)
@@ -71,9 +69,7 @@ class ActivityLog(models.Model):
         target_pk: Optional[str] = None
         target_repr = ""
         if target is not None:
-            target_ct = ContentType.objects.get_for_model(
-                target, for_concrete_model=False
-            )
+            target_ct = ContentType.objects.get_for_model(target, for_concrete_model=False)
             target_pk = str(target.pk)
             target_repr = str(target)
         return cls.objects.create(

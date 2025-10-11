@@ -12,20 +12,13 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from sims.analytics.serializers import (
-    ComparativeResponseSerializer,
-    PerformanceMetricsSerializer,
-    TrendPointSerializer,
-    TrendResponseSerializer,
-)
-from sims.analytics.services import (
-    TrendRequest,
-    comparative_summary,
-    get_accessible_users,
-    performance_metrics,
-    trend_for_user,
-    validate_window,
-)
+from sims.analytics.serializers import (ComparativeResponseSerializer,
+                                        PerformanceMetricsSerializer,
+                                        TrendPointSerializer,
+                                        TrendResponseSerializer)
+from sims.analytics.services import (TrendRequest, comparative_summary,
+                                     get_accessible_users, performance_metrics,
+                                     trend_for_user, validate_window)
 
 User = get_user_model()
 
@@ -42,9 +35,7 @@ class TrendAnalyticsView(APIView):
     def get(self, request: Request) -> Response:
         window = validate_window(request.query_params.get("window"))
         metric = request.query_params.get("metric", "entries")
-        include_moving_average = request.query_params.get(
-            "moving_average", "true"
-        ).lower() in {
+        include_moving_average = request.query_params.get("moving_average", "true").lower() in {
             "1",
             "true",
             "yes",
@@ -57,9 +48,7 @@ class TrendAnalyticsView(APIView):
             target_user = self._get_target_user(request)
         except PermissionError as exc:  # pragma: no cover - defensive branch
             raise PermissionDenied(str(exc)) from exc
-        status_filter: List[str] = [
-            s for s in request.query_params.getlist("status") if s
-        ]
+        status_filter: List[str] = [s for s in request.query_params.getlist("status") if s]
 
         data = trend_for_user(
             request.user, target_user, params, status_filter=status_filter or None
@@ -89,9 +78,7 @@ class TrendAnalyticsView(APIView):
             try:
                 return accessible.get(pk=target_param)
             except accessible.model.DoesNotExist as exc:
-                raise PermissionDenied(
-                    "You cannot access this user's analytics"
-                ) from exc
+                raise PermissionDenied("You cannot access this user's analytics") from exc
         return request.user
 
 

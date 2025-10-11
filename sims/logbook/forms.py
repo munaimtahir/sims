@@ -1,10 +1,12 @@
+from datetime import timedelta
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-from datetime import timedelta
 
-from .models import LogbookEntry, LogbookReview, LogbookTemplate, Procedure, Diagnosis, Skill
+from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookTemplate,
+                     Procedure, Skill)
 
 User = get_user_model()
 

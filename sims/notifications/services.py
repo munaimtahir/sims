@@ -49,9 +49,7 @@ class NotificationService:
         for channel in channels:
             if not preference.allows_channel(channel, timezone.now()):
                 results.append(
-                    NotificationResult(
-                        channel=channel, delivered=False, error="channel-disabled"
-                    )
+                    NotificationResult(channel=channel, delivered=False, error="channel-disabled")
                 )
                 continue
             try:
@@ -62,9 +60,7 @@ class NotificationService:
                 results.append(NotificationResult(channel=channel, delivered=True))
             except Exception as exc:  # pragma: no cover - defensive logging
                 logger.exception("Notification delivery failed", exc_info=exc)
-                results.append(
-                    NotificationResult(channel=channel, delivered=False, error=str(exc))
-                )
+                results.append(NotificationResult(channel=channel, delivered=False, error=str(exc)))
         return results
 
     def _create_in_app(
@@ -81,9 +77,7 @@ class NotificationService:
             metadata=self._serialise_metadata(context),
         )
 
-    def _send_email(
-        self, recipient: User, title: str, template: str, context: dict
-    ) -> None:
+    def _send_email(self, recipient: User, title: str, template: str, context: dict) -> None:
         subject = title
         text_body = render_to_string(f"notifications/{template}.txt", context)
         html_body = render_to_string(f"notifications/{template}.html", context)
@@ -111,9 +105,7 @@ class NotificationService:
 
     # Trigger helpers -------------------------------------------------
 
-    def logbook_status_change(
-        self, entry: LogbookEntry, previous_status: Optional[str]
-    ) -> None:
+    def logbook_status_change(self, entry: LogbookEntry, previous_status: Optional[str]) -> None:
         if entry.status == previous_status:
             return
         context = {"entry": entry, "previous_status": previous_status}

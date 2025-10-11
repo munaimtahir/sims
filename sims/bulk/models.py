@@ -32,13 +32,9 @@ class BulkOperation(models.Model):
         (STATUS_FAILED, "Failed"),
     )
 
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="bulk_operations"
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bulk_operations")
     operation = models.CharField(max_length=32, choices=OPERATION_CHOICES)
-    status = models.CharField(
-        max_length=16, choices=STATUS_CHOICES, default=STATUS_PENDING
-    )
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default=STATUS_PENDING)
     total_items = models.PositiveIntegerField(default=0)
     success_count = models.PositiveIntegerField(default=0)
     failure_count = models.PositiveIntegerField(default=0)

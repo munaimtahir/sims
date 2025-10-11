@@ -1,21 +1,13 @@
-from django.contrib import admin
-from django.utils.html import format_html
+from django.contrib import admin, messages
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
-from django.db.models import Q
-from import_export.admin import ImportExportModelAdmin
+from django.utils.html import format_html
 from import_export import resources
+from import_export.admin import ImportExportModelAdmin
 
-from .models import (
-    LogbookEntry,
-    Procedure,
-    Diagnosis,
-    Skill,
-    LogbookTemplate,
-    LogbookReview,
-    LogbookStatistics,
-)
+from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
+                     LogbookTemplate, Procedure, Skill)
 
 
 class LogbookEntryResource(resources.ModelResource):
@@ -924,8 +916,8 @@ class LogbookReportAdmin:
 
     def procedures_report(self, request):
         """Generate procedures report"""
-        from django.template.response import TemplateResponse
         from django.db.models import Count
+        from django.template.response import TemplateResponse
 
         # Get procedure usage statistics
         procedure_stats = Procedure.objects.annotate(usage_count=Count("logbook_entries")).order_by(
@@ -942,8 +934,8 @@ class LogbookReportAdmin:
 
     def learning_analytics_report(self, request):
         """Generate learning analytics report"""
-        from django.template.response import TemplateResponse
         from django.db.models import Avg, Count
+        from django.template.response import TemplateResponse
 
         # Get learning analytics
         analytics = {

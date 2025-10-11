@@ -1,12 +1,12 @@
-from django.contrib import admin
-from django.utils.html import format_html
+from django.contrib import admin, messages
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
-from django.db.models import Q
-from import_export.admin import ImportExportModelAdmin
+from django.utils.html import format_html
 from import_export import resources
-from .models import Certificate, CertificateType, CertificateReview
+from import_export.admin import ImportExportModelAdmin
+
+from .models import Certificate, CertificateReview, CertificateType
 
 
 class CertificateResource(resources.ModelResource):
@@ -581,8 +581,9 @@ class CertificateReportAdmin:
 
     def expiring_certificates_report(self, request):
         """Generate expiring certificates report"""
-        from django.template.response import TemplateResponse
         from datetime import timedelta
+
+        from django.template.response import TemplateResponse
 
         expiring_certificates = Certificate.objects.filter(
             expiry_date__lte=timezone.now().date() + timedelta(days=90),

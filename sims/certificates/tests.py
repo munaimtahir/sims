@@ -1,19 +1,18 @@
-from django.test import TestCase, Client
-from django.urls import reverse
+from datetime import date, timedelta
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
-from datetime import date, timedelta
+from django.test import Client, TestCase
+from django.urls import reverse
 
-from .models import Certificate, CertificateReview, CertificateType, CertificateStatistics
-from .forms import (
-    CertificateCreateForm,
-    CertificateReviewForm,
-    BulkCertificateApprovalForm,
-    QuickCertificateUploadForm,
-)
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
 
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from .forms import (BulkCertificateApprovalForm, CertificateCreateForm,
+                    CertificateReviewForm, QuickCertificateUploadForm)
+from .models import (Certificate, CertificateReview, CertificateStatistics,
+                     CertificateType)
 
 User = get_user_model()
 

@@ -30,9 +30,7 @@ class GlobalSearchView(APIView):
         duration_ms = int((time.perf_counter() - start) * 1000)
         if query:
             service.log_query(query, filters, len(results), duration_ms)
-        log_view(
-            request, "global-search", metadata={"query": query, "filters": filters}
-        )
+        log_view(request, "global-search", metadata={"query": query, "filters": filters})
         serializer = SearchResultSerializer(results, many=True)
         return Response(
             {

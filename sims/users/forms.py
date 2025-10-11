@@ -1,8 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.exceptions import ValidationError
-from .models import User, SPECIALTY_CHOICES, YEAR_CHOICES, USER_ROLES
+
+from .models import SPECIALTY_CHOICES, USER_ROLES, YEAR_CHOICES, User
 
 
 class CustomUserCreationForm(UserCreationForm):

@@ -34,6 +34,7 @@ class LogbookConfig(AppConfig):
             # Register any custom model permissions
             from django.contrib.auth.models import Permission
             from django.contrib.contenttypes.models import ContentType
+
             from .models import LogbookEntry, LogbookReview, Procedure
 
             # Create custom permissions if they don't exist
@@ -231,7 +232,7 @@ class LogbookConfig(AppConfig):
     def _setup_default_clinical_data(self):
         """Setup default procedures, diagnoses, and skills"""
         try:
-            from .models import Procedure, Diagnosis, Skill
+            from .models import Diagnosis, Procedure, Skill
 
             # Only setup if no data exists
             if Procedure.objects.exists() or Diagnosis.objects.exists() or Skill.objects.exists():

@@ -33,6 +33,7 @@ class CertificatesConfig(AppConfig):
             # Register any custom model permissions
             from django.contrib.auth.models import Permission
             from django.contrib.contenttypes.models import ContentType
+
             from .models import Certificate, CertificateReview
 
             # Create custom permissions if they don't exist

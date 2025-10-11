@@ -18,9 +18,7 @@ from sims.users.models import User
 
 class ReportingTests(APITestCase):
     def setUp(self) -> None:
-        self.admin = User.objects.create_user(
-            username="admin", password="testpass", role="admin"
-        )
+        self.admin = User.objects.create_user(username="admin", password="testpass", role="admin")
         self.supervisor = User.objects.create_user(
             username="sup",
             password="testpass",

@@ -10,11 +10,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sims.notifications.models import Notification, NotificationPreference
-from sims.notifications.serializers import (
-    NotificationMarkReadSerializer,
-    NotificationPreferenceSerializer,
-    NotificationSerializer,
-)
+from sims.notifications.serializers import (NotificationMarkReadSerializer,
+                                            NotificationPreferenceSerializer,
+                                            NotificationSerializer)
 
 
 class NotificationPagination(PageNumberPagination):
@@ -55,9 +53,7 @@ class NotificationPreferenceView(APIView):
 
     def patch(self, request: Request) -> Response:
         preference = NotificationPreference.for_user(request.user)
-        serializer = NotificationPreferenceSerializer(
-            preference, data=request.data, partial=True
-        )
+        serializer = NotificationPreferenceSerializer(preference, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
@@ -67,9 +63,7 @@ class NotificationUnreadCountView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request: Request) -> Response:
-        count = Notification.objects.filter(
-            recipient=request.user, read_at__isnull=True
-        ).count()
+        count = Notification.objects.filter(recipient=request.user, read_at__isnull=True).count()
         return Response({"unread": count})
 
 

@@ -3,10 +3,11 @@ Role-based access control decorators and mixins for SIMS
 """
 
 from functools import wraps
-from django.core.exceptions import PermissionDenied
+
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 
 def admin_required(view_func):

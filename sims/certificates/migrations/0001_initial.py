@@ -2,9 +2,10 @@
 
 import django.db.models.deletion
 import django.utils.timezone
-import sims.certificates.models
 from django.conf import settings
 from django.db import migrations, models
+
+import sims.certificates.models
 
 
 class Migration(migrations.Migration):

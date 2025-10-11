@@ -2,12 +2,9 @@
 
 from django.urls import path
 
-from sims.reports.views import (
-    ReportGenerateView,
-    ReportTemplateListView,
-    ScheduledReportDetailView,
-    ScheduledReportListCreateView,
-)
+from sims.reports.views import (ReportGenerateView, ReportTemplateListView,
+                                ScheduledReportDetailView,
+                                ScheduledReportListCreateView)
 
 app_name = "reports_api"
 

@@ -11,9 +11,7 @@ class BulkReviewSerializer(serializers.Serializer):
     entry_ids = serializers.ListField(
         child=serializers.IntegerField(min_value=1), allow_empty=False
     )
-    status = serializers.ChoiceField(
-        choices=[choice[0] for choice in LogbookEntry.STATUS_CHOICES]
-    )
+    status = serializers.ChoiceField(choices=[choice[0] for choice in LogbookEntry.STATUS_CHOICES])
 
 
 class BulkAssignmentSerializer(serializers.Serializer):

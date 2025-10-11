@@ -5,6 +5,7 @@ Provides enhanced admin dashboard with statistics
 
 from django.contrib.admin import AdminSite
 from django.utils import timezone
+
 from sims.users.models import User
 
 

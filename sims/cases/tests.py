@@ -1,14 +1,18 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.utils import timezone
 from datetime import date, timedelta
 
-from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
-from .forms import ClinicalCaseForm, CaseReviewForm
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from sims.tests.factories.case_factories import (CaseCategoryFactory,
+                                                 ClinicalCaseFactory)
 from sims.tests.factories.logbook_factories import DiagnosisFactory
-from sims.tests.factories.case_factories import ClinicalCaseFactory, CaseCategoryFactory
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
+
+from .forms import CaseReviewForm, ClinicalCaseForm
+from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase
 
 User = get_user_model()
 
@@ -42,20 +46,22 @@ class ClinicalCaseModelTest(TestCase):
         # Create test users and case using factories
         self.supervisor = SupervisorFactory(specialty="medicine")
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
-        
+
         # Create test case using factory (handles all required fields)
         self.case = ClinicalCaseFactory(
             pg=self.pg,
             supervisor=self.supervisor,
             case_title="Acute Myocardial Infarction",
             complexity="complex",
-            status="draft"
+            status="draft",
         )
         self.category = self.case.category
 
     def test_case_creation(self):
         """Test clinical case creation"""
-        self.assertEqual(str(self.case), "Acute Myocardial Infarction - testpg")
+        # Check the case title and pg relationship
+        self.assertIn("Acute Myocardial Infarction", str(self.case))
+        self.assertIn(self.pg.get_full_name(), str(self.case))
         self.assertEqual(self.case.status, "draft")
         self.assertEqual(self.case.pg, self.pg)
         self.assertEqual(self.case.supervisor, self.supervisor)
@@ -112,12 +118,12 @@ class CaseReviewModelTest(TestCase):
             case_title="Pediatric Asthma",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=8,
             patient_gender="F",
             learning_points="Asthma management in children",
             supervisor=self.supervisor,
-            status="submitted")
+            status="submitted",
+        )
 
     def test_review_creation(self):
         """Test case review creation"""
@@ -130,7 +136,8 @@ class CaseReviewModelTest(TestCase):
             professionalism_score=10,
             overall_rating=8,
             recommendation="approved",
-            comments="Excellent case presentation and analysis.")
+            comments="Excellent case presentation and analysis.",
+        )
 
         self.assertEqual(review.case, self.case)
         self.assertEqual(review.reviewer, self.supervisor)
@@ -145,7 +152,8 @@ class CaseReviewModelTest(TestCase):
             clinical_accuracy_score=8,
             documentation_quality_score=6,
             learning_demonstration_score=7,
-            professionalism_score=9)
+            professionalism_score=9,
+        )
 
         expected_average = (8 + 6 + 7 + 9) / 4
         self.assertEqual(review.calculate_average_score(), expected_average)
@@ -167,13 +175,13 @@ class CaseStatisticsModelTest(TestCase):
                 case_title=f"Case {i + 1}",
                 category=self.category,
                 date_encountered=date.today() - timedelta(days=i),
-                
                 patient_age=30 + i,
                 patient_gender="M" if i % 2 == 0 else "female",
                 learning_points=f"Learning points for case {i + 1}",
                 supervisor=self.supervisor,
                 status="approved" if i < 3 else "draft",
-                completion_score=80 + i if i < 3 else None)
+                completion_score=80 + i if i < 3 else None,
+            )
 
     def test_statistics_calculation(self):
         """Test automatic statistics calculation"""
@@ -192,6 +200,7 @@ class CaseFormsTest(TestCase):
 
     def setUp(self):
         self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
@@ -232,12 +241,12 @@ class CaseFormsTest(TestCase):
             case_title="Test Case",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=30,
             patient_gender="M",
             learning_points="Test learning points",
             supervisor=self.supervisor,
-            status="submitted")
+            status="submitted",
+        )
 
         form_data = {
             "clinical_accuracy_score": 8,
@@ -269,16 +278,29 @@ class CaseViewsTest(TestCase):
         # Create test data
         self.category = CaseCategory.objects.create(name="Orthopedics", color_code="#795548")
 
+        # Create a diagnosis for the case
+        from sims.logbook.models import Diagnosis
+
+        self.diagnosis = Diagnosis.objects.create(
+            name="Femur Fracture", category="orthopedic", icd_code="S72.0"
+        )
+
         self.case = ClinicalCase.objects.create(
             pg=self.pg,
             case_title="Fracture Management",
             category=self.category,
             date_encountered=date.today(),
-            
             patient_age=45,
             patient_gender="M",
+            chief_complaint="Severe leg pain after fall",
+            history_of_present_illness="Patient fell from height 2 hours ago",
+            physical_examination="Tenderness and deformity of left thigh",
+            primary_diagnosis=self.diagnosis,
+            management_plan="Surgical fixation with intramedullary nail",
+            clinical_reasoning="Mechanism of injury and examination findings consistent with femur fracture",
             learning_points="Fracture classification and treatment",
-            supervisor=self.supervisor)
+            supervisor=self.supervisor,
+        )
 
     def test_case_list_view_pg(self):
         """Test case list view for PG user"""

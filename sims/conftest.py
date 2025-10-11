@@ -2,9 +2,12 @@
 Pytest configuration and shared fixtures for SIMS tests.
 Provides reusable fixtures for all test modules.
 """
+
 import pytest
 from django.test import Client
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
 
 
 @pytest.fixture
@@ -19,7 +22,7 @@ def supervisor(db):
     return SupervisorFactory()
 
 
-@pytest.fixture  
+@pytest.fixture
 def pg_user(db, supervisor):
     """Create a PG user with all required fields."""
     return PGFactory(supervisor=supervisor)

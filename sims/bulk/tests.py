@@ -16,9 +16,7 @@ from sims.users.models import User
 
 class BulkOperationTests(APITestCase):
     def setUp(self) -> None:
-        self.admin = User.objects.create_user(
-            username="admin", password="testpass", role="admin"
-        )
+        self.admin = User.objects.create_user(username="admin", password="testpass", role="admin")
         self.supervisor = User.objects.create_user(
             username="sup",
             password="testpass",
@@ -49,9 +47,7 @@ class BulkOperationTests(APITestCase):
 
     def test_bulk_review_service(self) -> None:
         service = BulkService(self.admin, chunk_size=2)
-        operation = service.review_entries(
-            [entry.pk for entry in self.entries], status="approved"
-        )
+        operation = service.review_entries([entry.pk for entry in self.entries], status="approved")
         self.assertEqual(operation.status, BulkOperation.STATUS_COMPLETED)
         self.assertEqual(operation.success_count, 3)
         self.assertEqual(LogbookEntry.objects.filter(status="approved").count(), 3)
@@ -100,9 +96,7 @@ class BulkOperationTests(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["failure_count"], 1)
-        self.assertEqual(
-            LogbookEntry.objects.filter(case_title="Imported Case").count(), 0
-        )
+        self.assertEqual(LogbookEntry.objects.filter(case_title="Imported Case").count(), 0)
 
         uploaded = SimpleUploadedFile(
             "import.csv", csv_buffer.getvalue().encode("utf-8"), content_type="text/csv"
@@ -111,6 +105,4 @@ class BulkOperationTests(APITestCase):
             url, {"file": uploaded, "dry_run": False, "allow_partial": True}
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            LogbookEntry.objects.filter(case_title="Imported Case").count(), 1
-        )
+        self.assertEqual(LogbookEntry.objects.filter(case_title="Imported Case").count(), 1)
