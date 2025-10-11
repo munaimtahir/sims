@@ -19,7 +19,7 @@ from django.template.response import TemplateResponse
 from django.contrib.auth.views import LogoutView
 
 # Import test view
-from test_crispy_view import test_crispy_view
+# from test_crispy_view import test_crispy_view
 
 
 # Custom admin logout view that handles GET requests
