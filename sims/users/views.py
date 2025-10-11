@@ -464,9 +464,18 @@ class UserActivateView(AdminRequiredMixin, View):
         return redirect("users:user_list")
 
 
-class UserDeactivateView(UserActivateView):
-    """Deactivate user (admin only) - same as UserActivateView"""
+class UserDeactivateView(AdminRequiredMixin, View):
+    """Deactivate user (admin only)"""
 
+    def post(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        if user.is_active:
+            user.is_active = False
+            user.save()
+            messages.success(request, f"User {user.get_display_name()} has been deactivated.")
+        else:
+            messages.info(request, f"User {user.get_display_name()} is already deactivated.")
+        return redirect("users:user_list")
 
 class UserArchiveView(AdminRequiredMixin, View):
     """Archive user (admin only)"""
