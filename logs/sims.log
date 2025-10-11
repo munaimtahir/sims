@@ -20182,3 +20182,47 @@ WARNING 2025-10-11 13:58:38,305 apps 3589 140129585655936 Error in logbook app r
 WARNING 2025-10-11 14:05:03,712 apps 3712 140465333457024 Error in rotations app ready(): no such table: django_content_type
 WARNING 2025-10-11 14:05:03,713 apps 3712 140465333457024 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-11 14:05:03,714 apps 3712 140465333457024 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,991 apps 3903 140583713226880 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,991 apps 3903 140583713226880 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,992 apps 3903 140583713226880 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,461 apps 3906 139880502927488 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,461 apps 3906 139880502927488 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,462 apps 3906 139880502927488 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:09:36,007 apps 3911 139917534584960 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:09:36,030 apps 3911 139917534584960 Default logbook templates created successfully
+INFO 2025-10-11 14:09:36,030 apps 3911 139917534584960 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:09:36,127 apps 3911 139917534584960 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:10:37,189 apps 3927 140256375468160 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:10:37,194 apps 3927 140256375468160 Logbook periodic tasks setup completed
+WARNING 2025-10-11 14:10:46,836 apps 3933 140710996648064 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:10:46,837 apps 3933 140710996648064 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:10:46,837 apps 3933 140710996648064 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:00,187 apps 3942 140106531131520 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:00,210 apps 3942 140106531131520 Default logbook templates created successfully
+INFO 2025-10-11 14:11:00,210 apps 3942 140106531131520 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:00,305 apps 3942 140106531131520 Default clinical data (procedures, diagnoses, skills) created successfully
+WARNING 2025-10-11 14:11:11,795 apps 3947 140592790970496 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:11,796 apps 3947 140592790970496 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:11,796 apps 3947 140592790970496 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:15,542 apps 3949 140194522869888 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:15,563 apps 3949 140194522869888 Default logbook templates created successfully
+INFO 2025-10-11 14:11:15,564 apps 3949 140194522869888 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:15,660 apps 3949 140194522869888 Default clinical data (procedures, diagnoses, skills) created successfully
+WARNING 2025-10-11 14:11:43,144 apps 3960 140014630117504 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:43,145 apps 3960 140014630117504 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:43,146 apps 3960 140014630117504 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:46,818 apps 3963 140162881028224 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:46,840 apps 3963 140162881028224 Default logbook templates created successfully
+INFO 2025-10-11 14:11:46,841 apps 3963 140162881028224 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:46,936 apps 3963 140162881028224 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:11:57,531 apps 3967 140420833800320 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:57,536 apps 3967 140420833800320 Logbook periodic tasks setup completed
+WARNING 2025-10-11 14:12:08,659 apps 3972 139663725015168 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:12:08,659 apps 3972 139663725015168 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:12:08,660 apps 3972 139663725015168 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:12:12,341 apps 3973 139749188132992 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:12:12,365 apps 3973 139749188132992 Default logbook templates created successfully
+INFO 2025-10-11 14:12:12,365 apps 3973 139749188132992 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:12:12,462 apps 3973 139749188132992 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:12:22,487 apps 3979 140051345416320 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:12:22,492 apps 3979 140051345416320 Logbook periodic tasks setup completed
