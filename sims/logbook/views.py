@@ -427,7 +427,7 @@ class LogbookEntryCreateView(LoginRequiredMixin, LogbookAccessMixin, CreateView)
                     or (self.request.user.role == "admin")
                 ):
                     initial["rotation"] = rotation
-            except BaseException:
+            except Exception:
                 pass
 
         return initial
