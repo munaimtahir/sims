@@ -140,12 +140,14 @@ class AuditReport(models.Model):
                 .order_by("-count")[:10]
             ),
         }
-        report, _ = cls.objects.update_or_create(
+        report, created = cls.objects.get_or_create(
             start=start,
             end=end,
             created_by=created_by,
-            defaults={"payload": summary},
         )
+        if created or report.payload != summary:
+            report.payload = summary
+            report.save()
         return report
 
 
