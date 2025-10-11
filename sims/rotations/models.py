@@ -1,9 +1,19 @@
-from django.db import models
+from datetime import date, timedelta
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.utils import timezone
+from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 from dateutil.relativedelta import relativedelta
+from simple_history.models import HistoricalRecords
+
+from sims.domain.validators import (
+    sanitize_free_text,
+    validate_chronology,
+    validate_not_future,
+    validate_same_supervisor,
+)
 
 User = get_user_model()
 
@@ -19,12 +29,18 @@ class Hospital(models.Model):
     name = models.CharField(max_length=200, help_text="Official name of the hospital")
 
     code = models.CharField(
-        max_length=20, unique=True, blank=True, null=True, help_text="Hospital code or abbreviation"
+        max_length=20,
+        unique=True,
+        blank=True,
+        null=True,
+        help_text="Hospital code or abbreviation",
     )
 
     address = models.TextField(blank=True, help_text="Complete hospital address")
 
-    phone = models.CharField(max_length=20, blank=True, help_text="Hospital contact phone number")
+    phone = models.CharField(
+        max_length=20, blank=True, help_text="Hospital contact phone number"
+    )
 
     email = models.EmailField(blank=True, help_text="Hospital contact email")
 
@@ -34,7 +50,9 @@ class Hospital(models.Model):
         blank=True, help_text="Description of hospital and its specialties"
     )
 
-    facilities = models.TextField(blank=True, help_text="Available facilities and equipment")
+    facilities = models.TextField(
+        blank=True, help_text="Available facilities and equipment"
+    )
 
     is_active = models.BooleanField(
         default=True, help_text="Whether this hospital is currently accepting rotations"
@@ -42,6 +60,7 @@ class Hospital(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Hospital"
@@ -108,11 +127,13 @@ class Department(models.Model):
     )
 
     is_active = models.BooleanField(
-        default=True, help_text="Whether this department is currently accepting rotations"
+        default=True,
+        help_text="Whether this department is currently accepting rotations",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Department"
@@ -234,6 +255,7 @@ class Rotation(models.Model):
     # Audit fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -270,7 +292,8 @@ class Rotation(models.Model):
         ]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(end_date__gt=models.F("start_date")), name="rotation_end_after_start"
+                check=models.Q(end_date__gt=models.F("start_date")),
+                name="rotation_end_after_start",
             ),
         ]
 
@@ -283,26 +306,38 @@ class Rotation(models.Model):
         """Validate rotation data"""
         errors = {}
 
-        # Validate dates
-        if self.start_date and self.end_date:
-            if self.end_date <= self.start_date:
-                errors["end_date"] = "End date must be after start date"
+        try:
+            validate_not_future(self.start_date, "start_date")
+        except ValidationError as exc:  # pragma: no cover - simple wrapper
+            errors.update(exc.message_dict)
 
-            # Check for overlapping rotations for the same PG
-            if self.pg:
-                overlapping = Rotation.objects.filter(
-                    pg=self.pg, status__in=["planned", "ongoing"]
-                ).exclude(pk=self.pk)
+        try:
+            validate_not_future(self.end_date, "end_date")
+        except ValidationError as exc:
+            errors.update(exc.message_dict)
 
-                for rotation in overlapping:
-                    if (
-                        self.start_date <= rotation.end_date
-                        and self.end_date >= rotation.start_date
-                    ):
-                        errors["start_date"] = (
-                            f"This rotation overlaps with existing rotation: {rotation}"
-                        )
-                        break
+        try:
+            validate_chronology(
+                self.start_date, self.end_date, "start_date", "end_date"
+            )
+        except ValidationError as exc:
+            errors.update(exc.message_dict)
+
+        # Check for overlapping rotations for the same PG
+        if self.pg and self.start_date and self.end_date:
+            overlapping = Rotation.objects.filter(
+                pg=self.pg, status__in=["planned", "ongoing"]
+            ).exclude(pk=self.pk)
+
+            for rotation in overlapping:
+                if (
+                    self.start_date <= rotation.end_date
+                    and self.end_date >= rotation.start_date
+                ):
+                    errors["start_date"] = (
+                        f"This rotation overlaps with existing rotation: {rotation}"
+                    )
+                    break
 
         # Validate department belongs to hospital
         if self.department and self.hospital:
@@ -318,6 +353,17 @@ class Rotation(models.Model):
             ):
                 # This is a warning, not an error
                 pass
+
+        try:
+            validate_same_supervisor(self.pg, self.supervisor)
+        except ValidationError as exc:
+            errors.update(exc.message_dict)
+
+        if self.notes:
+            try:
+                self.notes = sanitize_free_text(self.notes)
+            except ValidationError as exc:
+                errors.update({"notes": exc.messages})
 
         if errors:
             raise ValidationError(errors)
@@ -474,14 +520,21 @@ class RotationEvaluation(models.Model):
         max_length=20, choices=EVALUATION_TYPES, help_text="Type of evaluation"
     )
 
-    score = models.IntegerField(null=True, blank=True, help_text="Numerical score (0-100)")
+    score = models.IntegerField(
+        null=True, blank=True, help_text="Numerical score (0-100)"
+    )
 
     comments = models.TextField(blank=True, help_text="Detailed comments and feedback")
 
-    recommendations = models.TextField(blank=True, help_text="Recommendations for improvement")
+    recommendations = models.TextField(
+        blank=True, help_text="Recommendations for improvement"
+    )
 
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default="draft", help_text="Status of the evaluation"
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="draft",
+        help_text="Status of the evaluation",
     )
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -521,7 +574,9 @@ class RotationEvaluation(models.Model):
                 and self.evaluator != self.rotation.supervisor
                 and self.evaluator != self.rotation.pg.supervisor
             ):
-                raise ValidationError("Supervisor can only evaluate rotations they supervise")
+                raise ValidationError(
+                    "Supervisor can only evaluate rotations they supervise"
+                )
 
             if (
                 self.evaluator.role == "pg"

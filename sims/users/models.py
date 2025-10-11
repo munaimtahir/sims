@@ -1,8 +1,9 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from simple_history.models import HistoricalRecords
 
 # Role choices for the SIMS system
 USER_ROLES = (
@@ -90,7 +91,10 @@ class User(AbstractUser):
 
     # Profile fields
     registration_number = models.CharField(
-        max_length=50, blank=True, null=True, help_text="Medical council registration number"
+        max_length=50,
+        blank=True,
+        null=True,
+        help_text="Medical council registration number",
     )
 
     phone_number = models.CharField(
@@ -128,6 +132,7 @@ class User(AbstractUser):
     archived_date = models.DateTimeField(
         null=True, blank=True, help_text="Date when user was archived"
     )
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "SIMS User"
@@ -162,7 +167,9 @@ class User(AbstractUser):
 
         # Supervisors must have specialty
         if self.role == "supervisor" and not self.specialty:
-            raise ValidationError({"specialty": "Specialty is required for Supervisors"})
+            raise ValidationError(
+                {"specialty": "Specialty is required for Supervisors"}
+            )
 
         # Admins don't need specialty/year/supervisor
         if self.role == "admin":
@@ -175,7 +182,9 @@ class User(AbstractUser):
 
         # Ensure supervisor is actually a supervisor
         if self.supervisor and self.supervisor.role != "supervisor":
-            raise ValidationError({"supervisor": "Assigned supervisor must have supervisor role"})
+            raise ValidationError(
+                {"supervisor": "Assigned supervisor must have supervisor role"}
+            )
 
     def save(self, *args, **kwargs):
         """Override save to handle archiving and validation"""
@@ -241,7 +250,11 @@ class User(AbstractUser):
 
     def get_role_badge_class(self):
         """Get CSS class for role badge"""
-        role_classes = {"admin": "badge-danger", "supervisor": "badge-warning", "pg": "badge-info"}
+        role_classes = {
+            "admin": "badge-danger",
+            "supervisor": "badge-warning",
+            "pg": "badge-info",
+        }
         return role_classes.get(self.role, "badge-secondary")
 
     # Statistics methods (for analytics)
@@ -272,13 +285,17 @@ class User(AbstractUser):
                 from sims.logbook.models import LogbookEntry
 
                 for pg in self.get_assigned_pgs():
-                    count += LogbookEntry.objects.filter(pg=pg, status="pending").count()
+                    count += LogbookEntry.objects.filter(
+                        pg=pg, status="pending"
+                    ).count()
 
             if apps.is_installed("sims.cases"):
                 from sims.cases.models import ClinicalCase
 
                 for pg in self.get_assigned_pgs():
-                    count += ClinicalCase.objects.filter(pg=pg, status="pending").count()
+                    count += ClinicalCase.objects.filter(
+                        pg=pg, status="pending"
+                    ).count()
 
         except ImportError:
             # Handle case where related models don't exist yet

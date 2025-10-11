@@ -1,7 +1,6 @@
-from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.utils import timezone
+from django.db import models
 from django.urls import reverse
 from datetime import timedelta
 import os
@@ -41,7 +40,9 @@ class CertificateType(models.Model):
         ("other", "Other"),
     ]
 
-    name = models.CharField(max_length=200, unique=True, help_text="Name of the certificate type")
+    name = models.CharField(
+        max_length=200, unique=True, help_text="Name of the certificate type"
+    )
 
     category = models.CharField(
         max_length=20,
@@ -73,7 +74,8 @@ class CertificateType(models.Model):
     )
 
     prerequisites = models.TextField(
-        blank=True, help_text="Prerequisites or requirements for obtaining this certificate"
+        blank=True,
+        help_text="Prerequisites or requirements for obtaining this certificate",
     )
 
     requirements = models.TextField(
@@ -90,6 +92,7 @@ class CertificateType(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         verbose_name = "Certificate Type"
@@ -159,7 +162,9 @@ class Certificate(models.Model):
     issue_date = models.DateField(help_text="Date when the certificate was issued")
 
     expiry_date = models.DateField(
-        null=True, blank=True, help_text="Date when the certificate expires (if applicable)"
+        null=True,
+        blank=True,
+        help_text="Date when the certificate expires (if applicable)",
     )
 
     # Content and details
@@ -168,7 +173,8 @@ class Certificate(models.Model):
     )
 
     skills_acquired = models.TextField(
-        blank=True, help_text="Skills and competencies acquired through this certificate"
+        blank=True,
+        help_text="Skills and competencies acquired through this certificate",
     )
 
     cme_points_earned = models.PositiveIntegerField(
@@ -216,6 +222,7 @@ class Certificate(models.Model):
     # Audit fields
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
     created_by = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
@@ -433,7 +440,10 @@ class CertificateReview(models.Model):
     )
 
     status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, default="pending", help_text="Review status"
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+        help_text="Review status",
     )
 
     comments = models.TextField(blank=True, help_text="Detailed review comments")
@@ -577,14 +587,18 @@ class CertificateStatistics(models.Model):
         self.total_cpd_credits = sum(cert.cpd_credits_earned for cert in approved_certs)
 
         # Get last certificate date
-        latest_cert = certificates.filter(status="approved").order_by("-issue_date").first()
+        latest_cert = (
+            certificates.filter(status="approved").order_by("-issue_date").first()
+        )
         self.last_certificate_date = latest_cert.issue_date if latest_cert else None
 
         # Calculate compliance rate
         required_types = CertificateType.objects.filter(is_required=True).count()
         if required_types > 0:
             pg_required_certs = (
-                certificates.filter(certificate_type__is_required=True, status="approved")
+                certificates.filter(
+                    certificate_type__is_required=True, status="approved"
+                )
                 .values("certificate_type")
                 .distinct()
                 .count()
