@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Dict, List, Sequence
 
@@ -318,11 +319,17 @@ class SearchService:
 def _build_snippet(text: str, query: str, radius: int = 120) -> str:
     if not text:
         return ""
-    lowered = text.lower()
-    index = lowered.find(query.lower())
-    if index == -1:
+    if not query:
         return text[:radius]
+
+    pattern = re.compile(re.escape(query), re.IGNORECASE)
+    match = pattern.search(text)
+    if not match:
+        return text[:radius]
+
+    index = match.start()
+    matched_length = match.end() - match.start()
     start = max(index - radius // 2, 0)
-    end = min(index + len(query) + radius // 2, len(text))
+    end = min(index + matched_length + radius // 2, len(text))
     snippet = text[start:end]
-    return snippet.replace(query, f"**{query}**")
+    return pattern.sub(lambda m: f"**{m.group(0)}**", snippet)
