@@ -41,6 +41,9 @@ SIMS (Surgical Information Management System) is a comprehensive web-based manag
 - **🔍 Advanced Filtering**: Search and filter capabilities across all modules
 - **📤 Data Export**: Export data to CSV format for all major modules
 - **🔐 Security**: Role-based permissions, secure authentication, and session management
+- **🌐 Global Search**: Cross-module search with suggestions, highlights, and per-user history
+- **🛡️ Audit Trail**: Historical tracking for key models plus Activity Log APIs and CSV export
+- **✅ Business Rules Engine**: Centralised validators, sanitisation and consistent error handling
 
 ### Additional Features
 
