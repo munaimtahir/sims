@@ -13,6 +13,8 @@ from .forms import (
     QuickCertificateUploadForm,
 )
 
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+
 User = get_user_model()
 
 
@@ -78,15 +80,8 @@ class CertificateModelTests(TestCase):
             last_name="User",
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-            first_name="Super",
-            last_name="Visor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -251,13 +246,8 @@ class CertificateReviewModelTests(TestCase):
             name="Test Certificate Type", category="cme"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -346,6 +336,8 @@ class CertificateStatisticsModelTests(TestCase):
     """Test cases for the CertificateStatistics model"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.cert_type = CertificateType.objects.create(
             name="Required Certificate", category="safety", is_required=True
@@ -411,13 +403,8 @@ class CertificateViewTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -558,13 +545,8 @@ class CertificateFormTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -726,6 +708,8 @@ class CertificateAPITests(TestCase):
     """Test cases for certificate API endpoints"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -808,6 +792,8 @@ class CertificateExportTests(TestCase):
     """Test cases for certificate export functionality"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -877,13 +863,8 @@ class CertificateIntegrationTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",

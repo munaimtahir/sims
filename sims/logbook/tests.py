@@ -22,6 +22,8 @@ from .forms import (
     QuickLogbookEntryForm,
 )
 
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+
 User = get_user_model()
 
 
@@ -182,15 +184,8 @@ class LogbookEntryModelTests(TestCase):
             last_name="User",
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-            first_name="Super",
-            last_name="Visor",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -426,13 +421,8 @@ class LogbookReviewModelTests(TestCase):
 
     def setUp(self):
         """Set up test data"""
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -550,6 +540,8 @@ class LogbookStatisticsModelTests(TestCase):
     """Test cases for the LogbookStatistics model"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.pg_user = User.objects.create_user(
             username="pg_test", email="pg@test.com", password="testpass123", role="pg"
@@ -648,13 +640,8 @@ class LogbookViewTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -792,13 +779,8 @@ class LogbookFormTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
@@ -984,6 +966,8 @@ class LogbookAPITests(TestCase):
     """Test cases for logbook API endpoints"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -1058,6 +1042,8 @@ class LogbookExportTests(TestCase):
     """Test cases for logbook export functionality"""
 
     def setUp(self):
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
@@ -1113,13 +1099,8 @@ class LogbookIntegrationTests(TestCase):
             username="admin_test", email="admin@test.com", password="testpass123", role="admin"
         )
 
-        self.supervisor = User.objects.create_user(
-            username="supervisor_test",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.pg_user = User.objects.create_user(
             username="pg_test",
