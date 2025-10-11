@@ -36,9 +36,7 @@ class Notification(models.Model):
     verb = models.CharField(max_length=128)
     title = models.CharField(max_length=255)
     body = models.TextField()
-    channel = models.CharField(
-        max_length=20, choices=CHANNEL_CHOICES, default=CHANNEL_IN_APP
-    )
+    channel = models.CharField(max_length=20, choices=CHANNEL_CHOICES, default=CHANNEL_IN_APP)
     metadata = models.JSONField(default=dict, blank=True)
     read_at = models.DateTimeField(null=True, blank=True)
     scheduled_for = models.DateTimeField(null=True, blank=True)
@@ -80,9 +78,7 @@ class NotificationPreference(models.Model):
     def __str__(self) -> str:
         return f"Preferences for {self.user}"  # pragma: no cover
 
-    def allows_channel(
-        self, channel: str, when: Optional[timezone.datetime] = None
-    ) -> bool:
+    def allows_channel(self, channel: str, when: Optional[timezone.datetime] = None) -> bool:
         if channel == Notification.CHANNEL_EMAIL and not self.email_enabled:
             return False
         if channel == Notification.CHANNEL_IN_APP and not self.in_app_enabled:
@@ -111,9 +107,7 @@ class NotificationPreference(models.Model):
             "quiet_hours_start": (
                 self.quiet_hours_start.isoformat() if self.quiet_hours_start else None
             ),
-            "quiet_hours_end": (
-                self.quiet_hours_end.isoformat() if self.quiet_hours_end else None
-            ),
+            "quiet_hours_end": (self.quiet_hours_end.isoformat() if self.quiet_hours_end else None),
         }
 
 

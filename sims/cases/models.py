@@ -18,9 +18,7 @@ def case_file_upload_path(instance, filename):
 
 def case_image_upload_path(instance, filename):
     """Generate upload path for case images"""
-    return (
-        f'cases/pg_{instance.pg.id}/images/{instance.date.strftime("%Y/%m")}/{filename}'
-    )
+    return f'cases/pg_{instance.pg.id}/images/{instance.date.strftime("%Y/%m")}/{filename}'
 
 
 class CaseCategory(models.Model):
@@ -31,13 +29,9 @@ class CaseCategory(models.Model):
     Author: SMIB2012
     """
 
-    name = models.CharField(
-        max_length=100, unique=True, help_text="Name of the case category"
-    )
+    name = models.CharField(max_length=100, unique=True, help_text="Name of the case category")
 
-    description = models.TextField(
-        blank=True, help_text="Description of the case category"
-    )
+    description = models.TextField(blank=True, help_text="Description of the case category")
 
     color_code = models.CharField(
         max_length=7,
@@ -49,9 +43,7 @@ class CaseCategory(models.Model):
         default=True, help_text="Whether this category is currently active"
     )
 
-    sort_order = models.PositiveIntegerField(
-        default=0, help_text="Sort order for display"
-    )
+    sort_order = models.PositiveIntegerField(default=0, help_text="Sort order for display")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -109,9 +101,7 @@ class ClinicalCase(models.Model):
         help_text="Postgraduate who created this case",
     )
 
-    case_title = models.CharField(
-        max_length=300, help_text="Descriptive title for the case"
-    )
+    case_title = models.CharField(max_length=300, help_text="Descriptive title for the case")
 
     category = models.ForeignKey(
         CaseCategory,
@@ -161,17 +151,13 @@ class ClinicalCase(models.Model):
     )
 
     # Clinical details
-    chief_complaint = models.TextField(
-        help_text="Patient's chief complaint or presenting symptoms"
-    )
+    chief_complaint = models.TextField(help_text="Patient's chief complaint or presenting symptoms")
 
     history_of_present_illness = models.TextField(
         help_text="Detailed history of the present illness"
     )
 
-    past_medical_history = models.TextField(
-        blank=True, help_text="Relevant past medical history"
-    )
+    past_medical_history = models.TextField(blank=True, help_text="Relevant past medical history")
 
     family_history = models.TextField(blank=True, help_text="Relevant family history")
 
@@ -181,9 +167,7 @@ class ClinicalCase(models.Model):
 
     physical_examination = models.TextField(help_text="Physical examination findings")
 
-    investigations = models.TextField(
-        blank=True, help_text="Investigations ordered and results"
-    )
+    investigations = models.TextField(blank=True, help_text="Investigations ordered and results")
 
     # Diagnosis and management
     primary_diagnosis = models.ForeignKey(
@@ -219,9 +203,7 @@ class ClinicalCase(models.Model):
         blank=True, help_text="Learning objectives for this case"
     )
 
-    clinical_reasoning = models.TextField(
-        help_text="Clinical reasoning and thought process"
-    )
+    clinical_reasoning = models.TextField(help_text="Clinical reasoning and thought process")
 
     learning_points = models.TextField(help_text="Key learning points from this case")
 
@@ -236,9 +218,7 @@ class ClinicalCase(models.Model):
     # Follow-up and outcomes
     outcome = models.TextField(blank=True, help_text="Patient outcome and follow-up")
 
-    follow_up_plan = models.TextField(
-        blank=True, help_text="Follow-up plan and actions required"
-    )
+    follow_up_plan = models.TextField(blank=True, help_text="Follow-up plan and actions required")
 
     # Assessment and feedback
     supervisor_feedback = models.TextField(
@@ -282,9 +262,7 @@ class ClinicalCase(models.Model):
         help_text="Current status of the case",
     )
 
-    is_active = models.BooleanField(
-        default=True, help_text="Whether this case is active"
-    )
+    is_active = models.BooleanField(default=True, help_text="Whether this case is active")
 
     is_featured = models.BooleanField(
         default=False, help_text="Mark as featured case for educational purposes"
@@ -363,9 +341,7 @@ class ClinicalCase(models.Model):
                 and self.supervisor != self.pg.supervisor
                 and not self.supervisor.role == "admin"
             ):
-                errors["supervisor"] = (
-                    "Supervisor should be the PG's assigned supervisor"
-                )
+                errors["supervisor"] = "Supervisor should be the PG's assigned supervisor"
 
         if errors:
             raise ValidationError(errors)
@@ -498,18 +474,14 @@ class CaseReview(models.Model):
         help_text="User conducting the review",
     )
 
-    status = models.CharField(
-        max_length=20, choices=STATUS_CHOICES, help_text="Review outcome"
-    )
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, help_text="Review outcome")
 
     review_date = models.DateField(
         default=date.today, help_text="Date when the review was conducted"
     )
 
     # Detailed feedback
-    overall_feedback = models.TextField(
-        help_text="Overall feedback on the case presentation"
-    )
+    overall_feedback = models.TextField(help_text="Overall feedback on the case presentation")
 
     clinical_reasoning_feedback = models.TextField(
         blank=True, help_text="Feedback on clinical reasoning"
@@ -527,9 +499,7 @@ class CaseReview(models.Model):
         blank=True, help_text="Strengths demonstrated in this case"
     )
 
-    areas_for_improvement = models.TextField(
-        blank=True, help_text="Areas requiring improvement"
-    )
+    areas_for_improvement = models.TextField(blank=True, help_text="Areas requiring improvement")
 
     recommendations = models.TextField(
         blank=True, help_text="Specific recommendations for future learning"
@@ -632,17 +602,13 @@ class CaseStatistics(models.Model):
         default=0, help_text="Total number of cases submitted"
     )
 
-    approved_cases = models.PositiveIntegerField(
-        default=0, help_text="Number of approved cases"
-    )
+    approved_cases = models.PositiveIntegerField(default=0, help_text="Number of approved cases")
 
     pending_cases = models.PositiveIntegerField(
         default=0, help_text="Number of cases pending review"
     )
 
-    draft_cases = models.PositiveIntegerField(
-        default=0, help_text="Number of draft cases"
-    )
+    draft_cases = models.PositiveIntegerField(default=0, help_text="Number of draft cases")
 
     # Case complexity distribution
     simple_cases = models.PositiveIntegerField(
@@ -653,18 +619,14 @@ class CaseStatistics(models.Model):
         default=0, help_text="Number of moderate complexity cases"
     )
 
-    complex_cases = models.PositiveIntegerField(
-        default=0, help_text="Number of complex cases"
-    )
+    complex_cases = models.PositiveIntegerField(default=0, help_text="Number of complex cases")
 
     highly_complex_cases = models.PositiveIntegerField(
         default=0, help_text="Number of highly complex cases"
     )
 
     # Performance metrics
-    average_self_score = models.FloatField(
-        default=0.0, help_text="Average self-assessment score"
-    )
+    average_self_score = models.FloatField(default=0.0, help_text="Average self-assessment score")
 
     average_supervisor_score = models.FloatField(
         default=0.0, help_text="Average supervisor assessment score"
@@ -719,20 +681,16 @@ class CaseStatistics(models.Model):
         if self_scores:
             self.average_self_score = sum(self_scores) / len(self_scores)
 
-        supervisor_scores = cases.filter(
-            supervisor_assessment_score__isnull=False
-        ).values_list("supervisor_assessment_score", flat=True)
+        supervisor_scores = cases.filter(supervisor_assessment_score__isnull=False).values_list(
+            "supervisor_assessment_score", flat=True
+        )
 
         if supervisor_scores:
-            self.average_supervisor_score = sum(supervisor_scores) / len(
-                supervisor_scores
-            )
+            self.average_supervisor_score = sum(supervisor_scores) / len(supervisor_scores)
 
         # Update completion rate (assuming minimum requirement)
         required_cases = 50  # This could be configurable
-        self.completion_rate = (
-            (self.approved_cases / required_cases) * 100 if required_cases else 0
-        )
+        self.completion_rate = (self.approved_cases / required_cases) * 100 if required_cases else 0
 
         # Update time metrics
         submitted_cases = cases.exclude(status="draft")
@@ -744,14 +702,10 @@ class CaseStatistics(models.Model):
                     submission_times.append(days_diff)
 
             if submission_times:
-                self.average_submission_time = sum(submission_times) / len(
-                    submission_times
-                )
+                self.average_submission_time = sum(submission_times) / len(submission_times)
 
         # Count overdue cases
-        self.overdue_cases = sum(
-            1 for case in cases.filter(status="draft") if case.is_overdue()
-        )
+        self.overdue_cases = sum(1 for case in cases.filter(status="draft") if case.is_overdue())
 
         self.save()
 

@@ -47,9 +47,7 @@ class ReportRenderer:
         document = SimpleDocTemplate(output, pagesize=A4)
         styles = getSampleStyleSheet()
         title_style = styles["Title"]
-        subtitle_style = ParagraphStyle(
-            name="Subtitle", parent=styles["Normal"], alignment=1
-        )
+        subtitle_style = ParagraphStyle(name="Subtitle", parent=styles["Normal"], alignment=1)
 
         elements = [
             Paragraph(context.get("title", "SIMS Report"), title_style),
@@ -100,14 +98,10 @@ class ReportRenderer:
             cell = sheet.cell(row=1, column=col_index, value=column)
             cell.font = header_font
             cell.alignment = Alignment(horizontal="center")
-            sheet.column_dimensions[get_column_letter(col_index)].width = max(
-                15, len(column) + 2
-            )
+            sheet.column_dimensions[get_column_letter(col_index)].width = max(15, len(column) + 2)
         for row_index, row in enumerate(rows, start=2):
             for col_index, column in enumerate(columns, start=1):
-                cell = sheet.cell(
-                    row=row_index, column=col_index, value=row.get(column)
-                )
+                cell = sheet.cell(row=row_index, column=col_index, value=row.get(column))
                 cell.alignment = Alignment(vertical="top")
         sheet.freeze_panes = "A2"
         output = io.BytesIO()
@@ -124,17 +118,13 @@ class ReportService:
         self.actor = actor
         self.renderer = ReportRenderer()
 
-    def generate(
-        self, template: ReportTemplate, params: dict, fmt: str
-    ) -> RenderedReport:
+    def generate(self, template: ReportTemplate, params: dict, fmt: str) -> RenderedReport:
         context = self._build_context(template, params)
         filename = f"{template.slug}-{timezone.now():%Y%m%d%H%M%S}"
         if fmt == "pdf":
             return self.renderer.render_pdf(context, filename)
         if fmt == "xlsx":
-            return self.renderer.render_excel(
-                context["rows"], context["columns"], filename
-            )
+            return self.renderer.render_excel(context["rows"], context["columns"], filename)
         raise ValueError("Unsupported format")
 
     def _build_context(self, template: ReportTemplate, params: dict) -> dict:
@@ -148,19 +138,13 @@ class ReportService:
         start = params.get("start_date")
         end = params.get("end_date")
         pg_id = params.get("pg_id")
-        queryset = LogbookEntry.objects.select_related("pg", "supervisor").order_by(
-            "-date"
-        )
+        queryset = LogbookEntry.objects.select_related("pg", "supervisor").order_by("-date")
         accessible = get_accessible_users(self.actor)
         queryset = queryset.filter(pg__in=accessible)
         if start:
-            queryset = queryset.filter(
-                date__gte=datetime.strptime(start, "%Y-%m-%d").date()
-            )
+            queryset = queryset.filter(date__gte=datetime.strptime(start, "%Y-%m-%d").date())
         if end:
-            queryset = queryset.filter(
-                date__lte=datetime.strptime(end, "%Y-%m-%d").date()
-            )
+            queryset = queryset.filter(date__lte=datetime.strptime(end, "%Y-%m-%d").date())
         if pg_id:
             queryset = queryset.filter(pg_id=pg_id)
         rows: List[dict] = []
@@ -169,9 +153,7 @@ class ReportService:
                 {
                     "Date": entry.date.isoformat(),
                     "Postgraduate": entry.pg.get_full_name() if entry.pg else "",
-                    "Supervisor": (
-                        entry.supervisor.get_full_name() if entry.supervisor else ""
-                    ),
+                    "Supervisor": (entry.supervisor.get_full_name() if entry.supervisor else ""),
                     "Case Title": entry.case_title,
                     "Status": entry.get_status_display(),
                 }
@@ -208,9 +190,7 @@ class ScheduledReportRunner:
         return count
 
     def _email_report(self, schedule: ScheduledReport, report: RenderedReport) -> None:
-        recipients = [
-            email.strip() for email in schedule.email_to.split(",") if email.strip()
-        ]
+        recipients = [email.strip() for email in schedule.email_to.split(",") if email.strip()]
         if not recipients:
             return
         message = EmailMessage(

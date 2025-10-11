@@ -42,9 +42,7 @@ class CertificateType(models.Model):
         ("other", "Other"),
     ]
 
-    name = models.CharField(
-        max_length=200, unique=True, help_text="Name of the certificate type"
-    )
+    name = models.CharField(max_length=200, unique=True, help_text="Name of the certificate type")
 
     category = models.CharField(
         max_length=20,
@@ -484,7 +482,7 @@ class CertificateReview(models.Model):
         # Guard: only validate if both FKs are set (avoids RelatedObjectDoesNotExist before save)
         if not (self.reviewer_id and self.certificate_id):
             return
-            
+
         # Ensure reviewer has permission to review this certificate
         if self.reviewer and self.certificate:
             if (
@@ -589,18 +587,14 @@ class CertificateStatistics(models.Model):
         self.total_cpd_credits = sum(cert.cpd_credits_earned for cert in approved_certs)
 
         # Get last certificate date
-        latest_cert = (
-            certificates.filter(status="approved").order_by("-issue_date").first()
-        )
+        latest_cert = certificates.filter(status="approved").order_by("-issue_date").first()
         self.last_certificate_date = latest_cert.issue_date if latest_cert else None
 
         # Calculate compliance rate
         required_types = CertificateType.objects.filter(is_required=True).count()
         if required_types > 0:
             pg_required_certs = (
-                certificates.filter(
-                    certificate_type__is_required=True, status="approved"
-                )
+                certificates.filter(certificate_type__is_required=True, status="approved")
                 .values("certificate_type")
                 .distinct()
                 .count()

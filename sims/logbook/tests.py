@@ -22,7 +22,7 @@ from .forms import (
     QuickLogbookEntryForm,
 )
 
-from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from sims.tests.factories.user_factories import SupervisorFactory, PGFactory
 
 User = get_user_model()
 

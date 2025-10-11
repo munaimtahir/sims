@@ -1,18 +1,19 @@
 """Factories for Cases models"""
+
 import factory
 from factory.django import DjangoModelFactory
 from datetime import date, timedelta
 from sims.cases.models import CaseCategory, ClinicalCase
-from .user_factories import SupervisorFactory, PGFactory
+from .user_factories import PGFactory
 from .logbook_factories import DiagnosisFactory
 
 
 class CaseCategoryFactory(DjangoModelFactory):
     """Factory for CaseCategory model."""
-    
+
     class Meta:
         model = CaseCategory
-    
+
     name = factory.Sequence(lambda n: f"Category {n}")
     description = factory.Faker("sentence")
     color_code = "#007bff"
@@ -22,10 +23,10 @@ class CaseCategoryFactory(DjangoModelFactory):
 
 class ClinicalCaseFactory(DjangoModelFactory):
     """Factory for ClinicalCase model with all required fields."""
-    
+
     class Meta:
         model = ClinicalCase
-    
+
     pg = factory.SubFactory(PGFactory)
     supervisor = factory.LazyAttribute(lambda obj: obj.pg.supervisor)
     case_title = factory.Faker("sentence", nb_words=6)

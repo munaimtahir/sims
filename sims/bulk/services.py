@@ -37,28 +37,21 @@ class BulkService:
 
     def _validate_permissions(self) -> None:
         if not (
-            self.actor.is_superuser
-            or getattr(self.actor, "role", None) in {"admin", "supervisor"}
+            self.actor.is_superuser or getattr(self.actor, "role", None) in {"admin", "supervisor"}
         ):
-            raise PermissionDenied(
-                "Bulk operations are restricted to supervisors and admins."
-            )
+            raise PermissionDenied("Bulk operations are restricted to supervisors and admins.")
 
     # ------------------------------------------------------------------
     # Review and assignment operations
 
     def review_entries(self, entry_ids: Sequence[int], status: str) -> BulkOperation:
-        operation = BulkOperation.objects.create(
-            user=self.actor, operation=BulkOperation.OP_REVIEW
-        )
+        operation = BulkOperation.objects.create(user=self.actor, operation=BulkOperation.OP_REVIEW)
         successes: List[dict] = []
         failures: List[dict] = []
         for chunk in _chunked(entry_ids, self.chunk_size):
             try:
                 with transaction.atomic():
-                    entries = list(
-                        LogbookEntry.objects.select_for_update().filter(pk__in=chunk)
-                    )
+                    entries = list(LogbookEntry.objects.select_for_update().filter(pk__in=chunk))
                     missing = set(chunk) - {entry.pk for entry in entries}
                     for missing_id in missing:
                         failures.append({"id": missing_id, "error": "not-found"})
@@ -76,9 +69,7 @@ class BulkService:
         )
         return operation
 
-    def assign_supervisor(
-        self, entry_ids: Sequence[int], supervisor: User
-    ) -> BulkOperation:
+    def assign_supervisor(self, entry_ids: Sequence[int], supervisor: User) -> BulkOperation:
         operation = BulkOperation.objects.create(
             user=self.actor, operation=BulkOperation.OP_ASSIGNMENT
         )
@@ -87,9 +78,7 @@ class BulkService:
         for chunk in _chunked(entry_ids, self.chunk_size):
             try:
                 with transaction.atomic():
-                    entries = list(
-                        LogbookEntry.objects.select_for_update().filter(pk__in=chunk)
-                    )
+                    entries = list(LogbookEntry.objects.select_for_update().filter(pk__in=chunk))
                     missing = set(chunk) - {entry.pk for entry in entries}
                     for missing_id in missing:
                         failures.append({"id": missing_id, "error": "not-found"})
@@ -116,9 +105,7 @@ class BulkService:
         dry_run: bool = True,
         allow_partial: bool = False,
     ) -> BulkOperation:
-        operation = BulkOperation.objects.create(
-            user=self.actor, operation=BulkOperation.OP_IMPORT
-        )
+        operation = BulkOperation.objects.create(user=self.actor, operation=BulkOperation.OP_IMPORT)
         rows = list(_parse_rows(uploaded_file))
         successes: List[dict] = []
         failures: List[dict] = []
@@ -145,8 +132,7 @@ class BulkService:
                 "date": entry_date,
                 "status": status,
                 "location_of_activity": row.get("location") or "Not specified",
-                "patient_history_summary": row.get("patient_history")
-                or "Pending summary",
+                "patient_history_summary": row.get("patient_history") or "Pending summary",
                 "management_action": row.get("management_action") or "Pending action",
                 "topic_subtopic": row.get("topic_subtopic") or "General",
             }
@@ -155,9 +141,7 @@ class BulkService:
                     entry = LogbookEntry(**payload)
                     entry.full_clean()
                 else:
-                    entry = LogbookEntry.objects.create(
-                        **payload, created_by=self.actor
-                    )
+                    entry = LogbookEntry.objects.create(**payload, created_by=self.actor)
                 successes.append(
                     {
                         "pg": pg.username,
@@ -215,9 +199,7 @@ def _parse_rows(uploaded_file) -> Iterator[dict]:
     stream.seek(0)
     if name.endswith(".csv"):
         text_stream = (
-            io.TextIOWrapper(stream, encoding="utf-8")
-            if isinstance(stream, io.BytesIO)
-            else stream
+            io.TextIOWrapper(stream, encoding="utf-8") if isinstance(stream, io.BytesIO) else stream
         )
         reader = csv.DictReader(text_stream)
         _validate_headers(reader.fieldnames)
@@ -230,9 +212,7 @@ def _parse_rows(uploaded_file) -> Iterator[dict]:
         _validate_headers(headers)
         for row in sheet.iter_rows(min_row=2, values_only=True):
             payload = {
-                headers[idx]: (value or "")
-                for idx, value in enumerate(row)
-                if idx < len(headers)
+                headers[idx]: (value or "") for idx, value in enumerate(row) if idx < len(headers)
             }
             yield {key: str(value).strip() for key, value in payload.items()}
     else:

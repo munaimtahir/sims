@@ -37,9 +37,7 @@ class SearchService:
         self.use_full_text = connection.vendor == "postgresql"
         self.limit = settings.GLOBAL_SEARCH_CONFIG["MAX_RESULTS"]
 
-    def search(
-        self, query: str, filters: Dict[str, str] | None = None
-    ) -> List[SearchResult]:
+    def search(self, query: str, filters: Dict[str, str] | None = None) -> List[SearchResult]:
         filters = filters or {}
         query = query.strip()
         if not query:
@@ -56,9 +54,7 @@ class SearchService:
         return results[: self.limit]
 
     # region Individual searchers
-    def _search_users(
-        self, query: str, filters: Dict[str, str]
-    ) -> Sequence[SearchResult]:
+    def _search_users(self, query: str, filters: Dict[str, str]) -> Sequence[SearchResult]:
         qs = User.objects.filter(is_active=True)
         if not self.user.is_superuser and getattr(self.user, "role", "") != "admin":
             if hasattr(self.user, "is_supervisor") and self.user.is_supervisor():
@@ -111,9 +107,7 @@ class SearchService:
             for obj, score in scored
         ]
 
-    def _search_rotations(
-        self, query: str, filters: Dict[str, str]
-    ) -> Sequence[SearchResult]:
+    def _search_rotations(self, query: str, filters: Dict[str, str]) -> Sequence[SearchResult]:
         qs = Rotation.objects.select_related("pg", "department", "hospital")
         if not self.user.is_superuser and getattr(self.user, "role", "") != "admin":
             if hasattr(self.user, "is_supervisor") and self.user.is_supervisor():
@@ -140,17 +134,11 @@ class SearchService:
             ],
         )
 
-    def _search_logbook(
-        self, query: str, filters: Dict[str, str]
-    ) -> Sequence[SearchResult]:
-        qs = LogbookEntry.objects.select_related("pg", "rotation").prefetch_related(
-            "procedures"
-        )
+    def _search_logbook(self, query: str, filters: Dict[str, str]) -> Sequence[SearchResult]:
+        qs = LogbookEntry.objects.select_related("pg", "rotation").prefetch_related("procedures")
         if not self.user.is_superuser and getattr(self.user, "role", "") != "admin":
             if hasattr(self.user, "is_supervisor") and self.user.is_supervisor():
-                qs = qs.filter(
-                    Q(supervisor=self.user) | Q(rotation__supervisor=self.user)
-                )
+                qs = qs.filter(Q(supervisor=self.user) | Q(rotation__supervisor=self.user))
             else:
                 qs = qs.filter(pg=self.user)
 
@@ -172,9 +160,7 @@ class SearchService:
             ],
         )
 
-    def _search_certificates(
-        self, query: str, filters: Dict[str, str]
-    ) -> Sequence[SearchResult]:
+    def _search_certificates(self, query: str, filters: Dict[str, str]) -> Sequence[SearchResult]:
         qs = Certificate.objects.select_related("pg", "certificate_type")
         if not self.user.is_superuser and getattr(self.user, "role", "") != "admin":
             if hasattr(self.user, "is_supervisor") and self.user.is_supervisor():
@@ -200,9 +186,7 @@ class SearchService:
             ],
         )
 
-    def _search_cases(
-        self, query: str, filters: Dict[str, str]
-    ) -> Sequence[SearchResult]:
+    def _search_cases(self, query: str, filters: Dict[str, str]) -> Sequence[SearchResult]:
         qs = ClinicalCase.objects.select_related("pg", "category")
         if not self.user.is_superuser and getattr(self.user, "role", "") != "admin":
             if hasattr(self.user, "is_supervisor") and self.user.is_supervisor():
@@ -269,11 +253,7 @@ class SearchService:
                     object_id=obj.pk,
                     title=title(obj),
                     summary=_build_snippet(summary(obj), query),
-                    url=(
-                        reverse(url_name, args=[obj.pk])
-                        if self._has_url(url_name)
-                        else ""
-                    ),
+                    url=(reverse(url_name, args=[obj.pk]) if self._has_url(url_name) else ""),
                     score=float(score or 0.1),
                 )
             )
