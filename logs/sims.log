@@ -21214,3 +21214,9 @@ Traceback (most recent call last):
 django.core.exceptions.PermissionDenied: Admin access required
 INFO 2025-10-11 14:18:05,013 apps 4050 140298629181568 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:18:05,018 apps 4050 140298629181568 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:20:05,353 apps 4102 139892980707456 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:20:05,359 apps 4102 139892980707456 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:20:40,143 apps 4149 139964844011648 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:20:40,149 apps 4149 139964844011648 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:21:58,467 apps 4188 139937782460544 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:21:58,473 apps 4188 139937782460544 Logbook periodic tasks setup completed
