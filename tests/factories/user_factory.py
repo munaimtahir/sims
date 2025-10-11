@@ -45,4 +45,4 @@ class PGFactory(UserFactory):
     role = "pg"
     specialty = "medicine"
     year = "1"
-    supervisor = factory.SubFactory(SupervisorFactory)
+    supervisor = factory.LazyAttribute(lambda o: o.supervisor if o.supervisor else SupervisorFactory())
