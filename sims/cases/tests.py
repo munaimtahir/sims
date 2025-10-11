@@ -6,6 +6,7 @@ from datetime import date, timedelta
 
 from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
 from .forms import ClinicalCaseForm, CaseReviewForm
+from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
 
 User = get_user_model()
 
@@ -36,18 +37,10 @@ class ClinicalCaseModelTest(TestCase):
     """Test the ClinicalCase model"""
 
     def setUp(self):
-        # Create test users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
-
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        # Create test users using factories
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         # Create test category
         self.category = CaseCategory.objects.create(name="Emergency Medicine", color_code="#F44336")
@@ -107,9 +100,7 @@ class ClinicalCaseModelTest(TestCase):
         self.assertTrue(self.case.can_edit(self.supervisor))
 
         # Other users cannot edit
-        other_user = User.objects.create_user(
-            username="other", email="other@test.com", password="testpass123", role="pg"
-        )
+        other_user = PGFactory()
         self.assertFalse(self.case.can_edit(other_user))
 
 
@@ -118,17 +109,10 @@ class CaseReviewModelTest(TestCase):
 
     def setUp(self):
         # Create test users and case
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Pediatrics", color_code="#4CAF50")
 
@@ -183,17 +167,10 @@ class CaseStatisticsModelTest(TestCase):
     """Test the CaseStatistics model"""
 
     def setUp(self):
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Internal Medicine", color_code="#2196F3")
 
@@ -229,17 +206,10 @@ class CaseFormsTest(TestCase):
     """Test case-related forms"""
 
     def setUp(self):
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
@@ -310,25 +280,12 @@ class CaseViewsTest(TestCase):
         self.client = Client()
 
         # Create test users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
-        self.admin = User.objects.create_user(
-            username="testadmin",
-            email="admin@test.com",
-            password="testpass123",
-            role="admin",
-            is_staff=True,
-        )
+        self.admin = AdminFactory()
 
         # Create test data
         self.category = CaseCategory.objects.create(name="Orthopedics", color_code="#795548")
@@ -449,9 +406,7 @@ class CaseViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test PG accessing other PG's case
-        _other_pg = User.objects.create_user(
-            username="otherpg", email="otherpg@test.com", password="testpass123", role="pg"
-        )
+        _other_pg = PGFactory()
 
         self.client.login(username="otherpg", password="testpass123")
         response = self.client.get(reverse("cases:case_detail", kwargs={"pk": self.case.pk}))
@@ -473,17 +428,10 @@ class CaseIntegrationTest(TestCase):
         self.client = Client()
 
         # Create users
-        self.pg = User.objects.create_user(
-            username="testpg", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.supervisor = User.objects.create_user(
-            username="testsupervisor",
-            email="supervisor@test.com",
-            password="testpass123",
-            role="supervisor",
-            specialty="medicine",
-        )
+        self.supervisor = SupervisorFactory(specialty="medicine")
 
         self.category = CaseCategory.objects.create(name="Neurology", color_code="#9C27B0")
 

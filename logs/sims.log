@@ -19125,3 +19125,21 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+WARNING 2025-10-11 11:26:01,685 apps 3423 139689840124032 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:26:01,686 apps 3423 139689840124032 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:26:01,686 apps 3423 139689840124032 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:44,659 apps 3469 140055860650112 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:44,659 apps 3469 140055860650112 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:44,660 apps 3469 140055860650112 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:57,699 apps 3493 140711052378240 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:57,700 apps 3493 140711052378240 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:27:57,700 apps 3493 140711052378240 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:28:29,339 apps 3501 140378913288320 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:28:29,340 apps 3501 140378913288320 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:28:29,340 apps 3501 140378913288320 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:12,627 apps 3512 140119219413120 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:12,628 apps 3512 140119219413120 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:12,628 apps 3512 140119219413120 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:24,842 apps 3522 140079358201984 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:24,843 apps 3522 140079358201984 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 11:29:24,843 apps 3522 140079358201984 Error in logbook app ready(): no such table: django_content_type

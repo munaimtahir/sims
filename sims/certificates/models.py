@@ -469,6 +469,10 @@ class CertificateReview(models.Model):
 
     def clean(self):
         """Validate review data"""
+        # Guard: only validate if both FKs are set (avoids RelatedObjectDoesNotExist before save)
+        if not (self.reviewer_id and self.certificate_id):
+            return
+            
         # Ensure reviewer has permission to review this certificate
         if self.reviewer and self.certificate:
             if (
