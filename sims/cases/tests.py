@@ -7,6 +7,8 @@ from datetime import date, timedelta
 from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
 from .forms import ClinicalCaseForm, CaseReviewForm
 from sims.tests.factories.user_factories import AdminFactory, SupervisorFactory, PGFactory
+from sims.tests.factories.logbook_factories import DiagnosisFactory
+from sims.tests.factories.case_factories import ClinicalCaseFactory, CaseCategoryFactory
 
 User = get_user_model()
 
@@ -37,31 +39,19 @@ class ClinicalCaseModelTest(TestCase):
     """Test the ClinicalCase model"""
 
     def setUp(self):
-        # Create test users using factories
+        # Create test users and case using factories
         self.supervisor = SupervisorFactory(specialty="medicine")
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
-
-        # Create test category
-        self.category = CaseCategory.objects.create(name="Emergency Medicine", color_code="#F44336")
-
-        # Create test case with all required fields
-        self.case = ClinicalCase.objects.create(
+        
+        # Create test case using factory (handles all required fields)
+        self.case = ClinicalCaseFactory(
             pg=self.pg,
-            case_title="Acute Myocardial Infarction",
-            category=self.category,
-            date_encountered=date.today(),
-            patient_age=65,
-            patient_gender="M",
-            complexity="complex",
-            past_medical_history="Hypertension, Diabetes",
-            chief_complaint="Chest pain, shortness of breath",
-            history_of_present_illness="Patient presented with acute onset chest pain radiating to left arm.",
-            physical_examination="BP 150/90, HR 110, ST elevation on ECG",
-            management_plan="STEMI protocol initiated, thrombolysis administered",
-            clinical_reasoning="Classic presentation of STEMI with ECG changes",
-            learning_points="ECG interpretation, STEMI management",
             supervisor=self.supervisor,
-            status="draft")
+            case_title="Acute Myocardial Infarction",
+            complexity="complex",
+            status="draft"
+        )
+        self.category = self.case.category
 
     def test_case_creation(self):
         """Test clinical case creation"""

@@ -4,6 +4,7 @@ from factory.django import DjangoModelFactory
 from datetime import date
 from sims.cases.models import CaseCategory, ClinicalCase
 from .user_factories import SupervisorFactory, PGFactory
+from .logbook_factories import DiagnosisFactory
 
 
 class CaseCategoryFactory(DjangoModelFactory):
@@ -36,6 +37,7 @@ class ClinicalCaseFactory(DjangoModelFactory):
     chief_complaint = factory.Faker("sentence")
     history_of_present_illness = factory.Faker("paragraph")
     physical_examination = factory.Faker("paragraph")
+    primary_diagnosis = factory.SubFactory(DiagnosisFactory)
     management_plan = factory.Faker("paragraph")
     clinical_reasoning = factory.Faker("paragraph")
     learning_points = factory.Faker("paragraph")
