@@ -1,7 +1,7 @@
 """Factories for Rotation models"""
-
 import factory
 from factory.django import DjangoModelFactory
+from datetime import date, timedelta
 from datetime import date, timedelta
 from sims.rotations.models import Hospital, Department, Rotation, RotationEvaluation
 from .user_factories import PGFactory, SupervisorFactory
