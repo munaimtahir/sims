@@ -1,7 +1,7 @@
 """Factories for Certificate models"""
-
 import factory
 from factory.django import DjangoModelFactory
+from datetime import date, timedelta
 from datetime import date, timedelta
 from django.core.files.uploadedfile import SimpleUploadedFile
 from sims.certificates.models import CertificateType, Certificate
