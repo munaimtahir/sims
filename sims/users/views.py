@@ -477,7 +477,6 @@ class UserDeactivateView(AdminRequiredMixin, View):
             messages.info(request, f"User {user.get_display_name()} is already deactivated.")
         return redirect("users:user_list")
 
-
 class UserArchiveView(AdminRequiredMixin, View):
     """Archive user (admin only)"""
 
