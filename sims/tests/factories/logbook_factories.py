@@ -1,5 +1,4 @@
 """Factories for Logbook models"""
-
 import factory
 from factory.django import DjangoModelFactory
 from datetime import date, timedelta
