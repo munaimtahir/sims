@@ -1,7 +1,7 @@
 """Factories for Cases models"""
-
 import factory
 from factory.django import DjangoModelFactory
+from datetime import date
 from datetime import date
 from sims.cases.models import CaseCategory, ClinicalCase
 from .user_factories import PGFactory
