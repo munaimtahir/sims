@@ -102,7 +102,7 @@ class CaseDetailView(LoginRequiredMixin, DetailView):
         """Ensure user can only view cases they have access to"""
         queryset = ClinicalCase.objects.select_related(
             "pg", "supervisor", "category", "primary_diagnosis", "rotation"
-        ).prefetch_related("secondary_diagnoses", "procedures_performed", "competencies_achieved")
+        ).prefetch_related("secondary_diagnoses", "procedures_performed")
 
         if hasattr(self.request.user, "role"):
             if self.request.user.role == "pg":

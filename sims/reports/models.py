@@ -31,19 +31,11 @@ class ReportTemplate(models.Model):
 class ScheduledReport(models.Model):
     """Represents a scheduled report to be generated periodically."""
 
-    template = models.ForeignKey(
-        ReportTemplate, on_delete=models.CASCADE, related_name="schedules"
-    )
-    created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="scheduled_reports"
-    )
-    email_to = models.CharField(
-        max_length=500, help_text="Comma separated list of recipients"
-    )
+    template = models.ForeignKey(ReportTemplate, on_delete=models.CASCADE, related_name="schedules")
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="scheduled_reports")
+    email_to = models.CharField(max_length=500, help_text="Comma separated list of recipients")
     params = models.JSONField(default=dict, blank=True)
-    cron = models.CharField(
-        max_length=64, help_text="Simplified cron expression like '0 6 * * *'"
-    )
+    cron = models.CharField(max_length=64, help_text="Simplified cron expression like '0 6 * * *'")
     last_run_at = models.DateTimeField(null=True, blank=True)
     next_run_at = models.DateTimeField(null=True, blank=True)
     last_result = models.JSONField(default=dict, blank=True)

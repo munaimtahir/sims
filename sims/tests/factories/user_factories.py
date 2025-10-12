@@ -21,7 +21,7 @@ class UserFactory(DjangoModelFactory):
     email = factory.LazyAttribute(lambda obj: f"{obj.username}@sims.test")
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
-    password = factory.LazyFunction(lambda: make_password('testpass123'))
+    password = factory.LazyFunction(lambda: make_password("testpass123"))
     is_active = True
     is_archived = False
     role = "admin"

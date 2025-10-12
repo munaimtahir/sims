@@ -19,7 +19,7 @@ def supervisor(db):
     return SupervisorFactory()
 
 
-@pytest.fixture  
+@pytest.fixture
 def pg_user(db, supervisor):
     """Create a PG user with all required fields."""
     return PGFactory(supervisor=supervisor)
