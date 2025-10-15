@@ -47,4 +47,3 @@ class LogbookEntryFactory(DjangoModelFactory):
     patient_gender = "M"
     status = "draft"
     is_active = True
-

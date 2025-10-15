@@ -189,9 +189,7 @@ class LogbookEntryModelTests(TestCase):
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         # Create test clinical data using factories
-        self.diagnosis = DiagnosisFactory(
-            name="Pneumonia", category="respiratory", icd_code="J18"
-        )
+        self.diagnosis = DiagnosisFactory(name="Pneumonia", category="respiratory", icd_code="J18")
         self.procedure = ProcedureFactory(
             name="Chest X-ray", category="diagnostic", difficulty_level=1
         )
