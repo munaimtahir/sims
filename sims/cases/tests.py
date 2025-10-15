@@ -371,7 +371,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_submit_view(self):
         """Test case submission for review"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.post(reverse("cases:case_submit", kwargs={"pk": self.case.pk}))
 
         self.assertEqual(response.status_code, 302)
