@@ -63,6 +63,10 @@ INSTALLED_APPS = [
     "sims.cases",
     "sims.search",
     "sims.audit",
+    "sims.analytics",
+    "sims.bulk",
+    "sims.notifications",
+    "sims.reports",
 ]
 
 MIDDLEWARE = [

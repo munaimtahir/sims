@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 """Factories for Certificate models"""
 import factory
 from factory.django import DjangoModelFactory
 from datetime import date, timedelta
 from datetime import date, timedelta
 from django.core.files.uploadedfile import SimpleUploadedFile
+=======
+"""Factories for Certificates models"""
+
+import factory
+from factory.django import DjangoModelFactory
+from datetime import date, timedelta
+>>>>>>> origin/main
 from sims.certificates.models import CertificateType, Certificate
 from .user_factories import PGFactory
 
@@ -15,17 +23,25 @@ class CertificateTypeFactory(DjangoModelFactory):
         model = CertificateType
 
     name = factory.Sequence(lambda n: f"Certificate Type {n}")
+<<<<<<< HEAD
     category = "professional"
     description = factory.Faker("sentence")
     is_required = False
     validity_period_months = 12
     cme_points = 10
     cpd_credits = 5
+=======
+    description = factory.Faker("paragraph")
+>>>>>>> origin/main
     is_active = True
 
 
 class CertificateFactory(DjangoModelFactory):
+<<<<<<< HEAD
     """Factory for Certificate model with all required fields."""
+=======
+    """Factory for Certificate model."""
+>>>>>>> origin/main
 
     class Meta:
         model = Certificate
@@ -33,6 +49,7 @@ class CertificateFactory(DjangoModelFactory):
     pg = factory.SubFactory(PGFactory)
     certificate_type = factory.SubFactory(CertificateTypeFactory)
     title = factory.Faker("sentence", nb_words=6)
+<<<<<<< HEAD
     certificate_number = factory.Sequence(lambda n: f"CERT-{n:05d}")
     issuing_organization = factory.Faker("company")
     issue_date = factory.LazyFunction(lambda: date.today() - timedelta(days=90))
@@ -48,3 +65,10 @@ class CertificateFactory(DjangoModelFactory):
     )
     status = "pending"
     is_verified = False
+=======
+    issue_date = factory.LazyFunction(lambda: date.today() - timedelta(days=30))
+    expiry_date = factory.LazyFunction(lambda: date.today() + timedelta(days=365))
+    issuing_organization = factory.Faker("company")
+    status = "active"
+    is_active = True
+>>>>>>> origin/main

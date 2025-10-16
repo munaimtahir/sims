@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Factories for Rotation models"""
 import factory
 from factory.django import DjangoModelFactory
@@ -5,6 +6,15 @@ from datetime import date, timedelta
 from datetime import date, timedelta
 from sims.rotations.models import Hospital, Department, Rotation, RotationEvaluation
 from .user_factories import PGFactory, SupervisorFactory
+=======
+"""Factories for Rotations models"""
+
+import factory
+from factory.django import DjangoModelFactory
+from datetime import date, timedelta
+from sims.rotations.models import Hospital, Department, Rotation
+from .user_factories import SupervisorFactory, PGFactory
+>>>>>>> origin/main
 
 
 class HospitalFactory(DjangoModelFactory):
@@ -14,6 +24,7 @@ class HospitalFactory(DjangoModelFactory):
         model = Hospital
 
     name = factory.Sequence(lambda n: f"Hospital {n}")
+<<<<<<< HEAD
     code = factory.Sequence(lambda n: f"HOSP{n:03d}")
     address = factory.Faker("address")
     phone = factory.Faker("phone_number")
@@ -21,6 +32,10 @@ class HospitalFactory(DjangoModelFactory):
     website = factory.Faker("url")
     description = factory.Faker("paragraph")
     facilities = factory.Faker("paragraph")
+=======
+    address = factory.Faker("address")
+    phone = factory.Faker("phone_number")
+>>>>>>> origin/main
     is_active = True
 
 
@@ -33,6 +48,7 @@ class DepartmentFactory(DjangoModelFactory):
     name = factory.Sequence(lambda n: f"Department {n}")
     hospital = factory.SubFactory(HospitalFactory)
     head_of_department = factory.Faker("name")
+<<<<<<< HEAD
     contact_email = factory.Faker("email")
     contact_phone = factory.Faker("phone_number")
     description = factory.Faker("paragraph")
@@ -41,12 +57,19 @@ class DepartmentFactory(DjangoModelFactory):
 
 class RotationFactory(DjangoModelFactory):
     """Factory for Rotation model with all required fields."""
+=======
+
+
+class RotationFactory(DjangoModelFactory):
+    """Factory for Rotation model."""
+>>>>>>> origin/main
 
     class Meta:
         model = Rotation
 
     pg = factory.SubFactory(PGFactory)
     supervisor = factory.LazyAttribute(lambda obj: obj.pg.supervisor)
+<<<<<<< HEAD
     name = factory.Sequence(lambda n: f"Rotation {n}")
     department = factory.SubFactory(DepartmentFactory)
     hospital = factory.LazyAttribute(lambda obj: obj.department.hospital)
@@ -78,3 +101,10 @@ class RotationEvaluationFactory(DjangoModelFactory):
     areas_for_improvement = factory.Faker("paragraph")
     comments = factory.Faker("paragraph")
     status = "submitted"
+=======
+    hospital = factory.SubFactory(HospitalFactory)
+    department = factory.SubFactory(DepartmentFactory)
+    start_date = factory.LazyFunction(lambda: date.today() - timedelta(days=30))
+    end_date = factory.LazyFunction(lambda: date.today() + timedelta(days=60))
+    status = "active"
+>>>>>>> origin/main

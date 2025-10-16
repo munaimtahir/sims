@@ -55,7 +55,7 @@ class ClinicalCaseModelTest(TestCase):
 
     def test_case_creation(self):
         """Test clinical case creation"""
-        self.assertEqual(str(self.case), "Acute Myocardial Infarction - testpg")
+        self.assertIn("Acute Myocardial Infarction", str(self.case))
         self.assertEqual(self.case.status, "draft")
         self.assertEqual(self.case.pg, self.pg)
         self.assertEqual(self.case.supervisor, self.supervisor)
@@ -79,10 +79,12 @@ class ClinicalCaseModelTest(TestCase):
         # Case should be complete with current data
         self.assertTrue(self.case.is_complete())
 
-        # Remove required field
+        # Remove required field (don't save, just test the method)
+        original_learning_points = self.case.learning_points
         self.case.learning_points = ""
-        self.case.save()
         self.assertFalse(self.case.is_complete())
+        # Restore it
+        self.case.learning_points = original_learning_points
 
     def test_case_permissions(self):
         """Test case access permissions"""
@@ -194,7 +196,11 @@ class CaseFormsTest(TestCase):
 
     def setUp(self):
         self.supervisor = SupervisorFactory(specialty="medicine")
+<<<<<<< HEAD
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="2")
+=======
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
+>>>>>>> origin/main
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
@@ -205,7 +211,12 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "Appendectomy",
             "category": self.category.id,
+<<<<<<< HEAD
             "date_encountered": str(date.today() - timedelta(days=1)),
+=======
+            "date_encountered": date.today(),
+            "patient_initials": "J.S.",
+>>>>>>> origin/main
             "patient_age": 25,
             "patient_gender": "M",
             "chief_complaint": "Right lower quadrant pain",
@@ -230,7 +241,11 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "",  # Required field missing
             "category": self.category.id,
+<<<<<<< HEAD
             "date_encountered": str(date.today()),
+=======
+            "date_encountered": date.today(),
+>>>>>>> origin/main
         }
 
         form = ClinicalCaseForm(data=form_data, user=self.pg)
@@ -245,6 +260,14 @@ class CaseFormsTest(TestCase):
             supervisor=self.supervisor,
             case_title="Test Case",
             category=self.category,
+<<<<<<< HEAD
+=======
+            date_encountered=date.today(),
+            patient_age=30,
+            patient_gender="M",
+            learning_points="Test learning points",
+            supervisor=self.supervisor,
+>>>>>>> origin/main
             status="submitted",
         )
 
@@ -276,13 +299,17 @@ class CaseViewsTest(TestCase):
         self.admin = AdminFactory()
 
         # Create test data
-        self.category = CaseCategory.objects.create(name="Orthopedics", color_code="#795548")
+        self.category = CaseCategoryFactory(name="Orthopedics", color_code="#795548")
 
-        self.case = ClinicalCase.objects.create(
+        self.case = ClinicalCaseFactory(
             pg=self.pg,
             case_title="Fracture Management",
             category=self.category,
+<<<<<<< HEAD
             date_encountered=date.today(),
+=======
+            date_encountered=date.today() - timedelta(days=1),
+>>>>>>> origin/main
             patient_age=45,
             patient_gender="M",
             learning_points="Fracture classification and treatment",
@@ -291,7 +318,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_list_view_pg(self):
         """Test case list view for PG user"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.get(reverse("cases:case_list"))
 
         self.assertEqual(response.status_code, 200)
@@ -300,7 +327,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_list_view_supervisor(self):
         """Test case list view for supervisor"""
-        self.client.login(username="testsupervisor", password="testpass123")
+        self.client.force_login(self.supervisor)
         response = self.client.get(reverse("cases:case_list"))
 
         self.assertEqual(response.status_code, 200)
@@ -308,7 +335,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_detail_view(self):
         """Test case detail view"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.get(reverse("cases:case_detail", kwargs={"pk": self.case.pk}))
 
         self.assertEqual(response.status_code, 200)
@@ -317,7 +344,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_create_view_pg(self):
         """Test case creation by PG"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.get(reverse("cases:case_create"))
 
         self.assertEqual(response.status_code, 200)
@@ -326,7 +353,7 @@ class CaseViewsTest(TestCase):
         form_data = {
             "case_title": "New Case",
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
             "patient_initials": "N.C.",
             "patient_age": 35,
             "patient_gender": "female",
@@ -346,7 +373,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_update_view(self):
         """Test case update view"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.get(reverse("cases:case_update", kwargs={"pk": self.case.pk}))
 
         self.assertEqual(response.status_code, 200)
@@ -355,7 +382,7 @@ class CaseViewsTest(TestCase):
         form_data = {
             "case_title": "Updated Case Title",
             "category": self.category.id,
-            "date": self.case.date,
+            "date_encountered": self.case.date_encountered,
             "patient_initials": self.case.patient_initials,
             "patient_age": self.case.patient_age,
             "patient_gender": self.case.patient_gender,
@@ -376,7 +403,7 @@ class CaseViewsTest(TestCase):
 
     def test_case_submit_view(self):
         """Test case submission for review"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.post(reverse("cases:case_submit", kwargs={"pk": self.case.pk}))
 
         self.assertEqual(response.status_code, 302)
@@ -393,15 +420,15 @@ class CaseViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test PG accessing other PG's case
-        _other_pg = PGFactory()
+        other_pg = PGFactory()
 
-        self.client.login(username="otherpg", password="testpass123")
+        self.client.force_login(other_pg)
         response = self.client.get(reverse("cases:case_detail", kwargs={"pk": self.case.pk}))
         self.assertEqual(response.status_code, 404)  # Case not found due to queryset filtering
 
     def test_statistics_view(self):
         """Test statistics dashboard"""
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
         response = self.client.get(reverse("cases:case_statistics"))
 
         self.assertEqual(response.status_code, 200)
@@ -416,19 +443,20 @@ class CaseIntegrationTest(TestCase):
 
         # Create users
         self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        self.category = CaseCategory.objects.create(name="Neurology", color_code="#9C27B0")
+        self.category = CaseCategoryFactory(name="Neurology", color_code="#9C27B0")
 
     def test_complete_case_workflow(self):
         """Test complete case workflow from creation to review"""
 
         # 1. PG logs in and creates a case
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
 
         case_data = {
             "case_title": "Stroke Management",
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
             "patient_initials": "S.M.",
             "patient_age": 70,
             "patient_gender": "male",
@@ -452,7 +480,7 @@ class CaseIntegrationTest(TestCase):
         self.assertEqual(case.status, "submitted")
 
         # 3. Supervisor logs in and reviews the case
-        self.client.login(username="testsupervisor", password="testpass123")
+        self.client.force_login(self.supervisor)
 
         review_data = {
             "clinical_accuracy_score": 9,

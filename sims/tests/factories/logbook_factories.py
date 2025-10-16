@@ -1,9 +1,15 @@
 """Factories for Logbook models"""
+
 import factory
 from factory.django import DjangoModelFactory
 from datetime import date, timedelta
+<<<<<<< HEAD
 from sims.logbook.models import Diagnosis, Procedure, LogbookEntry, LogbookReview
 from .user_factories import PGFactory, SupervisorFactory
+=======
+from sims.logbook.models import Diagnosis, Procedure, LogbookEntry
+from .user_factories import SupervisorFactory, PGFactory
+>>>>>>> origin/main
 
 
 class DiagnosisFactory(DjangoModelFactory):
@@ -29,7 +35,11 @@ class ProcedureFactory(DjangoModelFactory):
 
 
 class LogbookEntryFactory(DjangoModelFactory):
+<<<<<<< HEAD
     """Factory for LogbookEntry model with all required fields."""
+=======
+    """Factory for LogbookEntry model."""
+>>>>>>> origin/main
 
     class Meta:
         model = LogbookEntry
@@ -37,6 +47,7 @@ class LogbookEntryFactory(DjangoModelFactory):
     pg = factory.SubFactory(PGFactory)
     supervisor = factory.LazyAttribute(lambda obj: obj.pg.supervisor)
     case_title = factory.Faker("sentence", nb_words=6)
+<<<<<<< HEAD
     date = factory.LazyFunction(lambda: date.today() - timedelta(days=5))
     location_of_activity = factory.Faker("city")
     patient_history_summary = factory.Faker("paragraph")
@@ -63,3 +74,14 @@ class LogbookReviewFactory(DjangoModelFactory):
     feedback = factory.Faker("paragraph")
     recommendations = factory.Faker("paragraph")
     status = "approved"
+=======
+    date = factory.LazyFunction(lambda: date.today() - timedelta(days=7))
+    location_of_activity = factory.Faker("city")
+    patient_history_summary = factory.Faker("paragraph")
+    management_action = factory.Faker("paragraph")
+    topic_subtopic = factory.Faker("sentence", nb_words=4)
+    patient_age = 45
+    patient_gender = "M"
+    status = "draft"
+    is_active = True
+>>>>>>> origin/main

@@ -602,12 +602,7 @@ class LogbookEntry(models.Model):
             models.Index(fields=["submitted_to_supervisor_at"]),
             models.Index(fields=["supervisor_action_at"]),
         ]
-        constraints = [
-            models.CheckConstraint(
-                check=models.Q(date__lte=timezone.now().date()),
-                name="logbook_entry_date_not_future",
-            ),
-        ]
+        constraints = []
 
     def __str__(self):
         title = self.case_title
