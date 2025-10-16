@@ -204,7 +204,7 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "Appendectomy",
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
             "patient_initials": "J.S.",
             "patient_age": 25,
             "patient_gender": "male",
@@ -222,7 +222,7 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "",  # Required field missing
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
         }
 
         form = ClinicalCaseForm(data=form_data, user=self.pg)
@@ -321,7 +321,7 @@ class CaseViewsTest(TestCase):
         form_data = {
             "case_title": "New Case",
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
             "patient_initials": "N.C.",
             "patient_age": 35,
             "patient_gender": "female",
@@ -350,7 +350,7 @@ class CaseViewsTest(TestCase):
         form_data = {
             "case_title": "Updated Case Title",
             "category": self.category.id,
-            "date": self.case.date,
+            "date_encountered": self.case.date_encountered,
             "patient_initials": self.case.patient_initials,
             "patient_age": self.case.patient_age,
             "patient_gender": self.case.patient_gender,
@@ -424,7 +424,7 @@ class CaseIntegrationTest(TestCase):
         case_data = {
             "case_title": "Stroke Management",
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
             "patient_initials": "S.M.",
             "patient_age": 70,
             "patient_gender": "male",
