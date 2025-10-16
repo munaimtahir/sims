@@ -3,7 +3,6 @@ from __future__ import annotations
 from datetime import datetime
 
 from django.http import HttpResponse
-from django.utils import timezone
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser

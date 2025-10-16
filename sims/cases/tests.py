@@ -196,26 +196,44 @@ class CaseFormsTest(TestCase):
 
     def setUp(self):
         self.supervisor = SupervisorFactory(specialty="medicine")
+<<<<<<< HEAD
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="2")
+=======
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
+>>>>>>> origin/main
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
     def test_clinical_case_form_valid(self):
         """Test valid clinical case form submission"""
+        diagnosis = DiagnosisFactory()
+        
         form_data = {
             "case_title": "Appendectomy",
             "category": self.category.id,
+<<<<<<< HEAD
+            "date_encountered": str(date.today() - timedelta(days=1)),
+=======
             "date_encountered": date.today(),
             "patient_initials": "J.S.",
+>>>>>>> origin/main
             "patient_age": 25,
-            "patient_gender": "male",
-            "patient_history": "No significant medical history",
-            "presenting_complaints": "Right lower quadrant pain",
+            "patient_gender": "M",
+            "chief_complaint": "Right lower quadrant pain",
+            "history_of_present_illness": "No significant medical history",
+            "physical_examination": "Tenderness in RLQ",
+            "primary_diagnosis": diagnosis.id,
+            "management_plan": "Surgical intervention",
+            "clinical_reasoning": "Classic appendicitis presentation",
             "learning_points": "Surgical technique and patient care",
             "supervisor": self.supervisor.id,
         }
 
-        form = ClinicalCaseForm(data=form_data, user=self.pg)
+        # Create instance with pg first to satisfy model validation
+        instance = ClinicalCase(pg=self.pg)
+        form = ClinicalCaseForm(data=form_data, user=self.pg, instance=instance)
+        if not form.is_valid():
+            self.fail(f"Form validation failed: {form.errors}")
         self.assertTrue(form.is_valid())
 
     def test_clinical_case_form_invalid(self):
@@ -223,7 +241,11 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "",  # Required field missing
             "category": self.category.id,
+<<<<<<< HEAD
+            "date_encountered": str(date.today()),
+=======
             "date_encountered": date.today(),
+>>>>>>> origin/main
         }
 
         form = ClinicalCaseForm(data=form_data, user=self.pg)
@@ -232,15 +254,20 @@ class CaseFormsTest(TestCase):
 
     def test_case_review_form_valid(self):
         """Test valid case review form"""
-        case = ClinicalCase.objects.create(
+        # Use factory to create a complete case
+        case = ClinicalCaseFactory(
             pg=self.pg,
+            supervisor=self.supervisor,
             case_title="Test Case",
             category=self.category,
+<<<<<<< HEAD
+=======
             date_encountered=date.today(),
             patient_age=30,
             patient_gender="M",
             learning_points="Test learning points",
             supervisor=self.supervisor,
+>>>>>>> origin/main
             status="submitted",
         )
 
@@ -278,7 +305,11 @@ class CaseViewsTest(TestCase):
             pg=self.pg,
             case_title="Fracture Management",
             category=self.category,
+<<<<<<< HEAD
+            date_encountered=date.today(),
+=======
             date_encountered=date.today() - timedelta(days=1),
+>>>>>>> origin/main
             patient_age=45,
             patient_gender="M",
             learning_points="Fracture classification and treatment",

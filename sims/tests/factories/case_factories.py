@@ -2,7 +2,12 @@
 
 import factory
 from factory.django import DjangoModelFactory
+<<<<<<< HEAD
+from datetime import date
+from datetime import date
+=======
 from datetime import date, timedelta
+>>>>>>> origin/main
 from sims.cases.models import CaseCategory, ClinicalCase
 from .user_factories import PGFactory
 from .logbook_factories import DiagnosisFactory

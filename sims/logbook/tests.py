@@ -23,6 +23,8 @@ from .forms import (
 )
 
 from sims.tests.factories.user_factories import SupervisorFactory, PGFactory
+<<<<<<< HEAD
+=======
 from sims.tests.factories.logbook_factories import (
     DiagnosisFactory,
     ProcedureFactory,
@@ -33,6 +35,7 @@ from sims.tests.factories.rotation_factories import (
     DepartmentFactory,
     RotationFactory,
 )
+>>>>>>> origin/main
 
 User = get_user_model()
 

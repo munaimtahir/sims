@@ -19188,6 +19188,12 @@ WARNING 2025-10-11 13:03:58,380 apps 3729 140250649837696 Error in logbook app r
 WARNING 2025-10-11 13:04:12,776 apps 3735 140391005909120 Error in rotations app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:04:12,777 apps 3735 140391005909120 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:04:12,777 apps 3735 140391005909120 Error in logbook app ready(): no such table: django_content_type
+<<<<<<< HEAD
+WARNING 2025-10-11 13:54:04,316 apps 3510 140268784771200 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:54:04,316 apps 3510 140268784771200 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:54:04,316 apps 3510 140268784771200 Error in logbook app ready(): no such table: django_content_type
+ERROR 2025-10-11 13:54:41,388 log 3510 140268784771200 Internal Server Error: /certificates/1/
+=======
 WARNING 2025-10-11 13:55:25,828 apps 3387 139826438570112 Error in rotations app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:55:25,828 apps 3387 139826438570112 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-11 13:55:25,829 apps 3387 139826438570112 Error in logbook app ready(): no such table: django_content_type
@@ -19599,6 +19605,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
 ERROR 2025-10-11 13:58:32,576 log 3443 139654947356800 Internal Server Error: /certificates/1/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19685,7 +19692,11 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/base.py", line 606, in find_filter
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'abs'
+<<<<<<< HEAD
+WARNING 2025-10-11 13:54:43,275 log 3510 140268784771200 Forbidden (Permission denied): /certificates/1/review/
+=======
 WARNING 2025-10-11 13:58:34,456 log 3443 139654947356800 Forbidden (Permission denied): /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19699,7 +19710,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/certificates/views.py", line 408, in dispatch
     raise PermissionDenied("You don't have permission to review certificates")
 django.core.exceptions.PermissionDenied: You don't have permission to review certificates
+<<<<<<< HEAD
+ERROR 2025-10-11 13:54:43,466 log 3510 140268784771200 Internal Server Error: /certificates/1/review/
+=======
 ERROR 2025-10-11 13:58:34,646 log 3443 139654947356800 Internal Server Error: /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19719,7 +19734,319 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/loader.py", line 47, in select_template
     raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
 django.template.exceptions.TemplateDoesNotExist: certificates/review_form.html
+<<<<<<< HEAD
+ERROR 2025-10-11 13:55:11,994 log 3510 140268784771200 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:55:12,191 log 3510 140268784771200 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:55:12,386 log 3510 140268784771200 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:55:12,773 log 3510 140268784771200 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+WARNING 2025-10-11 13:55:29,386 log 3510 140268784771200 Forbidden (Permission denied): /rotations/create/
+=======
 WARNING 2025-10-11 13:58:52,241 log 3443 139654947356800 Forbidden (Permission denied): /rotations/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19739,9 +20066,13 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
     raise PermissionDenied(self.get_permission_denied_message())
 django.core.exceptions.PermissionDenied
+<<<<<<< HEAD
+WARNING 2025-10-11 13:55:45,574 log 3510 140268784771200 Forbidden (Permission denied): /users/admin-dashboard/
+=======
 INFO 2025-10-11 13:59:03,945 apps 3488 139855375298688 Certificate periodic tasks setup completed
 INFO 2025-10-11 13:59:03,950 apps 3488 139855375298688 Logbook periodic tasks setup completed
 WARNING 2025-10-11 13:59:20,147 log 3488 139855375298688 Forbidden (Permission denied): /users/admin-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19755,7 +20086,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+WARNING 2025-10-11 13:55:50,106 log 3510 140268784771200 Forbidden (Permission denied): /users/supervisor-dashboard/
+=======
 WARNING 2025-10-11 13:59:24,464 log 3488 139855375298688 Forbidden (Permission denied): /users/supervisor-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19769,7 +20104,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 93, in dispatch
     raise PermissionDenied("Supervisor access required")
 django.core.exceptions.PermissionDenied: Supervisor access required
+<<<<<<< HEAD
+WARNING 2025-10-11 13:55:52,016 log 3510 140268784771200 Forbidden (Permission denied): /users/list/
+=======
 WARNING 2025-10-11 13:59:26,335 log 3488 139855375298688 Forbidden (Permission denied): /users/list/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -19783,6 +20122,12 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+WARNING 2025-10-11 13:56:00,278 apps 3539 139864140533888 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:56:00,279 apps 3539 139864140533888 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:56:00,280 apps 3539 139864140533888 Error in logbook app ready(): no such table: django_content_type
+ERROR 2025-10-11 13:56:42,888 log 3539 139864140533888 Internal Server Error: /certificates/1/
+=======
 ERROR 2025-10-11 14:00:01,472 log 3488 139855375298688 Internal Server Error: /logbook/pg/entry/new/
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
@@ -20092,6 +20437,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
 ERROR 2025-10-11 14:00:25,715 log 3488 139855375298688 Internal Server Error: /certificates/1/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20178,7 +20524,11 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/base.py", line 606, in find_filter
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'abs'
+<<<<<<< HEAD
+WARNING 2025-10-11 13:56:44,828 log 3539 139864140533888 Forbidden (Permission denied): /certificates/1/review/
+=======
 WARNING 2025-10-11 14:00:27,602 log 3488 139855375298688 Forbidden (Permission denied): /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20192,7 +20542,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/certificates/views.py", line 408, in dispatch
     raise PermissionDenied("You don't have permission to review certificates")
 django.core.exceptions.PermissionDenied: You don't have permission to review certificates
+<<<<<<< HEAD
+ERROR 2025-10-11 13:56:45,028 log 3539 139864140533888 Internal Server Error: /certificates/1/review/
+=======
 ERROR 2025-10-11 14:00:27,792 log 3488 139855375298688 Internal Server Error: /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20212,7 +20566,319 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/loader.py", line 47, in select_template
     raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
 django.template.exceptions.TemplateDoesNotExist: certificates/review_form.html
+<<<<<<< HEAD
+ERROR 2025-10-11 13:57:13,789 log 3539 139864140533888 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:57:13,995 log 3539 139864140533888 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:57:14,201 log 3539 139864140533888 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 13:57:14,601 log 3539 139864140533888 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1379, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 714, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+WARNING 2025-10-11 13:57:31,373 log 3539 139864140533888 Forbidden (Permission denied): /rotations/create/
+=======
 WARNING 2025-10-11 14:00:45,515 log 3488 139855375298688 Forbidden (Permission denied): /rotations/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20232,6 +20898,9 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
     raise PermissionDenied(self.get_permission_denied_message())
 django.core.exceptions.PermissionDenied
+<<<<<<< HEAD
+WARNING 2025-10-11 13:57:47,680 log 3539 139864140533888 Forbidden (Permission denied): /users/admin-dashboard/
+=======
 INFO 2025-10-11 14:02:15,712 apps 3565 140450939216000 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:02:15,717 apps 3565 140450939216000 Logbook periodic tasks setup completed
 INFO 2025-10-11 14:03:15,116 apps 3576 140569544073344 Certificate periodic tasks setup completed
@@ -20251,6 +20920,7 @@ INFO 2025-10-11 14:06:42,156 apps 3625 140620612567168 Logbook periodic tasks se
 INFO 2025-10-11 14:09:36,839 apps 3724 140619455008896 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:09:36,844 apps 3724 140619455008896 Logbook periodic tasks setup completed
 ERROR 2025-10-11 14:09:40,805 log 3724 140619455008896 Internal Server Error: /cases/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20261,6 +20931,12 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
     return self.dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<<<<<<< HEAD
+  File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
+    raise PermissionDenied("Admin access required")
+django.core.exceptions.PermissionDenied: Admin access required
+WARNING 2025-10-11 13:57:52,138 log 3539 139864140533888 Forbidden (Permission denied): /users/supervisor-dashboard/
+=======
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
     return super().dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -20294,6 +20970,7 @@ Traceback (most recent call last):
     raise self.RelatedObjectDoesNotExist(
 sims.cases.models.ClinicalCase.pg.RelatedObjectDoesNotExist: ClinicalCase has no pg.
 ERROR 2025-10-11 14:09:42,598 log 3724 140619455008896 Internal Server Error: /cases/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20304,6 +20981,12 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
     return self.dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<<<<<<< HEAD
+  File "/home/runner/work/sims/sims/sims/users/decorators.py", line 93, in dispatch
+    raise PermissionDenied("Supervisor access required")
+django.core.exceptions.PermissionDenied: Supervisor access required
+WARNING 2025-10-11 13:57:54,072 log 3539 139864140533888 Forbidden (Permission denied): /users/list/
+=======
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
     return super().dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -20337,6 +21020,7 @@ Traceback (most recent call last):
     raise self.RelatedObjectDoesNotExist(
 sims.cases.models.ClinicalCase.pg.RelatedObjectDoesNotExist: ClinicalCase has no pg.
 ERROR 2025-10-11 14:09:43,170 log 3724 140619455008896 Internal Server Error: /cases/1/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20347,6 +21031,64 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
     return self.dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+<<<<<<< HEAD
+  File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
+    raise PermissionDenied("Admin access required")
+django.core.exceptions.PermissionDenied: Admin access required
+WARNING 2025-10-11 13:58:38,304 apps 3589 140129585655936 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:58:38,304 apps 3589 140129585655936 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 13:58:38,305 apps 3589 140129585655936 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,712 apps 3712 140465333457024 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,713 apps 3712 140465333457024 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:05:03,714 apps 3712 140465333457024 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,991 apps 3903 140583713226880 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,991 apps 3903 140583713226880 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:13,992 apps 3903 140583713226880 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,461 apps 3906 139880502927488 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,461 apps 3906 139880502927488 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:09:23,462 apps 3906 139880502927488 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:09:36,007 apps 3911 139917534584960 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:09:36,030 apps 3911 139917534584960 Default logbook templates created successfully
+INFO 2025-10-11 14:09:36,030 apps 3911 139917534584960 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:09:36,127 apps 3911 139917534584960 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:10:37,189 apps 3927 140256375468160 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:10:37,194 apps 3927 140256375468160 Logbook periodic tasks setup completed
+WARNING 2025-10-11 14:10:46,836 apps 3933 140710996648064 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:10:46,837 apps 3933 140710996648064 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:10:46,837 apps 3933 140710996648064 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:00,187 apps 3942 140106531131520 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:00,210 apps 3942 140106531131520 Default logbook templates created successfully
+INFO 2025-10-11 14:11:00,210 apps 3942 140106531131520 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:00,305 apps 3942 140106531131520 Default clinical data (procedures, diagnoses, skills) created successfully
+WARNING 2025-10-11 14:11:11,795 apps 3947 140592790970496 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:11,796 apps 3947 140592790970496 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:11,796 apps 3947 140592790970496 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:15,542 apps 3949 140194522869888 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:15,563 apps 3949 140194522869888 Default logbook templates created successfully
+INFO 2025-10-11 14:11:15,564 apps 3949 140194522869888 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:15,660 apps 3949 140194522869888 Default clinical data (procedures, diagnoses, skills) created successfully
+WARNING 2025-10-11 14:11:43,144 apps 3960 140014630117504 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:43,145 apps 3960 140014630117504 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:11:43,146 apps 3960 140014630117504 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:11:46,818 apps 3963 140162881028224 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:46,840 apps 3963 140162881028224 Default logbook templates created successfully
+INFO 2025-10-11 14:11:46,841 apps 3963 140162881028224 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:11:46,936 apps 3963 140162881028224 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:11:57,531 apps 3967 140420833800320 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:11:57,536 apps 3967 140420833800320 Logbook periodic tasks setup completed
+WARNING 2025-10-11 14:12:08,659 apps 3972 139663725015168 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:12:08,659 apps 3972 139663725015168 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-11 14:12:08,660 apps 3972 139663725015168 Error in logbook app ready(): no such table: django_content_type
+INFO 2025-10-11 14:12:12,341 apps 3973 139749188132992 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:12:12,365 apps 3973 139749188132992 Default logbook templates created successfully
+INFO 2025-10-11 14:12:12,365 apps 3973 139749188132992 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:12:12,462 apps 3973 139749188132992 Default clinical data (procedures, diagnoses, skills) created successfully
+INFO 2025-10-11 14:12:22,487 apps 3979 140051345416320 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:12:22,492 apps 3979 140051345416320 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:12:58,756 apps 4003 139974272884864 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:12:58,761 apps 4003 139974272884864 Logbook periodic tasks setup completed
+ERROR 2025-10-11 14:13:35,222 log 4003 139974272884864 Internal Server Error: /certificates/1/
+=======
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
     return super().dispatch(request, *args, **kwargs)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -20720,6 +21462,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
 ERROR 2025-10-11 14:12:13,721 log 3763 139649806340224 Internal Server Error: /certificates/1/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20806,7 +21549,11 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/base.py", line 606, in find_filter
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'abs'
+<<<<<<< HEAD
+WARNING 2025-10-11 14:13:37,114 log 4003 139974272884864 Forbidden (Permission denied): /certificates/1/review/
+=======
 WARNING 2025-10-11 14:12:15,598 log 3763 139649806340224 Forbidden (Permission denied): /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20820,7 +21567,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/certificates/views.py", line 408, in dispatch
     raise PermissionDenied("You don't have permission to review certificates")
 django.core.exceptions.PermissionDenied: You don't have permission to review certificates
+<<<<<<< HEAD
+ERROR 2025-10-11 14:13:37,307 log 4003 139974272884864 Internal Server Error: /certificates/1/review/
+=======
 ERROR 2025-10-11 14:12:15,789 log 3763 139649806340224 Internal Server Error: /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20840,7 +21591,319 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/loader.py", line 47, in select_template
     raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
 django.template.exceptions.TemplateDoesNotExist: certificates/review_form.html
+<<<<<<< HEAD
+ERROR 2025-10-11 14:14:06,013 log 4003 139974272884864 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:14:06,211 log 4003 139974272884864 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:14:06,409 log 4003 139974272884864 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:14:06,799 log 4003 139974272884864 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+WARNING 2025-10-11 14:14:23,502 log 4003 139974272884864 Forbidden (Permission denied): /rotations/create/
+=======
 WARNING 2025-10-11 14:12:33,456 log 3763 139649806340224 Forbidden (Permission denied): /rotations/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -20860,6 +21923,9 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
     raise PermissionDenied(self.get_permission_denied_message())
 django.core.exceptions.PermissionDenied
+<<<<<<< HEAD
+WARNING 2025-10-11 14:14:39,517 log 4003 139974272884864 Forbidden (Permission denied): /users/admin-dashboard/
+=======
 INFO 2025-10-11 14:12:46,794 apps 3773 139775771177088 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:12:46,800 apps 3773 139775771177088 Logbook periodic tasks setup completed
 ERROR 2025-10-11 14:13:16,623 log 3773 139775771177088 Internal Server Error: /logbook/pg/entry/new/
@@ -21173,6 +22239,7 @@ django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_
 INFO 2025-10-11 14:15:05,578 apps 3829 139681750515840 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:15:05,583 apps 3829 139681750515840 Logbook periodic tasks setup completed
 WARNING 2025-10-11 14:15:21,492 log 3829 139681750515840 Forbidden (Permission denied): /users/admin-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21186,7 +22253,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+WARNING 2025-10-11 14:14:43,873 log 4003 139974272884864 Forbidden (Permission denied): /users/supervisor-dashboard/
+=======
 WARNING 2025-10-11 14:15:25,885 log 3829 139681750515840 Forbidden (Permission denied): /users/supervisor-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21200,7 +22271,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 93, in dispatch
     raise PermissionDenied("Supervisor access required")
 django.core.exceptions.PermissionDenied: Supervisor access required
+<<<<<<< HEAD
+WARNING 2025-10-11 14:14:45,762 log 4003 139974272884864 Forbidden (Permission denied): /users/list/
+=======
 WARNING 2025-10-11 14:15:27,786 log 3829 139681750515840 Forbidden (Permission denied): /users/list/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21214,6 +22289,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+INFO 2025-10-11 14:14:54,986 apps 4022 139705373737088 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:14:54,992 apps 4022 139705373737088 Logbook periodic tasks setup completed
+ERROR 2025-10-11 14:15:31,312 log 4022 139705373737088 Internal Server Error: /certificates/1/
+=======
 ERROR 2025-10-11 14:15:28,756 log 3829 139681750515840 Internal Server Error: /cases/create/
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
@@ -21610,6 +22690,7 @@ Traceback (most recent call last):
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
 ERROR 2025-10-11 14:16:28,007 log 3829 139681750515840 Internal Server Error: /certificates/1/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21696,7 +22777,11 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/base.py", line 606, in find_filter
     raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
 django.template.exceptions.TemplateSyntaxError: Invalid filter: 'abs'
+<<<<<<< HEAD
+WARNING 2025-10-11 14:15:33,192 log 4022 139705373737088 Forbidden (Permission denied): /certificates/1/review/
+=======
 WARNING 2025-10-11 14:16:29,882 log 3829 139681750515840 Forbidden (Permission denied): /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21710,7 +22795,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/certificates/views.py", line 408, in dispatch
     raise PermissionDenied("You don't have permission to review certificates")
 django.core.exceptions.PermissionDenied: You don't have permission to review certificates
+<<<<<<< HEAD
+ERROR 2025-10-11 14:15:33,383 log 4022 139705373737088 Internal Server Error: /certificates/1/review/
+=======
 ERROR 2025-10-11 14:16:30,073 log 3829 139681750515840 Internal Server Error: /certificates/1/review/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21730,7 +22819,319 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/template/loader.py", line 47, in select_template
     raise TemplateDoesNotExist(", ".join(template_name_list), chain=chain)
 django.template.exceptions.TemplateDoesNotExist: certificates/review_form.html
+<<<<<<< HEAD
+ERROR 2025-10-11 14:16:01,745 log 4022 139705373737088 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:16:01,941 log 4022 139705373737088 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:16:02,138 log 4022 139705373737088 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+ERROR 2025-10-11 14:16:02,524 log 4022 139705373737088 Internal Server Error: /logbook/pg/entry/new/
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlite3.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 105, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 73, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 135, in dispatch
+    return super().dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/base.py", line 144, in dispatch
+    return handler(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 184, in post
+    return super().post(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/views/generic/edit.py", line 153, in post
+    return self.form_valid(form)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/sims/sims/sims/logbook/views.py", line 1377, in form_valid
+    entry.save()
+  File "/home/runner/work/sims/sims/sims/logbook/models.py", line 676, in save
+    super().save(*args, **kwargs)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 814, in save
+    self.save_base(
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 877, in save_base
+    updated = self._save_table(
+              ^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1020, in _save_table
+    results = self._do_insert(
+              ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/base.py", line 1061, in _do_insert
+    return manager._insert(
+           ^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/query.py", line 1805, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/models/sql/compiler.py", line 1822, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 67, in execute
+    return self._execute_with_wrappers(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 80, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 84, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/utils.py", line 89, in _execute
+    return self.cursor.execute(sql, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/.local/lib/python3.12/site-packages/django/db/backends/sqlite3/base.py", line 328, in execute
+    return super().execute(query, params)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.IntegrityError: CHECK constraint failed: logbook_entry_date_not_future
+WARNING 2025-10-11 14:16:19,123 log 4022 139705373737088 Forbidden (Permission denied): /rotations/create/
+=======
 WARNING 2025-10-11 14:16:47,702 log 3829 139681750515840 Forbidden (Permission denied): /rotations/create/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21750,11 +23151,15 @@ Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/contrib/auth/mixins.py", line 48, in handle_no_permission
     raise PermissionDenied(self.get_permission_denied_message())
 django.core.exceptions.PermissionDenied
+<<<<<<< HEAD
+WARNING 2025-10-11 14:16:35,230 log 4022 139705373737088 Forbidden (Permission denied): /users/admin-dashboard/
+=======
 INFO 2025-10-11 14:17:01,878 apps 3841 140114760528000 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:17:01,883 apps 3841 140114760528000 Logbook periodic tasks setup completed
 INFO 2025-10-11 14:20:04,882 apps 3921 140285535215744 Certificate periodic tasks setup completed
 INFO 2025-10-11 14:20:04,888 apps 3921 140285535215744 Logbook periodic tasks setup completed
 WARNING 2025-10-11 14:20:21,351 log 3921 140285535215744 Forbidden (Permission denied): /users/admin-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21768,7 +23173,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+WARNING 2025-10-11 14:16:39,644 log 4022 139705373737088 Forbidden (Permission denied): /users/supervisor-dashboard/
+=======
 WARNING 2025-10-11 14:20:25,878 log 3921 140285535215744 Forbidden (Permission denied): /users/supervisor-dashboard/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21782,7 +23191,11 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 93, in dispatch
     raise PermissionDenied("Supervisor access required")
 django.core.exceptions.PermissionDenied: Supervisor access required
+<<<<<<< HEAD
+WARNING 2025-10-11 14:16:41,556 log 4022 139705373737088 Forbidden (Permission denied): /users/list/
+=======
 WARNING 2025-10-11 14:20:27,808 log 3921 140285535215744 Forbidden (Permission denied): /users/list/
+>>>>>>> origin/main
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
     response = get_response(request)
@@ -21796,6 +23209,16 @@ Traceback (most recent call last):
   File "/home/runner/work/sims/sims/sims/users/decorators.py", line 79, in dispatch
     raise PermissionDenied("Admin access required")
 django.core.exceptions.PermissionDenied: Admin access required
+<<<<<<< HEAD
+INFO 2025-10-11 14:18:05,013 apps 4050 140298629181568 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:18:05,018 apps 4050 140298629181568 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:20:05,353 apps 4102 139892980707456 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:20:05,359 apps 4102 139892980707456 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:20:40,143 apps 4149 139964844011648 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:20:40,149 apps 4149 139964844011648 Logbook periodic tasks setup completed
+INFO 2025-10-11 14:21:58,467 apps 4188 139937782460544 Certificate periodic tasks setup completed
+INFO 2025-10-11 14:21:58,473 apps 4188 139937782460544 Logbook periodic tasks setup completed
+=======
 ERROR 2025-10-11 14:20:28,774 log 3921 140285535215744 Internal Server Error: /cases/create/
 Traceback (most recent call last):
   File "/home/runner/.local/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
@@ -26138,3 +27561,4 @@ WARNING 2025-10-16 00:26:45,527 apps 3828 139803765203072 Error in logbook app r
 WARNING 2025-10-16 00:26:45,528 apps 3829 140490580557952 Error in rotations app ready(): no such table: django_content_type
 WARNING 2025-10-16 00:26:45,528 apps 3829 140490580557952 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-16 00:26:45,529 apps 3829 140490580557952 Error in logbook app ready(): no such table: django_content_type
+>>>>>>> origin/main

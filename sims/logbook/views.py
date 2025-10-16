@@ -35,10 +35,8 @@ from .forms import (
     LogbookEntryUpdateForm,
     LogbookReviewForm,
     LogbookSearchForm,
-    LogbookFilterForm,
     BulkLogbookActionForm,
     QuickLogbookEntryForm,
-    LogbookTemplateForm,
     PGLogbookEntryForm,
     PGLogbookEntryEditForm,  # Added EditForm
     SupervisorLogbookReviewForm,

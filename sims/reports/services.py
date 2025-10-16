@@ -6,7 +6,7 @@ import base64
 import io
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, Iterable, List
+from typing import Iterable, List
 
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
