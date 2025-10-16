@@ -331,7 +331,8 @@ class ClinicalCase(models.Model):
             errors["date_encountered"] = "Case date cannot be more than 2 years old"
 
         # Validate supervisor assignment for PG's rotation
-        if self.supervisor and self.pg and self.rotation:
+        # Guard: only validate if both FKs are set (avoids RelatedObjectDoesNotExist before save)
+        if self.supervisor_id and self.pg_id and self.rotation_id:
             if (
                 self.pg.supervisor
                 and self.supervisor != self.pg.supervisor
