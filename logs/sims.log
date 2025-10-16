@@ -26132,3 +26132,9 @@ WARNING 2025-10-16 00:23:45,386 apps 3707 140689928384640 Error in rotations app
 WARNING 2025-10-16 00:23:45,386 apps 3707 140689928384640 Error in certificates app ready(): no such table: django_content_type
 WARNING 2025-10-16 00:23:45,387 apps 3707 140689928384640 Error in logbook app ready(): no such table: django_content_type
 WARNING 2025-10-16 00:23:55,975 log 3707 140689928384640 Not Found: /cases/1/
+WARNING 2025-10-16 00:26:45,526 apps 3828 139803765203072 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-16 00:26:45,526 apps 3828 139803765203072 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-16 00:26:45,527 apps 3828 139803765203072 Error in logbook app ready(): no such table: django_content_type
+WARNING 2025-10-16 00:26:45,528 apps 3829 140490580557952 Error in rotations app ready(): no such table: django_content_type
+WARNING 2025-10-16 00:26:45,528 apps 3829 140490580557952 Error in certificates app ready(): no such table: django_content_type
+WARNING 2025-10-16 00:26:45,529 apps 3829 140490580557952 Error in logbook app ready(): no such table: django_content_type
