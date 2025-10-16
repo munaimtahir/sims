@@ -196,6 +196,7 @@ class CaseFormsTest(TestCase):
 
     def setUp(self):
         self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.category = CaseCategory.objects.create(name="Surgery", color_code="#FF9800")
 
