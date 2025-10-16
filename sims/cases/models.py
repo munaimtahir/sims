@@ -307,7 +307,9 @@ class ClinicalCase(models.Model):
             models.Index(fields=["created_at"]),
         ]
         # Note: Date validation is handled in the clean() method
-        # Database CHECK constraints with dynamic dates don't work correctly
+        # Database CHECK constraints with dynamic values (e.g., timezone.now().date()) are evaluated at migration time,
+        # not at runtime. This means such constraints will not behave as expected for future data changes.
+        # Therefore, only static values should be used in database constraints; dynamic date validation is done in clean().
         constraints = [
             models.CheckConstraint(
                 check=models.Q(patient_age__gte=0) & models.Q(patient_age__lte=150),
