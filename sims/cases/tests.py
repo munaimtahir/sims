@@ -485,24 +485,35 @@ class CaseIntegrationTest(TestCase):
 
         # Create users
         self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.category = CaseCategory.objects.create(name="Neurology", color_code="#9C27B0")
+
+        # Create diagnosis for the case
+        from sims.logbook.models import Diagnosis
+
+        self.diagnosis = Diagnosis.objects.create(
+            name="Acute Ischemic Stroke", category="neurological", icd_code="I63.9"
+        )
 
     def test_complete_case_workflow(self):
         """Test complete case workflow from creation to review"""
 
         # 1. PG logs in and creates a case
-        self.client.login(username="testpg", password="testpass123")
+        self.client.force_login(self.pg)
 
         case_data = {
             "case_title": "Stroke Management",
             "category": self.category.id,
-            "date": date.today(),
-            "patient_initials": "S.M.",
+            "date_encountered": date.today(),
             "patient_age": 70,
-            "patient_gender": "male",
-            "patient_history": "Hypertension, smoking",
-            "presenting_complaints": "Sudden weakness, speech difficulty",
+            "patient_gender": "M",
+            "chief_complaint": "Sudden weakness, speech difficulty",
+            "history_of_present_illness": "Patient presented with acute onset of left-sided weakness",
+            "physical_examination": "Right hemiplegia, aphasia",
+            "primary_diagnosis": self.diagnosis.id,
+            "management_plan": "Thrombolysis protocol initiated",
+            "clinical_reasoning": "NIHSS score indicates acute ischemic stroke",
             "learning_points": "Acute stroke protocols and thrombolysis",
             "supervisor": self.supervisor.id,
         }
@@ -521,17 +532,15 @@ class CaseIntegrationTest(TestCase):
         self.assertEqual(case.status, "submitted")
 
         # 3. Supervisor logs in and reviews the case
-        self.client.login(username="testsupervisor", password="testpass123")
+        self.client.force_login(self.supervisor)
 
         review_data = {
-            "clinical_accuracy_score": 9,
-            "documentation_quality_score": 8,
-            "learning_demonstration_score": 9,
-            "professionalism_score": 10,
-            "overall_rating": 9,
-            "recommendation": "approved",
-            "comments": "Excellent case documentation and learning reflection.",
-            "is_final": True,
+            "clinical_knowledge_score": 9,
+            "clinical_reasoning_score": 8,
+            "documentation_score": 9,
+            "overall_score": 9,
+            "status": "approved",
+            "overall_feedback": "Excellent case documentation and learning reflection.",
         }
 
         response = self.client.post(
@@ -544,12 +553,12 @@ class CaseIntegrationTest(TestCase):
         self.assertEqual(case.status, "approved")
 
         review = CaseReview.objects.get(case=case)
-        self.assertEqual(review.recommendation, "approved")
-        self.assertEqual(review.overall_rating, 9)
+        self.assertEqual(review.status, "approved")
+        self.assertEqual(review.overall_score, 9)
 
         # 5. Verify statistics are updated
         stats, created = CaseStatistics.objects.get_or_create(pg=self.pg)
-        stats.refresh_statistics()
+        stats.update_statistics()
 
         self.assertEqual(stats.total_cases, 1)
         self.assertEqual(stats.approved_cases, 1)

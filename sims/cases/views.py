@@ -300,12 +300,12 @@ class CaseReviewCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
 
         response = super().form_valid(form)
 
-        # Update case status based on review recommendation
-        if form.instance.recommendation == "approved":
+        # Update case status based on review status
+        if form.instance.status == "approved":
             self.case.status = "approved"
-        elif form.instance.recommendation == "revision_needed":
+        elif form.instance.status == "needs_revision":
             self.case.status = "needs_revision"
-        elif form.instance.recommendation == "rejected":
+        elif form.instance.status == "rejected":
             self.case.status = "rejected"
 
         self.case.reviewed_at = timezone.now()
