@@ -412,6 +412,48 @@ class ClinicalCase(models.Model):
         """Get total count of diagnoses"""
         return self.secondary_diagnoses.count() + (1 if self.primary_diagnosis else 0)
 
+    def is_complete(self):
+        """Check if case has all required fields filled"""
+        required_fields = [
+            "case_title",
+            "date_encountered",
+            "patient_age",
+            "patient_gender",
+            "chief_complaint",
+            "history_of_present_illness",
+            "physical_examination",
+            "management_plan",
+            "clinical_reasoning",
+            "learning_points",
+        ]
+        for field in required_fields:
+            if not getattr(self, field, None):
+                return False
+        return True
+
+    def can_be_submitted(self):
+        """Check if case can be submitted for review"""
+        return self.status == "draft" and self.is_complete()
+
+    def can_be_reviewed(self):
+        """Check if case can be reviewed"""
+        return self.status == "submitted"
+
+    def can_edit(self, user):
+        """Check if user can edit this case"""
+        if not user:
+            return False
+        # Admin can edit anything
+        if user.role == "admin":
+            return True
+        # PG can edit their own draft cases
+        if user.role == "pg" and self.pg_id == user.id and self.status == "draft":
+            return True
+        # Supervisor can edit assigned cases
+        if user.role == "supervisor" and self.supervisor_id == user.id:
+            return True
+        return False
+
 
 class CaseReview(models.Model):
     """
