@@ -335,7 +335,7 @@ class ClinicalCase(models.Model):
             errors["date_encountered"] = "Case date cannot be more than 2 years old"
 
         # Validate supervisor assignment for PG's rotation
-        if self.supervisor and self.pg and self.rotation:
+        if self.supervisor and hasattr(self, "pg") and self.pg_id and self.rotation:
             if (
                 self.pg.supervisor
                 and self.supervisor != self.pg.supervisor
@@ -351,8 +351,10 @@ class ClinicalCase(models.Model):
         self.full_clean()
 
         # Auto-assign supervisor if not set
-        if not self.supervisor and self.pg and self.pg.supervisor:
-            self.supervisor = self.pg.supervisor
+        if not self.supervisor and hasattr(self, "pg") and self.pg_id:
+            pg = self.pg
+            if pg and pg.supervisor:
+                self.supervisor = pg.supervisor
 
         # Set created_by on first save
         if not self.pk and not self.created_by:
@@ -522,8 +524,14 @@ class CaseReview(models.Model):
         errors = {}
 
         # Ensure reviewer is not the case author
-        if self.case and self.reviewer and self.case.pg == self.reviewer:
-            errors["reviewer"] = "Case author cannot review their own case"
+        if (
+            hasattr(self, "case")
+            and self.case_id
+            and hasattr(self, "reviewer")
+            and self.reviewer_id
+        ):
+            if self.case.pg == self.reviewer:
+                errors["reviewer"] = "Case author cannot review their own case"
 
         # Validate review date
         if self.review_date and self.review_date > timezone.now().date():

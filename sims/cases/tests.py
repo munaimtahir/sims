@@ -206,20 +206,32 @@ class CaseFormsTest(TestCase):
 
     def test_clinical_case_form_valid(self):
         """Test valid clinical case form submission"""
+        # Create a diagnosis for the form
+        from sims.logbook.models import Diagnosis
+
+        diagnosis = Diagnosis.objects.create(
+            name="Acute Appendicitis", category="surgical", icd_code="K35.8"
+        )
+
         form_data = {
             "case_title": "Appendectomy",
             "category": self.category.id,
-            "date": date.today(),
-            "patient_initials": "J.S.",
+            "date_encountered": date.today(),
             "patient_age": 25,
-            "patient_gender": "male",
-            "patient_history": "No significant medical history",
-            "presenting_complaints": "Right lower quadrant pain",
+            "patient_gender": "M",
+            "chief_complaint": "Right lower quadrant pain",
+            "history_of_present_illness": "Patient presented with 24 hours of abdominal pain",
+            "physical_examination": "Tenderness in RLQ, positive rebound",
+            "primary_diagnosis": diagnosis.id,
+            "management_plan": "Emergency appendectomy",
+            "clinical_reasoning": "Clinical presentation consistent with acute appendicitis",
             "learning_points": "Surgical technique and patient care",
             "supervisor": self.supervisor.id,
         }
 
         form = ClinicalCaseForm(data=form_data, user=self.pg)
+        if not form.is_valid():
+            print(f"Form errors: {form.errors}")
         self.assertTrue(form.is_valid())
 
     def test_clinical_case_form_invalid(self):
@@ -227,7 +239,7 @@ class CaseFormsTest(TestCase):
         form_data = {
             "case_title": "",  # Required field missing
             "category": self.category.id,
-            "date": date.today(),
+            "date_encountered": date.today(),
         }
 
         form = ClinicalCaseForm(data=form_data, user=self.pg)
@@ -236,6 +248,13 @@ class CaseFormsTest(TestCase):
 
     def test_case_review_form_valid(self):
         """Test valid case review form"""
+        # Create a diagnosis
+        from sims.logbook.models import Diagnosis
+
+        diagnosis = Diagnosis.objects.create(
+            name="Test Condition", category="general", icd_code="A00"
+        )
+
         case = ClinicalCase.objects.create(
             pg=self.pg,
             case_title="Test Case",
@@ -243,23 +262,27 @@ class CaseFormsTest(TestCase):
             date_encountered=date.today(),
             patient_age=30,
             patient_gender="M",
+            chief_complaint="Test complaint",
+            history_of_present_illness="Test history",
+            physical_examination="Test examination",
+            primary_diagnosis=diagnosis,
+            management_plan="Test management",
+            clinical_reasoning="Test reasoning",
             learning_points="Test learning points",
             supervisor=self.supervisor,
             status="submitted",
         )
 
         form_data = {
-            "clinical_accuracy_score": 8,
-            "documentation_quality_score": 9,
-            "learning_demonstration_score": 7,
-            "professionalism_score": 10,
-            "overall_rating": 8,
-            "recommendation": "approved",
-            "comments": "Great work!",
-            "is_final": True,
+            "clinical_knowledge_score": 8,
+            "clinical_reasoning_score": 9,
+            "documentation_score": 7,
+            "overall_score": 8,
+            "status": "approved",
+            "overall_feedback": "Great work!",
         }
 
-        form = CaseReviewForm(data=form_data, case=case)
+        form = CaseReviewForm(data=form_data, case=case, reviewer=self.supervisor)
         self.assertTrue(form.is_valid())
 
 
