@@ -603,7 +603,7 @@ class LogbookEntry(models.Model):
             models.Index(fields=["supervisor_action_at"]),
         ]
         # Note: Date validation is handled in the clean() method.
-        # 
+        #
         # Database-level CHECK constraints that reference dynamic values (such as the current date/time)
         # are not supported in Django, because the database engine evaluates constraints using static
         # expressions only. For example, a constraint like "date <= now()" will not work as expected,
