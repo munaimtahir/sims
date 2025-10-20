@@ -957,18 +957,12 @@ class LogbookAPITests(TestCase):
     """Test cases for logbook API endpoints"""
 
     def setUp(self):
-        self.supervisor = SupervisorFactory(specialty="medicine")
-        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
-        self.admin_user = User.objects.create_user(
-            username="admin_test", email="admin@test.com", password="testpass123", role="admin"
-        )
-
-        self.pg_user = User.objects.create_user(
-            username="pg_test", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.admin_user = AdminFactory()
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg_user = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.diagnosis = Diagnosis.objects.create(name="API Test Diagnosis", category="other")
 
@@ -986,7 +980,7 @@ class LogbookAPITests(TestCase):
 
     def test_stats_api(self):
         """Test statistics API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("logbook:stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -997,7 +991,7 @@ class LogbookAPITests(TestCase):
 
     def test_entry_complexity_api(self):
         """Test entry complexity API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(
             reverse("logbook:entry_complexity_api", kwargs={"entry_id": self.entry.id})
         )
@@ -1010,7 +1004,7 @@ class LogbookAPITests(TestCase):
 
     def test_update_statistics_api(self):
         """Test statistics update API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("logbook:update_stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -1024,7 +1018,7 @@ class LogbookAPITests(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test with PG user trying to update statistics
-        self.client.login(username="pg_test", password="testpass123")
+        self.client.force_login(self.pg_user)
         response = self.client.get(reverse("logbook:update_stats_api"))
         self.assertEqual(response.status_code, 403)
 
