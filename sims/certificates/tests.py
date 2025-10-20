@@ -707,20 +707,14 @@ class CertificateAPITests(TestCase):
     """Test cases for certificate API endpoints"""
 
     def setUp(self):
-        self.supervisor = SupervisorFactory(specialty="medicine")
-        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
         self.cert_type = CertificateType.objects.create(name="API Test Certificate", category="cme")
 
-        self.admin_user = User.objects.create_user(
-            username="admin_test", email="admin@test.com", password="testpass123", role="admin"
-        )
-
-        self.pg_user = User.objects.create_user(
-            username="pg_test", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.admin_user = AdminFactory()
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg_user = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.test_file = SimpleUploadedFile("test.pdf", b"content", content_type="application/pdf")
 
@@ -736,7 +730,7 @@ class CertificateAPITests(TestCase):
 
     def test_certificate_stats_api(self):
         """Test certificate statistics API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("certificates:stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -748,7 +742,7 @@ class CertificateAPITests(TestCase):
 
     def test_quick_stats_api(self):
         """Test quick statistics API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("certificates:quick_stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -759,7 +753,7 @@ class CertificateAPITests(TestCase):
 
     def test_certificate_verification_api(self):
         """Test certificate verification API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.post(
             reverse("certificates:verify_api", kwargs={"pk": self.certificate.pk})
         )
@@ -780,7 +774,7 @@ class CertificateAPITests(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test with PG user trying to verify certificate
-        self.client.login(username="pg_test", password="testpass123")
+        self.client.force_login(self.pg_user)
         response = self.client.post(
             reverse("certificates:verify_api", kwargs={"pk": self.certificate.pk})
         )
