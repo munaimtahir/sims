@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import base64
 import io
-from datetime import date, timedelta
+from datetime import date
 
 from django.core.management import call_command
 from django.urls import reverse
