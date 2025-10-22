@@ -10,11 +10,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sims.notifications.models import Notification, NotificationPreference
-from sims.notifications.serializers import (
-    NotificationMarkReadSerializer,
-    NotificationPreferenceSerializer,
-    NotificationSerializer,
-)
+from sims.notifications.serializers import (NotificationMarkReadSerializer,
+                                            NotificationPreferenceSerializer,
+                                            NotificationSerializer)
 
 
 class NotificationPagination(PageNumberPagination):

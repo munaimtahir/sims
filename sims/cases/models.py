@@ -306,6 +306,10 @@ class ClinicalCase(models.Model):
             models.Index(fields=["is_featured"]),
             models.Index(fields=["created_at"]),
         ]
+        # Note: Date validation is handled in the clean() method
+        # Database CHECK constraints with dynamic values (e.g., timezone.now().date()) are evaluated at migration time,
+        # not at runtime. This means such constraints will not behave as expected for future data changes.
+        # Therefore, only static values should be used in database constraints; dynamic date validation is done in clean().
         constraints = [
             models.CheckConstraint(
                 check=models.Q(patient_age__gte=0) & models.Q(patient_age__lte=150),
@@ -348,8 +352,10 @@ class ClinicalCase(models.Model):
         self.full_clean()
 
         # Auto-assign supervisor if not set
-        if not self.supervisor and self.pg and self.pg.supervisor:
-            self.supervisor = self.pg.supervisor
+        if not self.supervisor and hasattr(self, "pg") and self.pg_id:
+            pg = self.pg
+            if pg and pg.supervisor:
+                self.supervisor = pg.supervisor
 
         # Set created_by on first save
         if not self.pk and not self.created_by:
@@ -440,6 +446,48 @@ class ClinicalCase(models.Model):
     def get_diagnosis_count(self):
         """Get total count of diagnoses"""
         return self.secondary_diagnoses.count() + (1 if self.primary_diagnosis else 0)
+
+    def is_complete(self):
+        """Check if case has all required fields filled"""
+        required_fields = [
+            "case_title",
+            "date_encountered",
+            "patient_age",
+            "patient_gender",
+            "chief_complaint",
+            "history_of_present_illness",
+            "physical_examination",
+            "management_plan",
+            "clinical_reasoning",
+            "learning_points",
+        ]
+        for field in required_fields:
+            if not getattr(self, field, None):
+                return False
+        return True
+
+    def can_be_submitted(self):
+        """Check if case can be submitted for review"""
+        return self.status == "draft" and self.is_complete()
+
+    def can_be_reviewed(self):
+        """Check if case can be reviewed"""
+        return self.status == "submitted"
+
+    def can_edit(self, user):
+        """Check if user can edit this case"""
+        if not user:
+            return False
+        # Admin can edit anything
+        if user.role == "admin":
+            return True
+        # PG can edit their own draft cases
+        if user.role == "pg" and self.pg_id == user.id and self.status == "draft":
+            return True
+        # Supervisor can edit assigned cases
+        if user.role == "supervisor" and self.supervisor_id == user.id:
+            return True
+        return False
 
 
 class CaseReview(models.Model):
@@ -553,8 +601,14 @@ class CaseReview(models.Model):
         errors = {}
 
         # Ensure reviewer is not the case author
-        if self.case and self.reviewer and self.case.pg == self.reviewer:
-            errors["reviewer"] = "Case author cannot review their own case"
+        if (
+            hasattr(self, "case")
+            and self.case_id
+            and hasattr(self, "reviewer")
+            and self.reviewer_id
+        ):
+            if self.case.pg == self.reviewer:
+                errors["reviewer"] = "Case author cannot review their own case"
 
         # Validate review date
         if self.review_date and self.review_date > timezone.now().date():

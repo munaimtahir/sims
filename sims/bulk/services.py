@@ -11,7 +11,6 @@ from typing import Iterable, Iterator, List, Sequence
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
-
 from openpyxl import load_workbook
 
 from sims.bulk.models import BulkOperation

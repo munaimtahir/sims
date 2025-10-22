@@ -1,49 +1,30 @@
-from django.shortcuts import get_object_or_404, redirect
+import csv
+from datetime import timedelta
+
+from django.conf import settings  # Import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib import messages
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView,
-    TemplateView,
-    RedirectView,
-)
-from django.views.generic.edit import FormView
-from django.urls import reverse_lazy, reverse
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
-from django.db.models import Q, Count, Avg
-from django.utils import timezone
-from django.conf import settings  # Import settings
 from django.core.exceptions import PermissionDenied
-from django.contrib.auth import get_user_model
-from datetime import timedelta
-import csv
+from django.db.models import Avg, Count, Q
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  RedirectView, TemplateView, UpdateView)
+from django.views.generic.edit import FormView
 
-from .models import (
-    LogbookEntry,
-    LogbookReview,
-    LogbookTemplate,
-    Procedure,
-    Diagnosis,
-    LogbookStatistics,
-)
-from .forms import (
-    LogbookEntryCreateForm,
-    LogbookEntryUpdateForm,
-    LogbookReviewForm,
-    LogbookSearchForm,
-    BulkLogbookActionForm,
-    QuickLogbookEntryForm,
-    PGLogbookEntryForm,
-    PGLogbookEntryEditForm,  # Added EditForm
-    SupervisorLogbookReviewForm,
-    SupervisorBulkActionForm,
-    SupervisorBulkApproveForm,
-    SupervisorBulkRejectForm,
-)
+from .forms import PGLogbookEntryEditForm  # Added EditForm
+from .forms import (BulkLogbookActionForm, LogbookEntryCreateForm,
+                    LogbookEntryUpdateForm, LogbookFilterForm,
+                    LogbookReviewForm, LogbookSearchForm, LogbookTemplateForm,
+                    PGLogbookEntryForm, QuickLogbookEntryForm,
+                    SupervisorBulkActionForm, SupervisorBulkApproveForm,
+                    SupervisorBulkRejectForm, SupervisorLogbookReviewForm)
+from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
+                     LogbookTemplate, Procedure)
 
 User = get_user_model()
 

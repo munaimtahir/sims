@@ -9,14 +9,14 @@ Created: 2025-05-29 16:10:53 UTC
 Author: SMIB2012
 """
 
-from django.contrib import admin
-from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from django.template.response import TemplateResponse
+from django.contrib import admin
 from django.contrib.auth.views import LogoutView
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.template.response import TemplateResponse
+from django.urls import include, path
 
 # Import test view
 from tests.test_crispy_view import test_crispy_view
@@ -25,8 +25,8 @@ from tests.test_crispy_view import test_crispy_view
 # Custom admin logout view that handles GET requests
 def admin_logout_view(request):
     """Custom admin logout that handles GET requests"""
-    from django.contrib.auth import logout
     from django.contrib.admin import site
+    from django.contrib.auth import logout
 
     if request.user.is_authenticated:
         logout(request)

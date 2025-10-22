@@ -1,41 +1,19 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 from datetime import date, timedelta
+
 from django.conf import settings  # Import settings
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.test import Client, TestCase
+from django.urls import reverse
+from django.utils import timezone
 
-from .models import (
-    LogbookEntry,
-    LogbookReview,
-    LogbookTemplate,
-    Procedure,
-    Diagnosis,
-    Skill,
-    LogbookStatistics,
-)
-from .forms import (
-    LogbookEntryCreateForm,
-    LogbookReviewForm,
-    BulkLogbookActionForm,
-    QuickLogbookEntryForm,
-)
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
 
-from sims.tests.factories.user_factories import SupervisorFactory, PGFactory
-<<<<<<< HEAD
-=======
-from sims.tests.factories.logbook_factories import (
-    DiagnosisFactory,
-    ProcedureFactory,
-    LogbookEntryFactory,
-)
-from sims.tests.factories.rotation_factories import (
-    HospitalFactory,
-    DepartmentFactory,
-    RotationFactory,
-)
->>>>>>> origin/main
+from .forms import (BulkLogbookActionForm, LogbookEntryCreateForm,
+                    LogbookReviewForm, QuickLogbookEntryForm)
+from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
+                     LogbookTemplate, Procedure, Skill)
 
 User = get_user_model()
 
@@ -187,24 +165,56 @@ class LogbookEntryModelTests(TestCase):
 
     def setUp(self):
         """Set up test data"""
-        # Create test users using factories
-        self.supervisor = SupervisorFactory(specialty="medicine")
+        # Create test users
+        self.admin_user = User.objects.create_user(
+            username="admin_test",
+            email="admin@test.com",
+            password="testpass123",
+            role="admin",
+            first_name="Admin",
+            last_name="User",
+        )
+
+        self.supervisor = SupervisorFactory(username="supervisor_test", specialty="medicine")
         self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
-        # Create test clinical data using factories
-        self.diagnosis = DiagnosisFactory(name="Pneumonia", category="respiratory", icd_code="J18")
-        self.procedure = ProcedureFactory(
+        self.pg_user = User.objects.create_user(
+            username="pg_test",
+            email="pg@test.com",
+            password="testpass123",
+            role="pg",
+            specialty="medicine",
+            year="1",
+            supervisor=self.supervisor,
+        )
+
+        # Create test clinical data
+        self.diagnosis = Diagnosis.objects.create(
+            name="Pneumonia", category="respiratory", icd_code="J18"
+        )
+
+        self.procedure = Procedure.objects.create(
             name="Chest X-ray", category="diagnostic", difficulty_level=1
         )
+
         self.skill = Skill.objects.create(
             name="Physical Examination", category="clinical", level="basic"
         )
 
-        # Create rotation using factory
-        self.hospital = HospitalFactory(name="Test Hospital")
-        # Note: Department model may not exist or may need different handling
-        self.rotation = RotationFactory(
-            pg=self.pg,
+        # Create rotation
+        from sims.rotations.models import Department, Hospital, Rotation
+
+        self.hospital = Hospital.objects.create(
+            name="Test Hospital", address="123 Test St", phone="555-0123", email="info@test.com"
+        )
+
+        self.department = Department.objects.create(
+            name="Internal Medicine", hospital=self.hospital, head_of_department=self.supervisor
+        )
+
+        self.rotation = Rotation.objects.create(
+            pg=self.pg_user,
+            department=self.department,
             hospital=self.hospital,
             start_date=date.today() - timedelta(days=30),
             end_date=date.today() + timedelta(days=30),
@@ -214,23 +224,24 @@ class LogbookEntryModelTests(TestCase):
     def test_logbook_entry_creation(self):
         """Test basic logbook entry creation"""
         entry = LogbookEntry.objects.create(
-            pg=self.pg,
-            date=date.today() - timedelta(days=1),
+            pg=self.pg_user,
+            date=date.today(),
             rotation=self.rotation,
             supervisor=self.supervisor,
             case_title="Pneumonia Case",
-            location_of_activity="Test Hospital",
-            patient_history_summary="Patient with cough and fever",
-            management_action="Started antibiotics",
-            topic_subtopic="Respiratory infections",
             patient_age=45,
             patient_gender="M",
+            patient_chief_complaint="Cough and fever",
+            primary_diagnosis=self.diagnosis,
+            clinical_reasoning="Patient presented with typical pneumonia symptoms",
+            learning_points="Learned about pneumonia diagnosis and treatment",
+            created_by=self.admin_user,
         )
 
-        self.assertEqual(entry.pg, self.pg)
-        self.assertEqual(entry.case_title, "Pneumonia Case")
+        self.assertEqual(entry.pg, self.pg_user)
+        self.assertEqual(entry.primary_diagnosis, self.diagnosis)
         self.assertEqual(entry.status, "draft")
-        # is_overdue check removed as it may depend on implementation details
+        self.assertFalse(entry.is_overdue())
 
     def test_entry_string_representation(self):
         """Test the __str__ method"""
@@ -946,18 +957,12 @@ class LogbookAPITests(TestCase):
     """Test cases for logbook API endpoints"""
 
     def setUp(self):
-        self.supervisor = SupervisorFactory(specialty="medicine")
-        self.pg = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
         """Set up test data"""
         self.client = Client()
 
-        self.admin_user = User.objects.create_user(
-            username="admin_test", email="admin@test.com", password="testpass123", role="admin"
-        )
-
-        self.pg_user = User.objects.create_user(
-            username="pg_test", email="pg@test.com", password="testpass123", role="pg"
-        )
+        self.admin_user = AdminFactory()
+        self.supervisor = SupervisorFactory(specialty="medicine")
+        self.pg_user = PGFactory(supervisor=self.supervisor, specialty="medicine", year="1")
 
         self.diagnosis = Diagnosis.objects.create(name="API Test Diagnosis", category="other")
 
@@ -975,7 +980,7 @@ class LogbookAPITests(TestCase):
 
     def test_stats_api(self):
         """Test statistics API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("logbook:stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -986,7 +991,7 @@ class LogbookAPITests(TestCase):
 
     def test_entry_complexity_api(self):
         """Test entry complexity API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(
             reverse("logbook:entry_complexity_api", kwargs={"entry_id": self.entry.id})
         )
@@ -999,7 +1004,7 @@ class LogbookAPITests(TestCase):
 
     def test_update_statistics_api(self):
         """Test statistics update API"""
-        self.client.login(username="admin_test", password="testpass123")
+        self.client.force_login(self.admin_user)
         response = self.client.get(reverse("logbook:update_stats_api"))
         self.assertEqual(response.status_code, 200)
 
@@ -1013,7 +1018,7 @@ class LogbookAPITests(TestCase):
         self.assertEqual(response.status_code, 302)  # Redirect to login
 
         # Test with PG user trying to update statistics
-        self.client.login(username="pg_test", password="testpass123")
+        self.client.force_login(self.pg_user)
         response = self.client.get(reverse("logbook:update_stats_api"))
         self.assertEqual(response.status_code, 403)
 

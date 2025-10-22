@@ -1,16 +1,14 @@
 """Factories for Cases models"""
 
+from datetime import date
+
 import factory
 from factory.django import DjangoModelFactory
-<<<<<<< HEAD
-from datetime import date
-from datetime import date
-=======
-from datetime import date, timedelta
->>>>>>> origin/main
+
 from sims.cases.models import CaseCategory, ClinicalCase
-from .user_factories import PGFactory
+
 from .logbook_factories import DiagnosisFactory
+from .user_factories import PGFactory, SupervisorFactory
 
 
 class CaseCategoryFactory(DjangoModelFactory):
@@ -36,7 +34,7 @@ class ClinicalCaseFactory(DjangoModelFactory):
     supervisor = factory.LazyAttribute(lambda obj: obj.pg.supervisor)
     case_title = factory.Faker("sentence", nb_words=6)
     category = factory.SubFactory(CaseCategoryFactory)
-    date_encountered = factory.LazyFunction(lambda: date.today() - timedelta(days=7))
+    date_encountered = factory.LazyFunction(date.today)
     patient_age = 45
     patient_gender = "M"
     complexity = "moderate"

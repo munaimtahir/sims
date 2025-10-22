@@ -95,3 +95,4 @@ dmypy.json
 *.tmp
 *.temp
 node_modules/
+logs/sims.log

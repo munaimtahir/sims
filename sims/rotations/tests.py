@@ -1,13 +1,16 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from datetime import date, timedelta
 
-from .models import Rotation, RotationEvaluation, Department, Hospital
-from .forms import RotationCreateForm, RotationEvaluationForm, BulkRotationAssignmentForm
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
+from django.test import Client, TestCase
+from django.urls import reverse
 
-from sims.tests.factories.user_factories import SupervisorFactory, PGFactory
+from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
+                                                 SupervisorFactory)
+
+from .forms import (BulkRotationAssignmentForm, RotationCreateForm,
+                    RotationEvaluationForm)
+from .models import Department, Hospital, Rotation, RotationEvaluation
 
 User = get_user_model()
 

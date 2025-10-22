@@ -1,16 +1,18 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.db.models import Avg, Count, Q
 from django.http import JsonResponse
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.db.models import Q, Count, Avg
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                  UpdateView)
 
-from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
-from .forms import ClinicalCaseForm, CaseReviewForm, CaseSearchForm, CaseFilterForm
+from .forms import (CaseFilterForm, CaseReviewForm, CaseSearchForm,
+                    ClinicalCaseForm)
+from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase
 
 
 class RoleRequiredMixin:
@@ -298,12 +300,12 @@ class CaseReviewCreateView(LoginRequiredMixin, RoleRequiredMixin, CreateView):
 
         response = super().form_valid(form)
 
-        # Update case status based on review recommendation
-        if form.instance.recommendation == "approved":
+        # Update case status based on review status
+        if form.instance.status == "approved":
             self.case.status = "approved"
-        elif form.instance.recommendation == "revision_needed":
+        elif form.instance.status == "needs_revision":
             self.case.status = "needs_revision"
-        elif form.instance.recommendation == "rejected":
+        elif form.instance.status == "rejected":
             self.case.status = "rejected"
 
         self.case.reviewed_at = timezone.now()

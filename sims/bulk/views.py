@@ -10,11 +10,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sims.bulk.models import BulkOperation
-from sims.bulk.serializers import (
-    BulkAssignmentSerializer,
-    BulkImportSerializer,
-    BulkReviewSerializer,
-)
+from sims.bulk.serializers import (BulkAssignmentSerializer,
+                                   BulkImportSerializer, BulkReviewSerializer)
 from sims.bulk.services import BulkService
 
 User = get_user_model()

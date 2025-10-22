@@ -4,9 +4,9 @@ All factories ensure valid model creation with required fields.
 """
 
 import factory
-from factory.django import DjangoModelFactory
 from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import make_password
+from factory.django import DjangoModelFactory
 
 User = get_user_model()
 

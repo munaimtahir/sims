@@ -1,8 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils import timezone
 from django.urls import reverse
+from django.utils import timezone
 from simple_history.models import HistoricalRecords
 
 # Role choices for the SIMS system

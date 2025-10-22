@@ -1,11 +1,10 @@
-from django.contrib import admin
-from django.utils.html import format_html
+from django.contrib import admin, messages
+from django.db.models import Count, Q
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib import messages
-from django.db.models import Q, Count
+from django.utils.html import format_html
 
-from .models import CaseCategory, ClinicalCase, CaseReview, CaseStatistics
+from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase
 
 
 @admin.register(CaseCategory)

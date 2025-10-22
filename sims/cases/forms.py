@@ -1,9 +1,10 @@
+from datetime import date, timedelta
+
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from datetime import date, timedelta
 
-from .models import CaseCategory, ClinicalCase
+from .models import CaseCategory, CaseReview, ClinicalCase
 
 User = get_user_model()
 
@@ -112,11 +113,64 @@ class ClinicalCaseForm(forms.ModelForm):
                 raise ValidationError("Please enter a valid patient age (0-150).")
         return age
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
 
-class CaseReviewForm(forms.Form):
+        # Set pg from user if provided and not already set
+        if self.user and not instance.pg_id:
+            if hasattr(self.user, "role") and self.user.role == "pg":
+                instance.pg = self.user
+
+        if commit:
+            instance.save()
+
+        return instance
+
+
+class CaseReviewForm(forms.ModelForm):
     """Form for case reviews"""
 
-    feedback = forms.CharField(widget=forms.Textarea(attrs={"rows": 4}), required=False)
+    class Meta:
+        model = CaseReview
+        fields = [
+            "status",
+            "overall_feedback",
+            "clinical_reasoning_feedback",
+            "documentation_feedback",
+            "learning_points_feedback",
+            "strengths_identified",
+            "areas_for_improvement",
+            "recommendations",
+            "follow_up_required",
+            "clinical_knowledge_score",
+            "clinical_reasoning_score",
+            "documentation_score",
+            "overall_score",
+        ]
+        widgets = {
+            "overall_feedback": forms.Textarea(attrs={"rows": 4}),
+            "clinical_reasoning_feedback": forms.Textarea(attrs={"rows": 3}),
+            "documentation_feedback": forms.Textarea(attrs={"rows": 3}),
+            "learning_points_feedback": forms.Textarea(attrs={"rows": 3}),
+            "strengths_identified": forms.Textarea(attrs={"rows": 3}),
+            "areas_for_improvement": forms.Textarea(attrs={"rows": 3}),
+            "recommendations": forms.Textarea(attrs={"rows": 3}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.case = kwargs.pop("case", None)
+        self.reviewer = kwargs.pop("reviewer", None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if self.case:
+            instance.case = self.case
+        if self.reviewer:
+            instance.reviewer = self.reviewer
+        if commit:
+            instance.save()
+        return instance
 
 
 class CaseSearchForm(forms.Form):
