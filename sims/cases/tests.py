@@ -5,11 +5,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from sims.tests.factories.case_factories import (CaseCategoryFactory,
-                                                 ClinicalCaseFactory)
-from sims.tests.factories.logbook_factories import DiagnosisFactory
-from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
-                                                 SupervisorFactory)
+from sims.tests.factories.case_factories import ClinicalCaseFactory
+from sims.tests.factories.user_factories import AdminFactory, PGFactory, SupervisorFactory
 
 from .forms import CaseReviewForm, ClinicalCaseForm
 from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase

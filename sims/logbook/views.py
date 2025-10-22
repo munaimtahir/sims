@@ -12,19 +12,39 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  RedirectView, TemplateView, UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    RedirectView,
+    TemplateView,
+    UpdateView,
+)
 from django.views.generic.edit import FormView
 
 from .forms import PGLogbookEntryEditForm  # Added EditForm
-from .forms import (BulkLogbookActionForm, LogbookEntryCreateForm,
-                    LogbookEntryUpdateForm, LogbookFilterForm,
-                    LogbookReviewForm, LogbookSearchForm, LogbookTemplateForm,
-                    PGLogbookEntryForm, QuickLogbookEntryForm,
-                    SupervisorBulkActionForm, SupervisorBulkApproveForm,
-                    SupervisorBulkRejectForm, SupervisorLogbookReviewForm)
-from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
-                     LogbookTemplate, Procedure)
+from .forms import (
+    BulkLogbookActionForm,
+    LogbookEntryCreateForm,
+    LogbookEntryUpdateForm,
+    LogbookReviewForm,
+    LogbookSearchForm,
+    PGLogbookEntryForm,
+    QuickLogbookEntryForm,
+    SupervisorBulkActionForm,
+    SupervisorBulkApproveForm,
+    SupervisorBulkRejectForm,
+    SupervisorLogbookReviewForm,
+)
+from .models import (
+    Diagnosis,
+    LogbookEntry,
+    LogbookReview,
+    LogbookStatistics,
+    LogbookTemplate,
+    Procedure,
+)
 
 User = get_user_model()
 

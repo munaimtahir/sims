@@ -14,10 +14,16 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.generic import DetailView, ListView, UpdateView, View
 
-from .decorators import (AdminRequiredMixin, PGRequiredMixin,
-                         SupervisorOrAdminRequiredMixin,
-                         SupervisorRequiredMixin, admin_required, pg_required,
-                         supervisor_or_admin_required, supervisor_required)
+from .decorators import (
+    AdminRequiredMixin,
+    PGRequiredMixin,
+    SupervisorOrAdminRequiredMixin,
+    SupervisorRequiredMixin,
+    admin_required,
+    pg_required,
+    supervisor_or_admin_required,
+    supervisor_required,
+)
 from .forms import PGSearchForm, SupervisorAssignmentForm, UserProfileForm
 from .models import User
 

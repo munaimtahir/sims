@@ -6,13 +6,15 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
-                                                 SupervisorFactory)
+from sims.tests.factories.user_factories import AdminFactory, PGFactory, SupervisorFactory
 
-from .forms import (BulkCertificateApprovalForm, CertificateCreateForm,
-                    CertificateReviewForm, QuickCertificateUploadForm)
-from .models import (Certificate, CertificateReview, CertificateStatistics,
-                     CertificateType)
+from .forms import (
+    BulkCertificateApprovalForm,
+    CertificateCreateForm,
+    CertificateReviewForm,
+    QuickCertificateUploadForm,
+)
+from .models import Certificate, CertificateReview, CertificateStatistics, CertificateType
 
 User = get_user_model()
 

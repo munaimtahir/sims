@@ -4,8 +4,6 @@ from .user_factories import AdminFactory, SupervisorFactory, PGFactory, UserFact
 from .logbook_factories import (
     DiagnosisFactory,
     ProcedureFactory,
-    LogbookEntryFactory,
-    LogbookReviewFactory,
 )
 from .case_factories import CaseCategoryFactory, ClinicalCaseFactory
 from .certificate_factories import CertificateTypeFactory, CertificateFactory
@@ -13,7 +11,6 @@ from .rotation_factories import (
     HospitalFactory,
     DepartmentFactory,
     RotationFactory,
-    RotationEvaluationFactory,
 )
 
 __all__ = [
@@ -25,8 +22,6 @@ __all__ = [
     # Logbook factories
     "DiagnosisFactory",
     "ProcedureFactory",
-    "LogbookEntryFactory",
-    "LogbookReviewFactory",
     # Case factories
     "CaseCategoryFactory",
     "ClinicalCaseFactory",
@@ -37,5 +32,4 @@ __all__ = [
     "HospitalFactory",
     "DepartmentFactory",
     "RotationFactory",
-    "RotationEvaluationFactory",
 ]

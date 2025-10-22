@@ -8,7 +8,7 @@ from factory.django import DjangoModelFactory
 from sims.cases.models import CaseCategory, ClinicalCase
 
 from .logbook_factories import DiagnosisFactory
-from .user_factories import PGFactory, SupervisorFactory
+from .user_factories import PGFactory
 
 
 class CaseCategoryFactory(DjangoModelFactory):
