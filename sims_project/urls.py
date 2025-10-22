@@ -93,6 +93,7 @@ urlpatterns = [
     path("api/notifications/", include("sims.notifications.urls")),
     path("api/reports/", include("sims.reports.urls")),
     path("api/logbook/", include("sims.logbook.api_urls")),
+    path("api/attendance/", include("sims.attendance.urls")),
 ]
 
 # Serve media files in development

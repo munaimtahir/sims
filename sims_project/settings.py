@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "sims.bulk",
     "sims.notifications",
     "sims.reports",
+    "sims.attendance",
 ]
 
 MIDDLEWARE = [
