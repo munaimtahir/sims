@@ -6,8 +6,7 @@ Provides reusable fixtures for all test modules.
 import pytest
 from django.test import Client
 
-from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
-                                                 SupervisorFactory)
+from sims.tests.factories.user_factories import AdminFactory, PGFactory, SupervisorFactory
 
 
 @pytest.fixture

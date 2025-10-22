@@ -9,8 +9,7 @@ from typing import Dict, Iterable, List, Optional, Sequence
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.db import models
-from django.db.models import (Avg, Count, DurationField, ExpressionWrapper, F,
-                              Max, QuerySet)
+from django.db.models import Avg, Count, DurationField, ExpressionWrapper, F, Max, QuerySet
 
 from sims.logbook.models import LogbookEntry
 

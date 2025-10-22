@@ -10,13 +10,23 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 from django.views.generic.edit import FormView
 
-from .forms import (BulkRotationAssignmentForm, RotationCreateForm,
-                    RotationEvaluationForm, RotationSearchForm,
-                    RotationUpdateForm)
+from .forms import (
+    BulkRotationAssignmentForm,
+    RotationCreateForm,
+    RotationEvaluationForm,
+    RotationSearchForm,
+    RotationUpdateForm,
+)
 from .models import Department, Hospital, Rotation, RotationEvaluation
 
 User = get_user_model()

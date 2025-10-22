@@ -6,8 +6,7 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from sims.logbook.models import LogbookEntry
-from sims.notifications.services import (NotificationService,
-                                         ensure_preferences_exist)
+from sims.notifications.services import NotificationService, ensure_preferences_exist
 from sims.users.models import User
 
 

@@ -7,11 +7,9 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  UpdateView)
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 
-from .forms import (CaseFilterForm, CaseReviewForm, CaseSearchForm,
-                    ClinicalCaseForm)
+from .forms import CaseFilterForm, CaseReviewForm, CaseSearchForm, ClinicalCaseForm
 from .models import CaseCategory, CaseReview, CaseStatistics, ClinicalCase
 
 

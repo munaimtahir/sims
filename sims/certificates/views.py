@@ -12,15 +12,24 @@ from django.http import FileResponse, Http404, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
-from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
-                                  TemplateView, UpdateView)
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 from django.views.generic.edit import FormView
 
-from .forms import (BulkCertificateApprovalForm, CertificateCreateForm,
-                    CertificateReviewForm, CertificateSearchForm,
-                    CertificateUpdateForm)
-from .models import (Certificate, CertificateReview, CertificateStatistics,
-                     CertificateType)
+from .forms import (
+    BulkCertificateApprovalForm,
+    CertificateCreateForm,
+    CertificateReviewForm,
+    CertificateSearchForm,
+    CertificateUpdateForm,
+)
+from .models import Certificate, CertificateReview, CertificateStatistics, CertificateType
 
 User = get_user_model()
 

@@ -9,9 +9,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sims.reports.models import ReportTemplate, ScheduledReport
-from sims.reports.serializers import (ReportRequestSerializer,
-                                      ReportTemplateSerializer,
-                                      ScheduledReportSerializer)
+from sims.reports.serializers import (
+    ReportRequestSerializer,
+    ReportTemplateSerializer,
+    ScheduledReportSerializer,
+)
 from sims.reports.services import ReportService
 
 

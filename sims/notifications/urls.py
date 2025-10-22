@@ -2,10 +2,12 @@
 
 from django.urls import path
 
-from sims.notifications.views import (NotificationListView,
-                                      NotificationMarkReadView,
-                                      NotificationPreferenceView,
-                                      NotificationUnreadCountView)
+from sims.notifications.views import (
+    NotificationListView,
+    NotificationMarkReadView,
+    NotificationPreferenceView,
+    NotificationUnreadCountView,
+)
 
 app_name = "notifications_api"
 

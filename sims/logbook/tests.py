@@ -7,13 +7,23 @@ from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
-from sims.tests.factories.user_factories import (AdminFactory, PGFactory,
-                                                 SupervisorFactory)
+from sims.tests.factories.user_factories import AdminFactory, PGFactory, SupervisorFactory
 
-from .forms import (BulkLogbookActionForm, LogbookEntryCreateForm,
-                    LogbookReviewForm, QuickLogbookEntryForm)
-from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
-                     LogbookTemplate, Procedure, Skill)
+from .forms import (
+    BulkLogbookActionForm,
+    LogbookEntryCreateForm,
+    LogbookReviewForm,
+    QuickLogbookEntryForm,
+)
+from .models import (
+    Diagnosis,
+    LogbookEntry,
+    LogbookReview,
+    LogbookStatistics,
+    LogbookTemplate,
+    Procedure,
+    Skill,
+)
 
 User = get_user_model()
 

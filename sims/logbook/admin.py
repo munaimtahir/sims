@@ -6,8 +6,15 @@ from django.utils.html import format_html
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
 
-from .models import (Diagnosis, LogbookEntry, LogbookReview, LogbookStatistics,
-                     LogbookTemplate, Procedure, Skill)
+from .models import (
+    Diagnosis,
+    LogbookEntry,
+    LogbookReview,
+    LogbookStatistics,
+    LogbookTemplate,
+    Procedure,
+    Skill,
+)
 
 
 class LogbookEntryResource(resources.ModelResource):
