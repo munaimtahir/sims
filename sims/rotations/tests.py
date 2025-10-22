@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from sims.tests.factories.user_factories import AdminFactory, PGFactory, SupervisorFactory
+from sims.tests.factories.user_factories import PGFactory, SupervisorFactory
 
 from .forms import BulkRotationAssignmentForm, RotationCreateForm, RotationEvaluationForm
 from .models import Department, Hospital, Rotation, RotationEvaluation

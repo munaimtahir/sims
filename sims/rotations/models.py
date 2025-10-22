@@ -1,5 +1,3 @@
-from datetime import date, timedelta
-
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError

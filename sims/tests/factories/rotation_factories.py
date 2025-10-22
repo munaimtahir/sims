@@ -4,7 +4,7 @@ import factory
 from factory.django import DjangoModelFactory
 from datetime import date, timedelta
 from sims.rotations.models import Hospital, Department, Rotation
-from .user_factories import PGFactory, SupervisorFactory
+from .user_factories import PGFactory
 
 
 class HospitalFactory(DjangoModelFactory):
