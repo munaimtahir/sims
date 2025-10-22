@@ -446,16 +446,6 @@ class ClinicalCase(models.Model):
     def get_diagnosis_count(self):
         """Get total count of diagnoses"""
         return self.secondary_diagnoses.count() + (1 if self.primary_diagnosis else 0)
-        # Admin can edit anything
-        if user.role == "admin":
-            return True
-        # PG can edit their own draft cases
-        if user.role == "pg" and self.pg_id == user.id and self.status == "draft":
-            return True
-        # Supervisor can edit assigned cases
-        if user.role == "supervisor" and self.supervisor_id == user.id:
-            return True
-        return False
 
 
 class CaseReview(models.Model):
