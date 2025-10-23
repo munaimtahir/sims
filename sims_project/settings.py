@@ -593,12 +593,33 @@ SIMPLE_JWT = {
 # Attendance eligibility threshold
 ATTENDANCE_THRESHOLD = float(os.environ.get("ATTENDANCE_THRESHOLD", "75.0"))
 
-# CORS Configuration for frontend
-CORS_ALLOWED_ORIGINS = os.environ.get(
-    "CORS_ALLOWED_ORIGINS",
-    "http://localhost:3000,http://127.0.0.1:3000"
-).split(",") if os.environ.get("CORS_ALLOWED_ORIGINS") else []
+# CORS Configuration for frontend - explicit origins only
+cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+else:
+    # Default for development only
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ] if DEBUG else []
+
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Login rate limiting (cache-based)
+LOGIN_RATE_LIMIT = os.environ.get("LOGIN_RATE_LIMIT", "5/min")
+LOGIN_RATE_LIMIT_BLOCK_DURATION = int(os.environ.get("LOGIN_RATE_LIMIT_BLOCK_DURATION", "300"))  # 5 minutes
 
 # Load local settings if available
 try:

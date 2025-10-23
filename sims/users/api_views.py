@@ -10,21 +10,28 @@ Provides:
 """
 
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, throttle_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.core.cache import cache
 from django.conf import settings
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
 from .models import User
 from .serializers import UserSerializer, UserRegistrationSerializer
+
+
+class LoginRateThrottle(AnonRateThrottle):
+    """Custom throttle for login attempts - 5 per minute by default."""
+    rate = settings.LOGIN_RATE_LIMIT
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -60,8 +67,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    """Custom token obtain view with extended user data."""
+    """Custom token obtain view with extended user data and rate limiting."""
     serializer_class = CustomTokenObtainPairSerializer
+    throttle_classes = [LoginRateThrottle]
 
 
 @api_view(['POST'])
