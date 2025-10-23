@@ -18,9 +18,9 @@ User = get_user_model()
 class BulkAttendanceUploadView(APIView):
     """
     POST /api/attendance/upload/
-    
+
     Bulk CSV upload for attendance records.
-    
+
     Requires supervisor or admin role.
     Accepts CSV file with columns: session_id,user_id,status,check_in_time,remarks
     """
@@ -87,9 +87,9 @@ class BulkAttendanceUploadView(APIView):
 class AttendanceSummaryView(APIView):
     """
     GET /api/attendance/summary/
-    
+
     Get attendance summary for a user over a date range.
-    
+
     Query parameters:
     - user: user ID (optional for admins/supervisors, defaults to self)
     - period: 'monthly', 'quarterly', 'semester', 'yearly', or 'custom'
@@ -108,9 +108,7 @@ class AttendanceSummaryView(APIView):
             try:
                 target_user = User.objects.get(pk=int(user_id))
             except (User.DoesNotExist, ValueError):
-                return Response(
-                    {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
-                )
+                return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
             # Check permission
             if getattr(acting_user, "role", None) == "supervisor":
@@ -126,26 +124,20 @@ class AttendanceSummaryView(APIView):
         period = request.query_params.get("period", "custom")
         valid_periods = ["monthly", "quarterly", "semester", "yearly", "custom"]
         if period not in valid_periods:
-            raise ValidationError(
-                {"period": f"Period must be one of: {', '.join(valid_periods)}"}
-            )
+            raise ValidationError({"period": f"Period must be one of: {', '.join(valid_periods)}"})
 
         # Parse dates
         start_date_str = request.query_params.get("start_date")
         end_date_str = request.query_params.get("end_date")
 
         if not start_date_str or not end_date_str:
-            raise ValidationError(
-                {"date_range": "Both start_date and end_date are required"}
-            )
+            raise ValidationError({"date_range": "Both start_date and end_date are required"})
 
         try:
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
             end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
         except ValueError:
-            raise ValidationError(
-                {"date_format": "Dates must be in YYYY-MM-DD format"}
-            )
+            raise ValidationError({"date_format": "Dates must be in YYYY-MM-DD format"})
 
         if start_date > end_date:
             raise ValidationError({"date_range": "start_date must be before end_date"})

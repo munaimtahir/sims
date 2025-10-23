@@ -43,4 +43,3 @@ class EligibilitySummaryAdmin(admin.ModelAdmin):
     search_fields = ["user__username", "user__first_name", "user__last_name"]
     date_hierarchy = "start_date"
     ordering = ["-start_date", "user__last_name"]
-

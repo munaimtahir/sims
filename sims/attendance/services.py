@@ -4,9 +4,8 @@ import csv
 import io
 import os
 from datetime import datetime
-from typing import Dict, List
+from typing import Dict
 
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 
@@ -23,20 +22,20 @@ def get_attendance_threshold() -> float:
 def process_csv_upload(csv_file, uploaded_by) -> Dict:
     """
     Process CSV file for bulk attendance upload.
-    
+
     Expected CSV format:
     session_id,user_id,status,check_in_time,remarks
-    
+
     Returns dict with success count, error count, and error messages.
     """
     errors = []
     success_count = 0
-    
+
     try:
         # Read CSV content
         content = csv_file.read().decode("utf-8")
         csv_reader = csv.DictReader(io.StringIO(content))
-        
+
         # Validate headers
         required_headers = {"session_id", "user_id", "status"}
         if not required_headers.issubset(set(csv_reader.fieldnames)):
@@ -46,16 +45,16 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
                 "error_count": 1,
                 "errors": [f"CSV must contain columns: {', '.join(required_headers)}"],
             }
-        
+
         with transaction.atomic():
             for row_num, row in enumerate(csv_reader, start=2):  # Start at 2 (header is 1)
                 try:
                     # Get session
                     session = Session.objects.get(pk=int(row["session_id"]))
-                    
+
                     # Get user
                     user = User.objects.get(pk=int(row["user_id"]))
-                    
+
                     # Validate status
                     status = row["status"].strip().lower()
                     valid_statuses = ["present", "absent", "late", "excused"]
@@ -64,7 +63,7 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
                             f"Row {row_num}: Invalid status '{status}'. Must be one of: {', '.join(valid_statuses)}"
                         )
                         continue
-                    
+
                     # Parse check-in time if provided
                     check_in_time = None
                     if row.get("check_in_time"):
@@ -75,7 +74,7 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
                                 f"Row {row_num}: Invalid check_in_time format. Use ISO format (YYYY-MM-DD HH:MM:SS)"
                             )
                             continue
-                    
+
                     # Create or update attendance record
                     record, created = AttendanceRecord.objects.update_or_create(
                         user=user,
@@ -88,7 +87,7 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
                         },
                     )
                     success_count += 1
-                    
+
                 except Session.DoesNotExist:
                     errors.append(f"Row {row_num}: Session with ID {row['session_id']} not found")
                 except User.DoesNotExist:
@@ -97,7 +96,7 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
                     errors.append(f"Row {row_num}: {str(e)}")
                 except Exception as e:
                     errors.append(f"Row {row_num}: Unexpected error - {str(e)}")
-    
+
     except Exception as e:
         return {
             "success": False,
@@ -105,7 +104,7 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
             "error_count": 1,
             "errors": [f"Failed to parse CSV file: {str(e)}"],
         }
-    
+
     return {
         "success": len(errors) == 0,
         "success_count": success_count,
@@ -117,40 +116,38 @@ def process_csv_upload(csv_file, uploaded_by) -> Dict:
 def calculate_attendance_summary(user, start_date, end_date, period="custom") -> Dict:
     """
     Calculate attendance summary for a user over a date range.
-    
+
     Returns dict with attendance statistics and eligibility status.
     """
     # Get sessions in the date range
     sessions = Session.objects.filter(
         date__gte=start_date, date__lte=end_date, status__in=["completed", "ongoing"]
     )
-    
+
     total_sessions = sessions.count()
-    
+
     # Get attendance records for the user
-    attendance_records = AttendanceRecord.objects.filter(
-        user=user, session__in=sessions
-    )
-    
+    attendance_records = AttendanceRecord.objects.filter(user=user, session__in=sessions)
+
     # Count attended (present or late)
     attended = attendance_records.filter(status__in=["present", "late"]).count()
-    
+
     # Count by status
     present_count = attendance_records.filter(status="present").count()
     late_count = attendance_records.filter(status="late").count()
     absent_count = attendance_records.filter(status="absent").count()
     excused_count = attendance_records.filter(status="excused").count()
-    
+
     # Calculate percentage
     if total_sessions > 0:
         percentage_present = round((attended / total_sessions) * 100, 2)
     else:
         percentage_present = 0.0
-    
+
     # Check eligibility
     threshold = get_attendance_threshold()
     is_eligible = percentage_present >= threshold
-    
+
     # Create or update eligibility summary
     summary, created = EligibilitySummary.objects.update_or_create(
         user=user,
@@ -165,7 +162,7 @@ def calculate_attendance_summary(user, start_date, end_date, period="custom") ->
             "threshold_percentage": threshold,
         },
     )
-    
+
     return {
         "user_id": user.id,
         "username": user.username,

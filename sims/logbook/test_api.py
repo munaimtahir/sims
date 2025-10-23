@@ -52,9 +52,7 @@ class LogbookVerificationAPITests(TestCase):
 
         # Create hospital and department
         self.hospital = Hospital.objects.create(name="Test Hospital")
-        self.department = Department.objects.create(
-            name="Surgery", hospital=self.hospital
-        )
+        self.department = Department.objects.create(name="Surgery", hospital=self.hospital)
 
         # Create rotation
         self.rotation = Rotation.objects.create(

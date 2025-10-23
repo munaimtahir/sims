@@ -7,7 +7,6 @@ Created for SIMS production-ready release.
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils import timezone
 
 
 class Session(models.Model):
@@ -58,9 +57,7 @@ class Session(models.Model):
         help_text="Module or course name (if not rotation-based)",
     )
 
-    location = models.CharField(
-        max_length=200, blank=True, help_text="Location of the session"
-    )
+    location = models.CharField(max_length=200, blank=True, help_text="Location of the session")
 
     instructor = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -129,9 +126,7 @@ class AttendanceRecord(models.Model):
         help_text="Attendance status",
     )
 
-    check_in_time = models.DateTimeField(
-        null=True, blank=True, help_text="Time user checked in"
-    )
+    check_in_time = models.DateTimeField(null=True, blank=True, help_text="Time user checked in")
 
     remarks = models.TextField(blank=True, help_text="Additional remarks or notes")
 
@@ -164,7 +159,7 @@ class AttendanceRecord(models.Model):
 class EligibilitySummary(models.Model):
     """
     Model representing eligibility summary based on attendance.
-    
+
     Business rule: eligible if attendance >= 75% (configurable via env).
     """
 
@@ -237,12 +232,9 @@ class EligibilitySummary(models.Model):
     def calculate_eligibility(self):
         """Calculate and update eligibility based on attendance percentage."""
         if self.total_sessions > 0:
-            self.percentage_present = round(
-                (self.attended_sessions / self.total_sessions) * 100, 2
-            )
+            self.percentage_present = round((self.attended_sessions / self.total_sessions) * 100, 2)
         else:
             self.percentage_present = 0.0
 
         self.is_eligible = self.percentage_present >= self.threshold_percentage
         self.save()
-
