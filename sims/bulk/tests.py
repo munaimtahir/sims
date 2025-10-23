@@ -106,3 +106,58 @@ class BulkOperationTests(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(LogbookEntry.objects.filter(case_title="Imported Case").count(), 1)
+
+    def test_bulk_review_with_invalid_ids(self) -> None:
+        """Test bulk review with some invalid IDs"""
+        service = BulkService(self.admin, chunk_size=2)
+        valid_ids = [entry.pk for entry in self.entries[:2]]
+        invalid_ids = [9999, 10000]
+        all_ids = valid_ids + invalid_ids
+        
+        operation = service.review_entries(all_ids, status="approved")
+        self.assertEqual(operation.status, BulkOperation.STATUS_COMPLETED)
+        self.assertEqual(operation.success_count, 2)
+        self.assertEqual(operation.failure_count, 2)
+        
+    def test_bulk_assignment_with_invalid_ids(self) -> None:
+        """Test bulk assignment with some invalid IDs"""
+        service = BulkService(self.admin, chunk_size=2)
+        valid_ids = [entry.pk for entry in self.entries[:1]]
+        invalid_ids = [9999]
+        all_ids = valid_ids + invalid_ids
+        
+        operation = service.assign_supervisor(all_ids, self.supervisor)
+        self.assertEqual(operation.status, BulkOperation.STATUS_COMPLETED)
+        self.assertEqual(operation.success_count, 1)
+        self.assertEqual(operation.failure_count, 1)
+        
+    def test_bulk_import_missing_columns(self) -> None:
+        """Test CSV import with missing required columns"""
+        csv_buffer = io.StringIO()
+        # Missing 'date' and 'status' columns
+        writer = csv.DictWriter(csv_buffer, fieldnames=["pg_username", "case_title"])
+        writer.writeheader()
+        writer.writerow({"pg_username": self.pg.username, "case_title": "Test"})
+        
+        uploaded = SimpleUploadedFile(
+            "import.csv", csv_buffer.getvalue().encode("utf-8"), content_type="text/csv"
+        )
+        url = reverse("bulk_api:import")
+        response = self.client.post(url, {"file": uploaded, "dry_run": True})
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Missing columns", str(response.data))
+        
+    def test_bulk_import_unsupported_format(self) -> None:
+        """Test import with unsupported file format"""
+        uploaded = SimpleUploadedFile(
+            "import.txt", b"random text content", content_type="text/plain"
+        )
+        url = reverse("bulk_api:import")
+        response = self.client.post(url, {"file": uploaded, "dry_run": True})
+        self.assertEqual(response.status_code, 400)
+        
+    def test_permission_denied_for_pg_user(self) -> None:
+        """Test that PG users cannot perform bulk operations"""
+        from django.core.exceptions import PermissionDenied
+        with self.assertRaises(PermissionDenied):
+            BulkService(self.pg, chunk_size=2)
