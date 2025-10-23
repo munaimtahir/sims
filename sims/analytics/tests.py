@@ -110,3 +110,35 @@ class AnalyticsAPITests(APITestCase):
         data = trend_for_user(self.admin, self.pg, params)
         cache_value = cache.get(cache_key)
         self.assertEqual(data, cache_value)
+
+    def test_dashboard_overview_api(self) -> None:
+        """Test dashboard overview endpoint."""
+        url = reverse("analytics_api:dashboard-overview")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.data
+        self.assertIn("total_residents", data)
+        self.assertIn("active_rotations", data)
+        self.assertIn("pending_certificates", data)
+        self.assertIn("last_30d_logs", data)
+        self.assertIn("last_30d_cases", data)
+        self.assertIn("unverified_logs", data)
+
+    def test_dashboard_trends_api(self) -> None:
+        """Test dashboard trends endpoint."""
+        url = reverse("analytics_api:dashboard-trends")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.data
+        self.assertIn("trends", data)
+        self.assertIsInstance(data["trends"], list)
+
+    def test_dashboard_compliance_api(self) -> None:
+        """Test dashboard compliance endpoint."""
+        url = reverse("analytics_api:dashboard-compliance")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        data = response.data
+        self.assertIn("compliance", data)
+        self.assertIsInstance(data["compliance"], list)
+

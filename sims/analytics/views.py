@@ -14,6 +14,9 @@ from rest_framework.views import APIView
 
 from sims.analytics.serializers import (
     ComparativeResponseSerializer,
+    DashboardComplianceSerializer,
+    DashboardOverviewSerializer,
+    DashboardTrendsSerializer,
     PerformanceMetricsSerializer,
     TrendPointSerializer,
     TrendResponseSerializer,
@@ -21,6 +24,9 @@ from sims.analytics.serializers import (
 from sims.analytics.services import (
     TrendRequest,
     comparative_summary,
+    dashboard_compliance,
+    dashboard_overview,
+    dashboard_trends,
     get_accessible_users,
     performance_metrics,
     trend_for_user,
@@ -125,8 +131,44 @@ class PerformanceMetricsView(APIView):
         return Response(serializer.data)
 
 
+class DashboardOverviewView(APIView):
+    """API endpoint for dashboard overview data."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: Request) -> Response:
+        overview = dashboard_overview(request.user)
+        serializer = DashboardOverviewSerializer(overview)
+        return Response(serializer.data)
+
+
+class DashboardTrendsView(APIView):
+    """API endpoint for monthly trends data (last 12 months)."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: Request) -> Response:
+        trends = dashboard_trends(request.user)
+        serializer = DashboardTrendsSerializer(trends)
+        return Response(serializer.data)
+
+
+class DashboardComplianceView(APIView):
+    """API endpoint for compliance data by rotation."""
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request: Request) -> Response:
+        compliance = dashboard_compliance(request.user)
+        serializer = DashboardComplianceSerializer(compliance)
+        return Response(serializer.data)
+
+
 __all__ = [
     "TrendAnalyticsView",
     "ComparativeAnalyticsView",
     "PerformanceMetricsView",
+    "DashboardOverviewView",
+    "DashboardTrendsView",
+    "DashboardComplianceView",
 ]

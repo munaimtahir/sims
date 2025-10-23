@@ -41,9 +41,53 @@ class PerformanceMetricsSerializer(serializers.Serializer):
     average_review_hours = serializers.FloatField()
 
 
+class DashboardOverviewSerializer(serializers.Serializer):
+    """Serializer for dashboard overview data."""
+
+    total_residents = serializers.IntegerField()
+    active_rotations = serializers.IntegerField()
+    pending_certificates = serializers.IntegerField()
+    last_30d_logs = serializers.IntegerField()
+    last_30d_cases = serializers.IntegerField()
+    unverified_logs = serializers.IntegerField()
+
+
+class MonthlyTrendSerializer(serializers.Serializer):
+    """Serializer for monthly trend data."""
+
+    month = serializers.CharField()
+    department = serializers.CharField()
+    case_count = serializers.IntegerField()
+    log_count = serializers.IntegerField()
+
+
+class DashboardTrendsSerializer(serializers.Serializer):
+    """Serializer for dashboard trends (last 12 months)."""
+
+    trends = MonthlyTrendSerializer(many=True)
+
+
+class ComplianceDataSerializer(serializers.Serializer):
+    """Serializer for compliance data by rotation."""
+
+    rotation_name = serializers.CharField()
+    total_logs = serializers.IntegerField()
+    verified_logs = serializers.IntegerField()
+    verification_percentage = serializers.FloatField()
+
+
+class DashboardComplianceSerializer(serializers.Serializer):
+    """Serializer for dashboard compliance data."""
+
+    compliance = ComplianceDataSerializer(many=True)
+
+
 __all__ = [
     "TrendPointSerializer",
     "TrendResponseSerializer",
     "ComparativeResponseSerializer",
     "PerformanceMetricsSerializer",
+    "DashboardOverviewSerializer",
+    "DashboardTrendsSerializer",
+    "DashboardComplianceSerializer",
 ]
