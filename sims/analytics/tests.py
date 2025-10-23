@@ -141,3 +141,63 @@ class AnalyticsAPITests(APITestCase):
         data = response.data
         self.assertIn("compliance", data)
         self.assertIsInstance(data["compliance"], list)
+    
+    def test_validate_window_invalid(self) -> None:
+        """Test window validation with invalid values."""
+        from sims.analytics.services import validate_window
+        
+        # Test invalid window value
+        with self.assertRaises(ValueError) as cm:
+            validate_window("15")  # Not in ALLOWED_WINDOWS
+        self.assertIn("Window must be one of", str(cm.exception))
+        
+    def test_validate_window_none_defaults_to_30(self) -> None:
+        """Test window validation with None defaults to 30."""
+        from sims.analytics.services import validate_window
+        self.assertEqual(validate_window(None), 30)
+        
+    def test_trend_for_user_permission_denied(self) -> None:
+        """Test permission error when accessing other user's analytics."""
+        params = TrendRequest(window=7)
+        
+        # PG trying to access another PG's data
+        other_pg = User.objects.create_user(
+            username="pg2",
+            password="testpass",
+            role="pg",
+            email="pg2@example.com",
+            specialty="surgery",
+            year="1",
+            supervisor=self.supervisor,
+        )
+        
+        with self.assertRaises(PermissionError):
+            trend_for_user(self.pg, other_pg, params)
+    
+    def test_trend_for_user_with_status_filter(self) -> None:
+        """Test trend calculation with status filter."""
+        params = TrendRequest(window=7)
+        data = trend_for_user(self.admin, self.pg, params, status_filter=["approved"])
+        
+        self.assertIsNotNone(data)
+        self.assertEqual(data["metric"], "entries")
+        self.assertIn("series", data)
+        
+    def test_trend_for_user_no_entries(self) -> None:
+        """Test trend for user with no logbook entries."""
+        new_pg = User.objects.create_user(
+            username="pg_new",
+            password="testpass",
+            role="pg",
+            email="pgnew@example.com",
+            specialty="surgery",
+            year="1",
+            supervisor=self.supervisor,
+        )
+        
+        params = TrendRequest(window=7)
+        data = trend_for_user(self.admin, new_pg, params)
+        
+        self.assertEqual(data["series"], [])
+        self.assertEqual(data["window"], 7)
+        self.assertEqual(data["metric"], "entries")
