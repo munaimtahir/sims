@@ -21,6 +21,9 @@ from django.urls import include, path
 # Import test view
 from tests.test_crispy_view import test_crispy_view
 
+# Import health check views
+from sims_project.health import healthz, liveness, readiness
+
 
 # Custom admin logout view that handles GET requests
 def admin_logout_view(request):
@@ -75,6 +78,9 @@ urlpatterns = [
     # Home and utility URLs
     path("", home_view, name="home"),
     path("health/", health_check, name="health_check"),
+    path("healthz/", healthz, name="healthz"),
+    path("readiness/", readiness, name="readiness"),
+    path("liveness/", liveness, name="liveness"),
     path("robots.txt", robots_txt, name="robots_txt"),
     # Custom admin logout URL (must come before admin/ URL)
     path("admin/logout/", admin_logout_view, name="admin_logout"),
