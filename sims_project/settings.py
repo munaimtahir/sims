@@ -84,6 +84,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "simple_history.middleware.HistoryRequestMiddleware",
+    "sims_project.middleware.PerformanceTimingMiddleware",  # Performance monitoring
 ]
 
 ROOT_URLCONF = "sims_project.urls"
