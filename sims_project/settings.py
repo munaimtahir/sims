@@ -48,12 +48,13 @@ INSTALLED_APPS = [
     "django.contrib.humanize",  # For number formatting
     "django.contrib.postgres",
     # Third-party apps
+    "corsheaders",  # For CORS support
     "crispy_forms",  # For better form rendering
     "crispy_bootstrap5",  # Bootstrap 5 support for forms
     "import_export",  # For CSV/Excel import/export
     "rest_framework",  # For API endpoints
     "rest_framework_simplejwt",  # For JWT authentication
-    "django_filters",  # For advanced filtering
+    "django_filters",  # For Advanced filtering
     "widget_tweaks",  # For form widget customization
     "simple_history",  # For audit history
     # SIMS apps
@@ -75,6 +76,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS middleware (should be early)
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
