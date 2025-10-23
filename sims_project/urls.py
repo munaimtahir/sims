@@ -100,6 +100,11 @@ urlpatterns = [
     path("api/reports/", include("sims.reports.urls")),
     path("api/logbook/", include("sims.logbook.api_urls")),
     path("api/attendance/", include("sims.attendance.urls")),
+    # New apps
+    path("academics/", include("sims.academics.urls")),
+    path("results/", include("sims.results.urls")),
+    # JWT Authentication endpoints
+    path("api/auth/", include("sims.users.api_urls")),
 ]
 
 # Serve media files in development

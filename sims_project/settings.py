@@ -48,15 +48,18 @@ INSTALLED_APPS = [
     "django.contrib.humanize",  # For number formatting
     "django.contrib.postgres",
     # Third-party apps
+    "corsheaders",  # For CORS support
     "crispy_forms",  # For better form rendering
     "crispy_bootstrap5",  # Bootstrap 5 support for forms
     "import_export",  # For CSV/Excel import/export
     "rest_framework",  # For API endpoints
-    "django_filters",  # For advanced filtering
+    "rest_framework_simplejwt",  # For JWT authentication
+    "django_filters",  # For Advanced filtering
     "widget_tweaks",  # For form widget customization
     "simple_history",  # For audit history
     # SIMS apps
     "sims.users",
+    "sims.academics",
     "sims.rotations",
     "sims.certificates",
     "sims.logbook",
@@ -68,10 +71,12 @@ INSTALLED_APPS = [
     "sims.notifications",
     "sims.reports",
     "sims.attendance",
+    "sims.results",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # CORS middleware (should be early)
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -233,6 +238,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 # Django REST Framework Settings
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
@@ -564,6 +570,56 @@ LOGGING = {
         },
     },
 }
+
+# JWT Settings for REST Framework SimpleJWT
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=int(os.environ.get("JWT_ACCESS_TOKEN_MINUTES", "60"))),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=int(os.environ.get("JWT_REFRESH_TOKEN_DAYS", "7"))),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+    "TOKEN_TYPE_CLAIM": "token_type",
+}
+
+# Attendance eligibility threshold
+ATTENDANCE_THRESHOLD = float(os.environ.get("ATTENDANCE_THRESHOLD", "75.0"))
+
+# CORS Configuration for frontend - explicit origins only
+cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
+if cors_origins_env:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
+else:
+    # Default for development only
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ] if DEBUG else []
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Login rate limiting (cache-based)
+LOGIN_RATE_LIMIT = os.environ.get("LOGIN_RATE_LIMIT", "5/min")
+LOGIN_RATE_LIMIT_BLOCK_DURATION = int(os.environ.get("LOGIN_RATE_LIMIT_BLOCK_DURATION", "300"))  # 5 minutes
 
 # Load local settings if available
 try:
