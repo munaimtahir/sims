@@ -106,3 +106,39 @@ class BulkOperationTests(APITestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(LogbookEntry.objects.filter(case_title="Imported Case").count(), 1)
+
+    def test_bulk_review_permission_denied(self) -> None:
+        """Test that PG cannot perform bulk review."""
+        from django.core.exceptions import PermissionDenied
+        
+        self.client.force_authenticate(self.pg)
+        # PG should not be able to create bulk service for review
+        with self.assertRaises(PermissionDenied):
+            service = BulkService(self.pg, chunk_size=2)
+            operation = service.review_entries([self.entries[0].pk], status="approved")
+
+    def test_bulk_import_empty_file(self) -> None:
+        """Test bulk import with empty CSV file."""
+        csv_buffer = io.StringIO()
+        writer = csv.DictWriter(
+            csv_buffer, fieldnames=["pg_username", "case_title", "date", "status"]
+        )
+        writer.writeheader()
+        uploaded = SimpleUploadedFile(
+            "empty.csv", csv_buffer.getvalue().encode("utf-8"), content_type="text/csv"
+        )
+        url = reverse("bulk_api:import")
+        response = self.client.post(
+            url, {"file": uploaded, "dry_run": True, "allow_partial": False}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data.get("success_count", 0), 0)
+
+    def test_bulk_operation_tracking(self) -> None:
+        """Test that bulk operations are properly tracked."""
+        initial_count = BulkOperation.objects.count()
+        service = BulkService(self.admin, chunk_size=2)
+        operation = service.review_entries([entry.pk for entry in self.entries], status="approved")
+        self.assertEqual(BulkOperation.objects.count(), initial_count + 1)
+        self.assertIsNotNone(operation.completed_at)
+        self.assertEqual(operation.status, BulkOperation.STATUS_COMPLETED)
