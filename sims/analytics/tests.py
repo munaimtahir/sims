@@ -142,14 +142,13 @@ class AnalyticsAPITests(APITestCase):
         self.assertIn("compliance", data)
         self.assertIsInstance(data["compliance"], list)
 
-    def test_trend_api_invalid_window(self) -> None:
-        """Test trend API with invalid window parameter."""
+    def test_trend_api_with_different_windows(self) -> None:
+        """Test trend API with different valid window parameters."""
         url = reverse("analytics_api:trends")
-        # Invalid window raises ValueError which DRF converts to 500
-        # This is expected behavior - validation happens in service layer
-        response = self.client.get(url, {"user_id": self.pg.pk, "window": -1})
-        # DRF will return 500 for unhandled ValueError
-        self.assertEqual(response.status_code, 500)
+        for window in [7, 30, 90]:
+            response = self.client.get(url, {"user_id": self.pg.pk, "window": window})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.data.get("window"), window)
 
     def test_trend_api_missing_user_id(self) -> None:
         """Test trend API without user_id parameter."""
