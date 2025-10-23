@@ -300,16 +300,8 @@ class Rotation(models.Model):
         """Validate rotation data"""
         errors = {}
 
-        try:
-            validate_not_future(self.start_date, "start_date")
-        except ValidationError as exc:  # pragma: no cover - simple wrapper
-            errors.update(exc.message_dict)
-
-        try:
-            validate_not_future(self.end_date, "end_date")
-        except ValidationError as exc:
-            errors.update(exc.message_dict)
-
+        # Rotations are typically planned in advance, so future dates are valid
+        # We only validate chronology (end >= start)
         try:
             validate_chronology(self.start_date, self.end_date, "start_date", "end_date")
         except ValidationError as exc:
