@@ -18,9 +18,6 @@ from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from django.urls import include, path
 
-# Import test view
-from tests.test_crispy_view import test_crispy_view
-
 # Import health check views
 from sims_project.health import healthz, liveness, readiness
 
@@ -73,8 +70,6 @@ Allow: /
 
 
 urlpatterns = [
-    # Test URL for debugging
-    path("test-crispy/", test_crispy_view, name="test_crispy"),
     # Home and utility URLs
     path("", home_view, name="home"),
     path("health/", health_check, name="health_check"),

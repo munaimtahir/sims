@@ -3,7 +3,7 @@
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from rest_framework import permissions, status
-from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -16,7 +16,7 @@ User = get_user_model()
 class PendingLogbookEntriesView(APIView):
     """
     GET /api/logbook/pending/
-    
+
     Returns logbook entries pending verification, scoped by supervisor role.
     - Supervisors see entries from their assigned PGs
     - Admins see all pending entries
@@ -37,9 +37,7 @@ class PendingLogbookEntriesView(APIView):
             queryset = LogbookEntry.objects.filter(status="pending")
         else:  # supervisor
             supervised_users = User.objects.filter(supervisor=user)
-            queryset = LogbookEntry.objects.filter(
-                status="pending", pg__in=supervised_users
-            )
+            queryset = LogbookEntry.objects.filter(status="pending", pg__in=supervised_users)
 
         # Select related to reduce queries
         queryset = queryset.select_related(
@@ -61,9 +59,7 @@ class PendingLogbookEntriesView(APIView):
                     },
                     "rotation": {
                         "id": entry.rotation.id if entry.rotation else None,
-                        "department": (
-                            entry.rotation.department.name if entry.rotation else None
-                        ),
+                        "department": (entry.rotation.department.name if entry.rotation else None),
                     },
                     "submitted_at": (
                         entry.submitted_to_supervisor_at.isoformat()
@@ -80,12 +76,12 @@ class PendingLogbookEntriesView(APIView):
 class VerifyLogbookEntryView(APIView):
     """
     PATCH /api/logbook/<id>/verify/
-    
+
     Verifies (approves) a logbook entry.
     - Sets verified_by and verified_at
     - Changes status to 'approved'
     - Triggers notification and audit event
-    
+
     Request body (optional):
     {
         "feedback": "Additional supervisor feedback"
@@ -105,9 +101,7 @@ class VerifyLogbookEntryView(APIView):
         try:
             entry = LogbookEntry.objects.select_related("pg", "supervisor").get(pk=pk)
         except LogbookEntry.DoesNotExist:
-            return Response(
-                {"error": "Logbook entry not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({"error": "Logbook entry not found"}, status=status.HTTP_404_NOT_FOUND)
 
         # Check permission - supervisors can only verify their assigned PGs
         if getattr(user, "role", None) == "supervisor":

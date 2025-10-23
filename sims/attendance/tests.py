@@ -7,7 +7,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APIClient
 
-from sims.attendance.models import AttendanceRecord, EligibilitySummary, Session
+from sims.attendance.models import AttendanceRecord, Session
 from sims.users.models import User
 
 
@@ -67,12 +67,8 @@ class AttendanceAPITests(TestCase):
         )
 
         # Create some attendance records
-        AttendanceRecord.objects.create(
-            user=self.pg, session=self.session1, status="present"
-        )
-        AttendanceRecord.objects.create(
-            user=self.pg, session=self.session2, status="present"
-        )
+        AttendanceRecord.objects.create(user=self.pg, session=self.session1, status="present")
+        AttendanceRecord.objects.create(user=self.pg, session=self.session2, status="present")
         # session3 not attended
 
         self.client = APIClient()
@@ -130,9 +126,7 @@ class AttendanceAPITests(TestCase):
         url = reverse("attendance_api:summary")
         start = (date.today() - timedelta(days=10)).isoformat()
         end = date.today().isoformat()
-        response = self.client.get(
-            url, {"start_date": start, "end_date": end, "period": "custom"}
-        )
+        response = self.client.get(url, {"start_date": start, "end_date": end, "period": "custom"})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["user_id"], self.pg.id)
@@ -192,21 +186,16 @@ class AttendanceAPITests(TestCase):
     def test_eligibility_threshold(self):
         """Test eligibility calculation with threshold."""
         # Add one more present record to get 100%
-        AttendanceRecord.objects.create(
-            user=self.pg, session=self.session3, status="present"
-        )
+        AttendanceRecord.objects.create(user=self.pg, session=self.session3, status="present")
 
         self.client.force_authenticate(self.pg)
 
         url = reverse("attendance_api:summary")
         start = (date.today() - timedelta(days=10)).isoformat()
         end = date.today().isoformat()
-        response = self.client.get(
-            url, {"start_date": start, "end_date": end, "period": "custom"}
-        )
+        response = self.client.get(url, {"start_date": start, "end_date": end, "period": "custom"})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["attended_sessions"], 3)
         self.assertEqual(response.data["percentage_present"], 100.0)
         self.assertTrue(response.data["is_eligible"])  # Above 75%
-

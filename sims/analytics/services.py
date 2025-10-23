@@ -235,7 +235,7 @@ def performance_metrics(
 def dashboard_overview(user: User) -> Dict:
     """
     Get dashboard overview with totals and recent activity.
-    
+
     Returns:
         - total_residents: count of PG users
         - active_rotations: count of active rotations
@@ -248,9 +248,9 @@ def dashboard_overview(user: User) -> Dict:
     from sims.rotations.models import Rotation
     from sims.certificates.models import Certificate
     from sims.cases.models import ClinicalCase
-    
+
     thirty_days_ago = datetime.now() - timedelta(days=30)
-    
+
     # Base queries - scope by user role
     if user.is_superuser or getattr(user, "role", None) == "admin":
         users_qs = User.objects.all()
@@ -272,7 +272,7 @@ def dashboard_overview(user: User) -> Dict:
         certificates_qs = Certificate.objects.filter(resident=user)
         logs_qs = LogbookEntry.objects.filter(user=user)
         cases_qs = ClinicalCase.objects.filter(pg=user)
-    
+
     return {
         "total_residents": users_qs.filter(role="pg").count(),
         "active_rotations": rotations_qs.filter(status="ongoing").count(),
@@ -286,16 +286,16 @@ def dashboard_overview(user: User) -> Dict:
 def dashboard_trends(user: User) -> Dict:
     """
     Get monthly trends for last 12 months by department.
-    
+
     Returns data grouped by month and department with case/log counts.
     """
     from datetime import datetime, timedelta
     from django.db.models import Count
     from django.db.models.functions import TruncMonth
     from sims.cases.models import ClinicalCase
-    
+
     twelve_months_ago = datetime.now() - timedelta(days=365)
-    
+
     # Scope by user role
     if user.is_superuser or getattr(user, "role", None) == "admin":
         logs_qs = LogbookEntry.objects.all()
@@ -307,7 +307,7 @@ def dashboard_trends(user: User) -> Dict:
     else:
         logs_qs = LogbookEntry.objects.filter(user=user)
         cases_qs = ClinicalCase.objects.filter(pg=user)
-    
+
     # Get log counts by month and rotation department
     log_trends = (
         logs_qs.filter(date__gte=twelve_months_ago)
@@ -317,7 +317,7 @@ def dashboard_trends(user: User) -> Dict:
         .annotate(log_count=Count("id"))
         .order_by("month", "rotation__department__name")
     )
-    
+
     # Get case counts by month and category
     case_trends = (
         cases_qs.filter(created_at__gte=twelve_months_ago)
@@ -327,7 +327,7 @@ def dashboard_trends(user: User) -> Dict:
         .annotate(case_count=Count("id"))
         .order_by("month", "category__name")
     )
-    
+
     # Merge trends
     trends_dict = {}
     for item in log_trends:
@@ -335,17 +335,27 @@ def dashboard_trends(user: User) -> Dict:
         dept = item["rotation__department__name"] or "Unassigned"
         key = (month_str, dept)
         if key not in trends_dict:
-            trends_dict[key] = {"month": month_str, "department": dept, "log_count": 0, "case_count": 0}
+            trends_dict[key] = {
+                "month": month_str,
+                "department": dept,
+                "log_count": 0,
+                "case_count": 0,
+            }
         trends_dict[key]["log_count"] = item["log_count"]
-    
+
     for item in case_trends:
         month_str = item["month"].strftime("%Y-%m") if item["month"] else "N/A"
         dept = item["category__name"] or "Unassigned"
         key = (month_str, dept)
         if key not in trends_dict:
-            trends_dict[key] = {"month": month_str, "department": dept, "log_count": 0, "case_count": 0}
+            trends_dict[key] = {
+                "month": month_str,
+                "department": dept,
+                "log_count": 0,
+                "case_count": 0,
+            }
         trends_dict[key]["case_count"] = item["case_count"]
-    
+
     return {"trends": list(trends_dict.values())}
 
 
@@ -353,9 +363,8 @@ def dashboard_compliance(user: User) -> Dict:
     """
     Get compliance data showing % verified vs unverified logs by rotation.
     """
-    from django.db.models import Count, Q, Case, When, FloatField
     from sims.rotations.models import Rotation
-    
+
     # Scope by user role
     if user.is_superuser or getattr(user, "role", None) == "admin":
         rotations = Rotation.objects.all()
@@ -364,28 +373,30 @@ def dashboard_compliance(user: User) -> Dict:
         rotations = Rotation.objects.filter(pg__in=supervised_users)
     else:
         rotations = Rotation.objects.filter(pg=user)
-    
+
     compliance_data = []
     for rotation in rotations:
         logs = LogbookEntry.objects.filter(rotation=rotation)
         total = logs.count()
         verified = logs.filter(verified_by__isnull=False).count()
-        
+
         if total > 0:
             percentage = round((verified / total) * 100, 2)
         else:
             percentage = 0.0
-        
+
         # Create a descriptive name for the rotation
         rotation_desc = f"{rotation.department.name} - {rotation.hospital.name}"
-        
-        compliance_data.append({
-            "rotation_name": rotation_desc,
-            "total_logs": total,
-            "verified_logs": verified,
-            "verification_percentage": percentage,
-        })
-    
+
+        compliance_data.append(
+            {
+                "rotation_name": rotation_desc,
+                "total_logs": total,
+                "verified_logs": verified,
+                "verification_percentage": percentage,
+            }
+        )
+
     return {"compliance": compliance_data}
 
 

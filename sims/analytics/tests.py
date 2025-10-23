@@ -141,4 +141,3 @@ class AnalyticsAPITests(APITestCase):
         data = response.data
         self.assertIn("compliance", data)
         self.assertIsInstance(data["compliance"], list)
-
