@@ -142,34 +142,45 @@ sims/
 ├── manage.py                   # Django management script
 ├── README.md                   # Project overview and documentation
 ├── requirements.txt            # Python dependencies
+├── requirements-dev.txt        # Development dependencies
 ├── pytest.ini                  # Pytest configuration
-├── db.sqlite3                  # SQLite development database
+├── pyproject.toml              # Black/pytest configuration
+├── conftest.py                 # Pytest fixtures and configuration
+├── .github/workflows/          # CI/CD workflows
 ├── deployment/                 # Deployment configuration and scripts
 ├── docs/                       # Project documentation and reports
+│   ├── archive/                # Historical development documents
+│   └── reports/                # Feature and testing reports
 ├── logs/                       # Runtime and diagnostic logs
-│   └── test_reports/           # Archived manual test output
-├── scripts/                    # Cross-platform helper scripts
+├── scripts/                    # Utility scripts and helper tools
 ├── sims_project/               # Django project configuration
 │   ├── settings.py             # Django settings module
 │   ├── urls.py                 # Root URL patterns
-│   └── wsgi.py                 # WSGI configuration
+│   ├── wsgi.py                 # WSGI configuration
+│   └── health.py               # Health check endpoints
 ├── sims/                       # Core Django applications
-│   ├── users/                  # User management and authentication
+│   ├── analytics/              # Analytics and metrics
+│   ├── attendance/             # Attendance tracking
+│   ├── audit/                  # Audit trail functionality
+│   ├── bulk/                   # Bulk operations
 │   ├── cases/                  # Clinical case management
-│   ├── logbook/                # Digital logbook functionality
 │   ├── certificates/           # Certification tracking
-│   └── rotations/              # Training rotation management
+│   ├── logbook/                # Digital logbook functionality
+│   ├── notifications/          # Notification system
+│   ├── reports/                # Report generation
+│   ├── rotations/              # Training rotation management
+│   ├── search/                 # Global search functionality
+│   └── users/                  # User management and authentication
 ├── static/                     # Project static assets
 │   ├── css/                    # Compiled CSS
 │   ├── images/                 # Shared imagery and icons
 │   └── js/                     # JavaScript bundles
 ├── staticfiles/                # Collected static files for deployment
 ├── templates/                  # Django template files
-├── tests/                      # Automated and manual verification scripts
-│   ├── manual/                 # CLI utilities for manual validation
-│   ├── resources/              # Supplementary fixtures (HTML, JSON, etc.)
-│   └── results/                # Reserved for generated test artefacts
-└── utils/                      # Data setup and diagnostic utilities
+└── tests/                      # Test files and test utilities
+    ├── factories/              # Test data factories
+    ├── feature_verification/   # Feature verification tests
+    └── manual/                 # Manual test utilities
 ```
 
 ## 👥 User Roles
