@@ -64,15 +64,22 @@ class BulkImportView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request: Request) -> Response:
+        from django.core.exceptions import ValidationError as DjangoValidationError
+        
         serializer = BulkImportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         uploaded_file = serializer.validated_data["file"]
         service = BulkService(request.user)
-        operation = service.import_logbook_entries(
-            uploaded_file,
-            dry_run=serializer.validated_data["dry_run"],
-            allow_partial=serializer.validated_data["allow_partial"],
-        )
+        
+        try:
+            operation = service.import_logbook_entries(
+                uploaded_file,
+                dry_run=serializer.validated_data["dry_run"],
+                allow_partial=serializer.validated_data["allow_partial"],
+            )
+        except DjangoValidationError as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            
         status_code = (
             status.HTTP_200_OK
             if operation.status == BulkOperation.STATUS_COMPLETED

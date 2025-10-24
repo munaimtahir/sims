@@ -682,7 +682,11 @@ class RotationIntegrationTests(TestCase):
 
     def test_complete_rotation_workflow(self):
         """Test the complete rotation workflow from creation to evaluation"""
+        # First try getting the create page to ensure we can access it
         self.client.login(username="admin_test", password="testpass123")
+        get_response = self.client.get(reverse("rotations:create"))
+        self.assertEqual(get_response.status_code, 200, 
+                        f"GET failed. Cannot access create page. Status: {get_response.status_code}")
 
         # NOTE: Due to validation conflicts (Model prevents future dates, Form prevents past dates)
         # we create rotation directly via model to test the workflow
@@ -709,6 +713,10 @@ class RotationIntegrationTests(TestCase):
         # 2. View rotation details
         response = self.client.get(reverse("rotations:detail", kwargs={"pk": rotation.pk}))
         self.assertEqual(response.status_code, 200)
+
+        # Update rotation status to ongoing so it can be evaluated
+        rotation.status = "ongoing"
+        rotation.save()
 
         # 3. Login as supervisor and create evaluation
         self.client.login(username="supervisor_test", password="testpass123")
