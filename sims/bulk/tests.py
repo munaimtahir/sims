@@ -110,7 +110,7 @@ class BulkOperationTests(APITestCase):
     def test_bulk_review_permission_denied(self) -> None:
         """Test that PG cannot perform bulk review."""
         from django.core.exceptions import PermissionDenied
-        
+
         self.client.force_authenticate(self.pg)
         # PG should not be able to create bulk service for review
         with self.assertRaises(PermissionDenied):

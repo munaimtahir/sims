@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,7 +7,7 @@ from .serializers import DepartmentSerializer, BatchSerializer, StudentProfileSe
 
 class DepartmentViewSet(viewsets.ModelViewSet):
     """ViewSet for Department CRUD operations."""
-    
+
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -19,7 +18,7 @@ class DepartmentViewSet(viewsets.ModelViewSet):
 
 class BatchViewSet(viewsets.ModelViewSet):
     """ViewSet for Batch CRUD operations."""
-    
+
     queryset = Batch.objects.all()
     serializer_class = BatchSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -38,7 +37,7 @@ class BatchViewSet(viewsets.ModelViewSet):
 
 class StudentProfileViewSet(viewsets.ModelViewSet):
     """ViewSet for StudentProfile CRUD operations."""
-    
+
     queryset = StudentProfile.objects.select_related("user", "batch", "batch__department")
     serializer_class = StudentProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -50,7 +49,7 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
         """Filter based on user role."""
         user = self.request.user
         queryset = super().get_queryset()
-        
+
         if user.role == "pg":
             # PG students can only see their own profile
             return queryset.filter(user=user)
@@ -65,10 +64,10 @@ class StudentProfileViewSet(viewsets.ModelViewSet):
         """Update student status."""
         student = self.get_object()
         new_status = request.data.get("status")
-        
+
         if new_status in dict(StudentProfile.STATUS_CHOICES):
             student.update_status(new_status)
             serializer = self.get_serializer(student)
             return Response(serializer.data)
-        
+
         return Response({"error": "Invalid status"}, status=400)

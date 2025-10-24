@@ -349,7 +349,7 @@ class SearchAPITests(APITestCase):
             role="admin",
             email="other@test.com",
         )
-        
+
         self.client.force_authenticate(self.pg)
         url = reverse("search:global_search")
         response = self.client.get(url, {"q": "other_admin"})

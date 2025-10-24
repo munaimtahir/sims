@@ -4,7 +4,7 @@ from .models import Department, Batch, StudentProfile
 
 class DepartmentSerializer(serializers.ModelSerializer):
     head_name = serializers.CharField(source="head.get_full_name", read_only=True)
-    
+
     class Meta:
         model = Department
         fields = [
@@ -26,7 +26,7 @@ class BatchSerializer(serializers.ModelSerializer):
     coordinator_name = serializers.CharField(source="coordinator.get_full_name", read_only=True)
     current_strength = serializers.IntegerField(read_only=True)
     is_full = serializers.BooleanField(read_only=True)
-    
+
     class Meta:
         model = Batch
         fields = [
@@ -63,7 +63,7 @@ class StudentProfileSerializer(serializers.ModelSerializer):
     department_name = serializers.CharField(source="batch.department.name", read_only=True)
     is_active = serializers.BooleanField(read_only=True)
     duration = serializers.IntegerField(source="duration_in_program", read_only=True)
-    
+
     class Meta:
         model = StudentProfile
         fields = [
@@ -92,4 +92,10 @@ class StudentProfileSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
-        read_only_fields = ["created_at", "updated_at", "status_updated_at", "is_active", "duration"]
+        read_only_fields = [
+            "created_at",
+            "updated_at",
+            "status_updated_at",
+            "is_active",
+            "duration",
+        ]
