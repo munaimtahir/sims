@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db import OperationalError, ProgrammingError
 
 
 class LogbookConfig(AppConfig):
@@ -72,6 +73,9 @@ class LogbookConfig(AppConfig):
             # Initialize default procedures and diagnoses
             self._setup_default_clinical_data()
 
+        except (OperationalError, ProgrammingError):
+            # Database not ready (migrations not applied). Skip DB-dependent initialization.
+            pass
         except ImportError:
             pass
         except Exception as e:
