@@ -1,4 +1,4 @@
-# SIMS - Surgical Information Management System
+# SIMS - Student (Postgrduate) Information Management System
 
 A comprehensive Django web application for managing postgraduate medical residents' academic and training records.
 
