@@ -187,12 +187,12 @@ class AnalyticsAPITests(APITestCase):
         """Test that cache is properly used and can be invalidated."""
         params = TrendRequest(window=7)
         cache_key = params.cache_key(self.pg.pk)
-        
+
         # First call should cache
         data1 = trend_for_user(self.admin, self.pg, params)
         cached1 = cache.get(cache_key)
         self.assertEqual(data1, cached1)
-        
+
         # Add new entry
         LogbookEntry.objects.create(
             pg=self.pg,
@@ -207,10 +207,10 @@ class AnalyticsAPITests(APITestCase):
             submitted_to_supervisor_at=timezone.now(),
             supervisor_action_at=timezone.now(),
         )
-        
+
         # Clear cache
         cache.delete(cache_key)
-        
+
         # Should get new data
         data2 = trend_for_user(self.admin, self.pg, params)
         self.assertIsNotNone(data2)

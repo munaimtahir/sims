@@ -135,6 +135,7 @@ class ReportingTests(APITestCase):
     def test_scheduled_report_email_sent(self) -> None:
         """Test that scheduled report sends email."""
         from django.core import mail
+
         schedule = ScheduledReport.objects.create(
             template=self.template,
             created_by=self.admin,

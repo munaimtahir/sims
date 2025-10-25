@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.db import models
 from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -8,7 +8,7 @@ from .serializers import ExamSerializer, ScoreSerializer
 
 class ExamViewSet(viewsets.ModelViewSet):
     """ViewSet for Exam CRUD operations."""
-    
+
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -29,29 +29,33 @@ class ExamViewSet(viewsets.ModelViewSet):
         """Get exam statistics."""
         exam = self.get_object()
         scores = exam.scores.all()
-        
+
         if not scores.exists():
             return Response({"message": "No scores recorded yet"})
-        
+
         total_students = scores.count()
         passed = scores.filter(is_passing=True).count()
         failed = total_students - passed
         average_marks = scores.aggregate(avg=models.Avg("marks_obtained"))["avg"]
-        
-        return Response({
-            "total_students": total_students,
-            "passed": passed,
-            "failed": failed,
-            "pass_percentage": round((passed / total_students) * 100, 2) if total_students > 0 else 0,
-            "average_marks": round(average_marks, 2) if average_marks else 0,
-            "max_marks": exam.max_marks,
-            "passing_marks": exam.passing_marks,
-        })
+
+        return Response(
+            {
+                "total_students": total_students,
+                "passed": passed,
+                "failed": failed,
+                "pass_percentage": (
+                    round((passed / total_students) * 100, 2) if total_students > 0 else 0
+                ),
+                "average_marks": round(average_marks, 2) if average_marks else 0,
+                "max_marks": exam.max_marks,
+                "passing_marks": exam.passing_marks,
+            }
+        )
 
 
 class ScoreViewSet(viewsets.ModelViewSet):
     """ViewSet for Score CRUD operations."""
-    
+
     queryset = Score.objects.select_related("exam", "student", "entered_by")
     serializer_class = ScoreSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -63,7 +67,7 @@ class ScoreViewSet(viewsets.ModelViewSet):
         """Filter based on user role."""
         user = self.request.user
         queryset = super().get_queryset()
-        
+
         if user.role == "pg":
             # PG students can only see their own scores
             return queryset.filter(student=user)
@@ -76,7 +80,7 @@ class ScoreViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         """Set entered_by to current user and check eligibility."""
         score = serializer.save(entered_by=self.request.user)
-        
+
         # Check eligibility if required
         if score.exam.requires_eligibility:
             is_eligible, reason = score.check_eligibility()
@@ -90,9 +94,9 @@ class ScoreViewSet(viewsets.ModelViewSet):
         if request.user.role != "pg":
             return Response(
                 {"error": "Only PG students can access this endpoint"},
-                status=status.HTTP_403_FORBIDDEN
+                status=status.HTTP_403_FORBIDDEN,
             )
-        
+
         scores = Score.objects.filter(student=request.user)
         serializer = self.get_serializer(scores, many=True)
         return Response(serializer.data)

@@ -27,30 +27,35 @@ class StudentProfileAdmin(admin.ModelAdmin):
     ordering = ["roll_number"]
     date_hierarchy = "admission_date"
     readonly_fields = ["created_at", "updated_at", "status_updated_at"]
-    
+
     fieldsets = (
-        ("Basic Information", {
-            "fields": ("user", "batch", "roll_number", "status")
-        }),
-        ("Academic Dates", {
-            "fields": ("admission_date", "expected_graduation_date", "actual_graduation_date")
-        }),
-        ("Performance", {
-            "fields": ("cgpa",)
-        }),
-        ("Previous Education", {
-            "fields": ("previous_institution", "previous_qualification"),
-            "classes": ("collapse",)
-        }),
-        ("Emergency Contact", {
-            "fields": ("emergency_contact_name", "emergency_contact_phone", "emergency_contact_relation"),
-            "classes": ("collapse",)
-        }),
-        ("Additional", {
-            "fields": ("remarks",)
-        }),
-        ("Timestamps", {
-            "fields": ("status_updated_at", "created_at", "updated_at"),
-            "classes": ("collapse",)
-        }),
+        ("Basic Information", {"fields": ("user", "batch", "roll_number", "status")}),
+        (
+            "Academic Dates",
+            {"fields": ("admission_date", "expected_graduation_date", "actual_graduation_date")},
+        ),
+        ("Performance", {"fields": ("cgpa",)}),
+        (
+            "Previous Education",
+            {
+                "fields": ("previous_institution", "previous_qualification"),
+                "classes": ("collapse",),
+            },
+        ),
+        (
+            "Emergency Contact",
+            {
+                "fields": (
+                    "emergency_contact_name",
+                    "emergency_contact_phone",
+                    "emergency_contact_relation",
+                ),
+                "classes": ("collapse",),
+            },
+        ),
+        ("Additional", {"fields": ("remarks",)}),
+        (
+            "Timestamps",
+            {"fields": ("status_updated_at", "created_at", "updated_at"), "classes": ("collapse",)},
+        ),
     )

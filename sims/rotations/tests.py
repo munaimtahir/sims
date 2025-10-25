@@ -685,8 +685,11 @@ class RotationIntegrationTests(TestCase):
         # First try getting the create page to ensure we can access it
         self.client.login(username="admin_test", password="testpass123")
         get_response = self.client.get(reverse("rotations:create"))
-        self.assertEqual(get_response.status_code, 200, 
-                        f"GET failed. Cannot access create page. Status: {get_response.status_code}")
+        self.assertEqual(
+            get_response.status_code,
+            200,
+            f"GET failed. Cannot access create page. Status: {get_response.status_code}",
+        )
 
         # NOTE: Due to validation conflicts (Model prevents future dates, Form prevents past dates)
         # we create rotation directly via model to test the workflow

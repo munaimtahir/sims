@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db import OperationalError, ProgrammingError
 
 
 class RotationsConfig(AppConfig):
@@ -52,6 +53,9 @@ class RotationsConfig(AppConfig):
                     codename=codename, name=name, content_type=content_type
                 )
 
+        except (OperationalError, ProgrammingError):
+            # Database not ready (migrations not applied). Skip DB-dependent initialization.
+            pass
         except ImportError:
             pass
         except Exception as e:

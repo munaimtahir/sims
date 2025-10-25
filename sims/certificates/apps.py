@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db import OperationalError, ProgrammingError
 
 
 class CertificatesConfig(AppConfig):
@@ -56,6 +57,9 @@ class CertificatesConfig(AppConfig):
             # Set up periodic tasks for certificate expiry checking
             self._setup_certificate_tasks()
 
+        except (OperationalError, ProgrammingError):
+            # Database not ready (migrations not applied). Skip DB-dependent initialization.
+            pass
         except ImportError:
             pass
         except Exception as e:

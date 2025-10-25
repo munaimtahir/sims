@@ -15,7 +15,7 @@ from django.utils import timezone
 
 class Department(models.Model):
     """Academic department model."""
-    
+
     name = models.CharField(max_length=200, unique=True, help_text="Department name")
     code = models.CharField(max_length=20, unique=True, help_text="Department code")
     description = models.TextField(blank=True, help_text="Department description")
@@ -47,7 +47,7 @@ class Department(models.Model):
 
 class Batch(models.Model):
     """Student batch/cohort model."""
-    
+
     PROGRAM_CHOICES = [
         ("mbbs", "MBBS"),
         ("md", "MD"),
@@ -57,7 +57,7 @@ class Batch(models.Model):
         ("diploma", "Diploma"),
         ("fellowship", "Fellowship"),
     ]
-    
+
     name = models.CharField(max_length=100, help_text="Batch name (e.g., 2024 Batch)")
     program = models.CharField(
         max_length=50,
@@ -118,7 +118,7 @@ class StudentProfile(models.Model):
     Extended student profile tracking admission to graduation.
     Linked to User model for authentication.
     """
-    
+
     STATUS_CHOICES = [
         ("admitted", "Admitted"),
         ("enrolled", "Enrolled"),
@@ -129,7 +129,7 @@ class StudentProfile(models.Model):
         ("graduated", "Graduated"),
         ("expelled", "Expelled"),
     ]
-    
+
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -137,7 +137,7 @@ class StudentProfile(models.Model):
         limit_choices_to={"role": "pg"},
         help_text="Linked user account",
     )
-    
+
     # Academic Information
     batch = models.ForeignKey(
         Batch,
@@ -161,7 +161,7 @@ class StudentProfile(models.Model):
         blank=True,
         help_text="Actual graduation date",
     )
-    
+
     # Status
     status = models.CharField(
         max_length=20,
@@ -173,7 +173,7 @@ class StudentProfile(models.Model):
         default=timezone.now,
         help_text="Last status change date",
     )
-    
+
     # Academic Performance
     cgpa = models.DecimalField(
         max_digits=4,
@@ -183,7 +183,7 @@ class StudentProfile(models.Model):
         validators=[MinValueValidator(0.0), MaxValueValidator(10.0)],
         help_text="Cumulative GPA",
     )
-    
+
     # Additional Information
     previous_institution = models.CharField(
         max_length=200,
@@ -195,7 +195,7 @@ class StudentProfile(models.Model):
         blank=True,
         help_text="Previous qualification",
     )
-    
+
     # Emergency Contact
     emergency_contact_name = models.CharField(
         max_length=200,
@@ -212,10 +212,10 @@ class StudentProfile(models.Model):
         blank=True,
         help_text="Relationship to student",
     )
-    
+
     # Remarks
     remarks = models.TextField(blank=True, help_text="Additional remarks")
-    
+
     # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

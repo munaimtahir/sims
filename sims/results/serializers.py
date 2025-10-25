@@ -1,5 +1,4 @@
 from rest_framework import serializers
-from django.db import models
 from .models import Exam, Score
 
 
@@ -7,7 +6,7 @@ class ExamSerializer(serializers.ModelSerializer):
     conducted_by_name = serializers.CharField(source="conducted_by.get_full_name", read_only=True)
     rotation_name = serializers.CharField(source="rotation.name", read_only=True)
     total_scores = serializers.IntegerField(read_only=True)
-    
+
     class Meta:
         model = Exam
         fields = [
@@ -44,11 +43,13 @@ class ExamSerializer(serializers.ModelSerializer):
 
 class ScoreSerializer(serializers.ModelSerializer):
     student_name = serializers.CharField(source="student.get_full_name", read_only=True)
-    student_roll = serializers.CharField(source="student.student_profile.roll_number", read_only=True)
+    student_roll = serializers.CharField(
+        source="student.student_profile.roll_number", read_only=True
+    )
     exam_title = serializers.CharField(source="exam.title", read_only=True)
     exam_date = serializers.DateField(source="exam.date", read_only=True)
     entered_by_name = serializers.CharField(source="entered_by.get_full_name", read_only=True)
-    
+
     class Meta:
         model = Score
         fields = [
