@@ -14,11 +14,11 @@
 This document outlines a structured 6-phase development plan for implementing 60+ pending features in the SIMS application over the next 6-12 months. The plan prioritizes critical security and infrastructure features, followed by incremental enhancement phases.
 
 **Key Milestones**:
-- ✅ Phase 1 (Weeks 1-8): Critical pre-deployment features
-- ✅ Phase 2 (Weeks 9-12): Post-deployment stabilization
-- ✅ Phase 3 (Weeks 13-24): Core enhancement features
-- ✅ Phase 4 (Weeks 25-36): Advanced capabilities
-- ✅ Phase 5 (Weeks 37-48): Future enhancements
+- ✅ Phase 1: Critical pre-deployment features (20 developer-weeks)
+- ✅ Phase 2: Post-deployment stabilization (16 developer-weeks)
+- ✅ Phase 3: Core enhancement features (48 developer-weeks)
+- ✅ Phase 4: Advanced capabilities (36 developer-weeks)
+- ✅ Phase 5: Future enhancements (40+ developer-weeks)
 
 ---
 
@@ -41,58 +41,60 @@ This document outlines a structured 6-phase development plan for implementing 60
 ### Overview
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│ PHASE 1: CRITICAL (Weeks 1-8)                                   │
-│ Security, Backup, Monitoring, Compliance - 8 features           │
-│ Team: 2-3 developers + 1 DevOps                                 │
-├─────────────────────────────────────────────────────────────────┤
-│ PHASE 2: POST-DEPLOY (Weeks 9-12)                              │
-│ Notifications, Analytics, Search, Optimization - 12 features    │
-│ Team: 3-4 developers + 1 QA                                     │
-├─────────────────────────────────────────────────────────────────┤
-│ PHASE 3: ENHANCEMENT (Weeks 13-24)                             │
-│ Communication, Documents, Competency, QA - 20 features          │
-│ Team: 4-5 developers + 2 QA                                     │
-├─────────────────────────────────────────────────────────────────┤
-│ PHASE 4: ADVANCED (Weeks 25-36)                                │
-│ SSO, Multi-lang, Calendar, BI - 10 features                     │
-│ Team: 3-4 developers + 1 QA                                     │
-├─────────────────────────────────────────────────────────────────┤
-│ PHASE 5: FUTURE (Weeks 37-48+)                                 │
-│ Mobile, Real-time, Gamification, Research - 10+ features        │
-│ Team: 4-5 developers + 1 QA                                     │
-└─────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────┐
+│ PHASE 1: CRITICAL (20 developer-weeks)                         │
+│ Security, Backup, Monitoring, Compliance - 8 features          │
+│ Team: 2-3 developers + 1 DevOps (2-3 concurrent)               │
+├────────────────────────────────────────────────────────────────┤
+│ PHASE 2: POST-DEPLOY (16 developer-weeks)                      │
+│ Notifications, Analytics, Search, Optimization - 12 features   │
+│ Team: 3-4 developers + 1 QA (2-3 concurrent)                   │
+├────────────────────────────────────────────────────────────────┤
+│ PHASE 3: ENHANCEMENT (48 developer-weeks)                      │
+│ Communication, Documents, Competency, QA - 20 features         │
+│ Team: 4-5 developers + 2 QA (3-4 concurrent)                   │
+├────────────────────────────────────────────────────────────────┤
+│ PHASE 4: ADVANCED (36 developer-weeks)                         │
+│ SSO, Multi-lang, Calendar, BI - 10 features                    │
+│ Team: 3-4 developers + 1 QA (2-3 concurrent)                   │
+├────────────────────────────────────────────────────────────────┤
+│ PHASE 5: FUTURE (40+ developer-weeks)                          │
+│ Mobile, Real-time, Gamification, Research - 10+ features       │
+│ Team: 4-5 developers + 1 QA (2-3 concurrent)                   │
+└────────────────────────────────────────────────────────────────┘
 ```
+
+**Note**: With AI Agent Build Model: Actual calendar time for each phase depends on number of concurrent AI agents assigned. The developer-weeks are independent of duration.
 
 ---
 
 ## Phase Details
 
-### 🔴 PHASE 1: CRITICAL PRE-DEPLOYMENT (Weeks 1-8)
+### 🔴 PHASE 1: CRITICAL PRE-DEPLOYMENT
 
 **Goal**: Establish security, backup, and monitoring foundation before production deployment
 
-**Duration**: 8 weeks  
-**Team Size**: 2-3 developers + 1 DevOps engineer  
 **Total Effort**: 20 developer-weeks  
+**Team Size**: 2-3 developers + 1 DevOps engineer  
+**Concurrent Resources**: 2-3 AI agents working in parallel  
 **Budget Impact**: Infrastructure costs (~$500-1000/month)
 
 #### Features in This Phase
 
 | # | Feature | Effort | Lead | Dependencies |
 |---|---------|--------|------|--------------|
-| 1.1 | Two-Factor Authentication | 3 weeks | Backend Dev | Authentication system |
-| 1.2 | Session Security | 2 weeks | Backend Dev | User model |
-| 1.3 | API Security (Rate Limiting) | 2 weeks | Backend Dev | API framework |
-| 1.4 | Audit & Compliance Logging | 2 weeks | Backend Dev | Database |
-| 1.5 | Automated Backup System | 3 weeks | DevOps | Infrastructure |
-| 1.6 | Monitoring & Alerting | 3 weeks | DevOps + Backend | Infrastructure |
-| 1.7 | Compliance Framework | 2 weeks | Product Manager | Requirements |
-| 1.8 | Data Protection (Encryption) | 2 weeks | Backend Dev | Database security |
+| 1.1 | Two-Factor Authentication | 3 dev-weeks | Backend Dev | Authentication system |
+| 1.2 | Session Security | 2 dev-weeks | Backend Dev | User model |
+| 1.3 | API Security (Rate Limiting) | 2 dev-weeks | Backend Dev | API framework |
+| 1.4 | Audit & Compliance Logging | 2 dev-weeks | Backend Dev | Database |
+| 1.5 | Automated Backup System | 3 dev-weeks | DevOps | Infrastructure |
+| 1.6 | Monitoring & Alerting | 3 dev-weeks | DevOps + Backend | Infrastructure |
+| 1.7 | Compliance Framework | 2 dev-weeks | Product Manager | Requirements |
+| 1.8 | Data Protection (Encryption) | 2 dev-weeks | Backend Dev | Database security |
 
 #### Phase 1 Detailed Tasks
 
-**Week 1-2: Two-Factor Authentication**
+**Feature 1.1: Two-Factor Authentication**
 ```
 Backend Developer A:
 - [ ] Design 2FA system architecture
@@ -115,7 +117,7 @@ QA:
 - [ ] Test edge cases (expired codes, etc.)
 ```
 
-**Week 3-4: Session Security + API Rate Limiting**
+**Feature 1.2-1.3: Session Security + API Rate Limiting**
 ```
 Backend Developer B:
 - [ ] Implement session timeout middleware
@@ -131,7 +133,7 @@ DevOps:
 - [ ] Add monitoring for rate limit hits
 ```
 
-**Week 5-6: Backup System**
+**Feature 1.5: Backup System**
 ```
 DevOps Engineer:
 - [ ] Design backup architecture
@@ -148,7 +150,7 @@ Backend Developer:
 - [ ] Implement backup verification
 ```
 
-**Week 7-8: Monitoring & Alerting**
+**Feature 1.6: Monitoring & Alerting**
 ```
 DevOps Engineer:
 - [ ] Set up Prometheus metrics collection
@@ -188,29 +190,28 @@ Backend Developer:
 
 ---
 
-### 🟠 PHASE 2: POST-DEPLOYMENT STABILIZATION (Weeks 9-12)
+### 🟠 PHASE 2: POST-DEPLOYMENT STABILIZATION
 
 **Goal**: Stabilize production deployment and improve core functionality
 
-**Duration**: 4 weeks  
-**Team Size**: 3-4 developers + 1 QA engineer  
 **Total Effort**: 16 developer-weeks  
-**Parallel with Phase 1 final weeks**: Weeks 7-12
+**Team Size**: 3-4 developers + 1 QA engineer  
+**Concurrent Resources**: 2-3 AI agents working in parallel
 
 #### Features in This Phase
 
 | # | Feature | Effort | Lead | Dependencies |
 |---|---------|--------|------|--------------|
-| 2.1 | Notification System | 3 weeks | Backend Dev | Email config, Celery |
-| 2.2 | Analytics Enhancement | 2 weeks | Backend Dev | Database, data |
-| 2.3 | Global Search | 2 weeks | Backend Dev | Search indexing |
-| 2.4 | Bulk Operations | 2 weeks | Backend Dev | Forms, models |
-| 2.5 | Performance Optimization | 2 weeks | Backend Dev | Profiling |
-| 2.6 | Bug Fixes & Stabilization | 3 weeks | Developers | Testing results |
+| 2.1 | Notification System | 3 dev-weeks | Backend Dev | Email config, Celery |
+| 2.2 | Analytics Enhancement | 2 dev-weeks | Backend Dev | Database, data |
+| 2.3 | Global Search | 2 dev-weeks | Backend Dev | Search indexing |
+| 2.4 | Bulk Operations | 2 dev-weeks | Backend Dev | Forms, models |
+| 2.5 | Performance Optimization | 2 dev-weeks | Backend Dev | Profiling |
+| 2.6 | Bug Fixes & Stabilization | 3 dev-weeks | Developers | Testing results |
 
 #### Notification System Breakdown
 
-**Email Notifications** (2 weeks):
+**Email Notifications** (2 dev-weeks):
 ```
 Backend Developer A:
 - [ ] Create notification event system
@@ -231,7 +232,7 @@ Frontend Developer:
 - [ ] Build notification history view
 ```
 
-**In-App Notifications** (1 week):
+**In-App Notifications** (1 dev-week):
 ```
 Backend Developer:
 - [ ] Create notification model
@@ -246,28 +247,18 @@ Frontend Developer:
 - [ ] Add mark as read functionality
 ```
 
-#### Phase 2 Timeline
+#### Phase 2 Execution Strategy
 
 ```
-Week 9:
-- Start notification system development
-- Begin analytics enhancement
-- Perform performance profiling
+Parallel Development Streams:
+- AI Agent 1: Notification System (3 dev-weeks)
+- AI Agent 2: Analytics & Search (2 dev-weeks)
+- AI Agent 3: Performance Optimization & Bug Fixes (3 dev-weeks)
 
-Week 10:
-- Complete email notification infrastructure
-- Implement global search indexing
-- Start database optimization
-
-Week 11:
-- Complete in-app notifications
-- Finish bulk operations
-- Complete performance optimizations
-
-Week 12:
-- QA testing for all features
-- Bug fixes based on testing
-- Deploy to production
+With Concurrent Work:
+- Actual calendar time depends on number of agents deployed
+- Recommend: 2-3 concurrent AI agents for optimal velocity
+- Sequential delivery of stabilized features
 ```
 
 #### Phase 2 Success Metrics
@@ -281,26 +272,26 @@ Week 12:
 
 ---
 
-### 🟡 PHASE 3: CORE ENHANCEMENT (Weeks 13-24)
+### 🟡 PHASE 3: CORE ENHANCEMENT
 
 **Goal**: Implement core institutional features
 
-**Duration**: 12 weeks  
+**Total Effort**: 48 developer-weeks  
 **Team Size**: 4-5 developers + 2 QA engineers  
-**Total Effort**: 48 developer-weeks
+**Concurrent Resources**: 3-4 AI agents working in parallel
 
 #### Features in This Phase
 
-| # | Feature | Effort | Lead | Weeks |
-|---|---------|--------|------|-------|
-| 3.1 | Advanced Scheduling | 4 weeks | Backend Dev | 13-16 |
-| 3.2 | Communication Tools | 4 weeks | Full Stack | 14-17 |
-| 3.3 | Document Management | 4 weeks | Backend Dev | 16-19 |
-| 3.4 | Competency Framework | 5 weeks | Backend Dev | 18-22 |
-| 3.5 | Quality Assurance Module | 5 weeks | Backend Dev | 19-23 |
+| # | Feature | Effort | Lead | Dependencies |
+|---|---------|--------|------|--------------|
+| 3.1 | Advanced Scheduling | 4 dev-weeks | Backend Dev | Core models |
+| 3.2 | Communication Tools | 4 dev-weeks | Full Stack | Database, UI |
+| 3.3 | Document Management | 4 dev-weeks | Backend Dev | Storage, permissions |
+| 3.4 | Competency Framework | 5 dev-weeks | Backend Dev | Assessment models |
+| 3.5 | Quality Assurance Module | 5 dev-weeks | Backend Dev | Audit trail |
 | 3.6 | Performance Fine-tuning | 2 weeks | Backend Dev | 22-24 |
 
-#### Advanced Scheduling (4 weeks, Weeks 13-16)
+#### Advanced Scheduling (4 dev-weeks)
 
 **Sub-features**:
 - Automated rotation scheduling algorithm
@@ -310,32 +301,26 @@ Week 12:
 
 **Implementation**:
 ```
-Week 13:
+Phase Development Stream:
 - [ ] Design scheduling algorithm
 - [ ] Create RotationSwap model
 - [ ] Create Leave model
 - [ ] API endpoints
-
-Week 14:
 - [ ] Implement swap request workflow
 - [ ] Add supervisor approval system
 - [ ] Create conflict detection logic
 - [ ] Unit tests
-
-Week 15:
 - [ ] Build UI for swap requests
 - [ ] Create leave management interface
 - [ ] Integration tests
 - [ ] Performance testing
-
-Week 16:
 - [ ] Bug fixes
 - [ ] Final testing
 - [ ] Documentation
 - [ ] Production deployment
 ```
 
-#### Communication Tools (4 weeks, Weeks 14-17)
+#### Communication Tools (4 dev-weeks)
 
 **Sub-features**:
 - Internal messaging system
@@ -344,20 +329,20 @@ Week 16:
 
 **Development**:
 ```
-Week 14-15:
+Backend Phase:
 - [ ] Message model and API
 - [ ] Discussion model and API
 - [ ] Announcement model and API
 - [ ] Backend logic
 
-Week 16-17:
+Frontend Phase:
 - [ ] UI components for messaging
 - [ ] Forum UI components
 - [ ] Announcement board UI
 - [ ] Integration and testing
 ```
 
-#### Document Management (4 weeks, Weeks 16-19)
+#### Document Management (4 dev-weeks)
 
 **Sub-features**:
 - Version control
@@ -365,7 +350,7 @@ Week 16-17:
 - Collaboration
 - E-signature support
 
-#### Competency Framework (5 weeks, Weeks 18-22)
+#### Competency Framework (5 dev-weeks)
 
 **Sub-features**:
 - Competency mapping
@@ -373,7 +358,7 @@ Week 16-17:
 - Learning objectives
 - Milestone evaluations
 
-#### Quality Assurance Module (5 weeks, Weeks 19-23)
+#### Quality Assurance Module (5 dev-weeks)
 
 **Sub-features**:
 - Incident reporting
@@ -393,25 +378,25 @@ Week 16-17:
 
 ---
 
-### 🔵 PHASE 4: ADVANCED CAPABILITIES (Weeks 25-36)
+### 🔵 PHASE 4: ADVANCED CAPABILITIES
 
 **Goal**: Add advanced institutional and security features
 
-**Duration**: 12 weeks  
+**Total Effort**: 36 developer-weeks  
 **Team Size**: 3-4 developers + 1 QA engineer  
-**Total Effort**: 36 developer-weeks
+**Concurrent Resources**: 2-3 AI agents working in parallel
 
 #### Features in This Phase
 
-| # | Feature | Effort | Weeks |
-|---|---------|--------|-------|
-| 4.1 | SSO/LDAP Integration | 3 weeks | 25-27 |
-| 4.2 | Multi-Language Support | 3 weeks | 26-28 |
-| 4.3 | Calendar Integration | 3 weeks | 29-31 |
-| 4.4 | Advanced BI Tools | 3 weeks | 32-34 |
-| 4.5 | Testing & Optimization | 2 weeks | 35-36 |
+| # | Feature | Effort |
+|---|---------|--------|
+| 4.1 | SSO/LDAP Integration | 3 dev-weeks |
+| 4.2 | Multi-Language Support | 3 dev-weeks |
+| 4.3 | Calendar Integration | 3 dev-weeks |
+| 4.4 | Advanced BI Tools | 3 dev-weeks |
+| 4.5 | Testing & Optimization | 2 dev-weeks |
 
-#### SSO/LDAP Integration (3 weeks)
+#### SSO/LDAP Integration (3 dev-weeks)
 
 **Features**:
 - OAuth 2.0 support (Google, Microsoft)
@@ -420,51 +405,44 @@ Week 16-17:
 
 **Implementation**:
 ```
-Week 25:
+Development Phase:
 - [ ] Design SSO architecture
 - [ ] Integrate python-social-auth
 - [ ] Implement OAuth2 providers
 - [ ] Unit tests
-
-Week 26:
 - [ ] Design LDAP integration
 - [ ] Implement LDAP backend
 - [ ] Create user sync process
 - [ ] Tests
-
-Week 27:
 - [ ] UI for OAuth login
 - [ ] Admin panel for LDAP config
 - [ ] Integration tests
 - [ ] Documentation
 ```
 
-#### Multi-Language Support (3 weeks)
+#### Multi-Language Support (3 dev-weeks)
 
 **Languages**: English (existing), Arabic (primary), others TBD
 
 **Implementation**:
 ```
-Week 26-27:
+Translation Phase:
 - [ ] Set up Django i18n
 - [ ] Extract translatable strings
 - [ ] Create translation files
 - [ ] RTL support for Arabic
-
-Week 28:
 - [ ] Implement language switcher
 - [ ] Date/time localization
 - [ ] Testing for each language
 - [ ] Documentation
 ```
 
-#### Calendar Integration (3 weeks)
+#### Calendar Integration (3 dev-weeks)
 
 **Services**: Google Calendar, Outlook Calendar
 
 **Implementation**:
 ```
-Week 29-31:
 - [ ] Google Calendar API integration
 - [ ] Outlook Calendar API integration
 - [ ] Event sync (bidirectional)
@@ -472,7 +450,7 @@ Week 29-31:
 - [ ] Testing and documentation
 ```
 
-#### Advanced BI Tools (3 weeks)
+#### Advanced BI Tools (3 dev-weeks)
 
 **Features**:
 - Custom dashboard builder
@@ -489,61 +467,52 @@ Week 29-31:
 
 ---
 
-### 🔷 PHASE 5: FUTURE ENHANCEMENTS (Weeks 37-48+)
+### 🔷 PHASE 5: FUTURE ENHANCEMENTS
 
 **Goal**: Long-term vision features
 
-**Duration**: 12+ weeks  
+**Total Effort**: 40+ developer-weeks  
 **Team Size**: 4-5 developers + 1 QA engineer  
-**Total Effort**: 40+ developer-weeks
+**Concurrent Resources**: 2-3 AI agents working in parallel
 
 #### Features in This Phase
 
-| # | Feature | Effort | Weeks |
-|---|---------|--------|-------|
-| 5.1 | Progressive Web App | 4 weeks | 37-40 |
-| 5.2 | Real-Time Collaboration | 4 weeks | 38-41 |
-| 5.3 | Gamification | 3 weeks | 42-44 |
-| 5.4 | Research Module | 3 weeks | 43-45 |
-| 5.5 | Mobile Apps (iOS/Android) | 12 weeks | 37-48 |
+| # | Feature | Effort |
+|---|---------|--------|
+| 5.1 | Progressive Web App | 4 dev-weeks |
+| 5.2 | Real-Time Collaboration | 4 dev-weeks |
+| 5.3 | Gamification | 3 dev-weeks |
+| 5.4 | Research Module | 3 dev-weeks |
+| 5.5 | Mobile Apps (iOS/Android) | 12 dev-weeks |
 
-#### Progressive Web App (4 weeks)
+#### Progressive Web App (4 dev-weeks)
 
 - Offline functionality
 - Push notifications
 - Service worker support
 - Install to home screen
 
-#### Real-Time Collaboration (4 weeks)
+#### Real-Time Collaboration (4 dev-weeks)
 
 - WebSocket support
 - Live editing
 - Presence indicators
 - Real-time notifications
 
-#### Mobile Application Development (12 weeks)
+#### Mobile Application Development (12 dev-weeks)
 
 **Technology**: React Native (shared codebase iOS/Android)
 
 ```
-Weeks 37-39: Design & Setup
-- [ ] Mobile app architecture
-- [ ] React Native project setup
-- [ ] Authentication flow
-- [ ] Basic navigation
+Development Streams:
+- AI Agent 1: Mobile app architecture & setup (3 dev-weeks)
+- AI Agent 2: Core features implementation (5 dev-weeks)
+- AI Agent 3: Testing & release (4 dev-weeks)
 
-Weeks 40-44: Core Features
-- [ ] Dashboard screens
-- [ ] Case management screens
-- [ ] Logbook screens
-- [ ] Notifications
-- [ ] Offline sync
-
-Weeks 45-48: Testing & Release
-- [ ] QA testing
-- [ ] Performance optimization
-- [ ] App store submissions
-- [ ] Production release
+Parallel Development Approach:
+- Setup phase completed first
+- Core features begin while setup finalizes
+- Testing proceeds as features complete
 ```
 
 ---
@@ -732,54 +701,49 @@ Each feature should follow this template during development:
 
 ### Phase-by-Phase Resource Plan
 
-#### Phase 1: Weeks 1-8 (Critical Features)
+#### Phase 1: Critical Features (Total 20 dev-weeks)
 ```
-Week 1-2:
-- Senior Backend Dev: 40 hrs (Architecture, code review)
-- Backend Dev: 40 hrs (Implementation)
-- DevOps: 20 hrs (Planning)
-- Total: 100 developer-hours
-
-Week 3-4:
-- Senior Backend Dev: 30 hrs
-- Backend Dev: 40 hrs
-- DevOps: 30 hrs
-- Total: 100 developer-hours
-
-Week 5-8:
-- Senior Backend Dev: 20 hrs/week (Review, mentoring)
-- Backend Dev: 30 hrs/week (Implementation)
-- DevOps: 40 hrs/week (Infrastructure)
-- Total: 90 developer-hours/week
+Resource Allocation:
+- Senior Backend Dev: 8 dev-weeks (Architecture, code review, mentoring)
+- Backend Dev: 8 dev-weeks (Core implementation)
+- DevOps: 4 dev-weeks (Infrastructure setup)
+  
+With AI Agent Build Model:
+- Assign 2-3 AI agents working in parallel on different features
+- Recommended: 1 AI agent per feature stream
+- Total calendar time: Depends on number of concurrent agents
 ```
 
 **Total Phase 1 Effort**: ~20 developer-weeks
 
-#### Phase 2: Weeks 9-12 (Post-Deployment, overlaps with Phase 1)
+#### Phase 2: Post-Deployment (Total 16 dev-weeks)
 ```
-Weekly Allocation:
-- Senior Backend Dev: 20 hrs (Architecture)
-- Backend Dev (A): 40 hrs (Notifications)
-- Backend Dev (B): 40 hrs (Analytics, Search)
-- Frontend Dev: 30 hrs (UI)
-- QA Engineer: 30 hrs (Testing)
-- Total: 160 developer-hours/week
+Parallel Development Streams:
+- Backend Dev (A): 6 dev-weeks (Notifications)
+- Backend Dev (B): 4 dev-weeks (Analytics, Search)
+- Backend Dev (C): 3 dev-weeks (Performance Optimization)
+- Frontend Dev: 2 dev-weeks (UI components)
+- QA Engineer: 1 dev-week (Testing coordination)
+
+Recommended AI Agent Assignment:
+- 2-3 concurrent AI agents on independent features
+- Each agent owns a complete feature stream
 ```
 
 **Total Phase 2 Effort**: ~16 developer-weeks
 
-#### Phase 3: Weeks 13-24 (Core Enhancement)
+#### Phase 3: Core Enhancement (Total 48 dev-weeks)
 ```
-Weekly Allocation:
-- Backend Dev (A): 40 hrs (Scheduling)
-- Backend Dev (B): 40 hrs (Communication)
-- Backend Dev (C): 40 hrs (Documents/Competency)
-- Frontend Dev (A): 30 hrs (UI)
-- Frontend Dev (B): 30 hrs (UI)
-- QA Engineer (A): 30 hrs
-- QA Engineer (B): 30 hrs
-- Senior Dev: 20 hrs (Review)
-- Total: 260 developer-hours/week
+Parallel Development Streams:
+- Backend Dev (A): 12 dev-weeks (Scheduling, Documents)
+- Backend Dev (B): 12 dev-weeks (Communication, Competency)
+- Backend Dev (C): 12 dev-weeks (QA Module, Support)
+- Frontend Dev (A): 8 dev-weeks (UI across features)
+- Frontend Dev (B): 4 dev-weeks (UI and integration)
+
+Recommended AI Agent Assignment:
+- 3-4 concurrent AI agents on major feature streams
+- One agent per major feature to maximize parallelization
 ```
 
 **Total Phase 3 Effort**: ~48 developer-weeks

@@ -22,7 +22,7 @@ These **MUST** be completed before production deployment.
 ### 1. Security Enhancements
 **Priority**: 🔴 CRITICAL  
 **Current Status**: ⚠️ Partially Implemented  
-**Effort**: 2-3 weeks
+**Effort**: 2-3 developer-weeks
 
 - [ ] Two-Factor Authentication (2FA)
   - SMS-based OTP
@@ -51,7 +51,7 @@ These **MUST** be completed before production deployment.
 ### 2. Automated Backup System
 **Priority**: 🔴 CRITICAL  
 **Current Status**: ❌ Not Implemented  
-**Effort**: 2 weeks
+**Effort**: 2 developer-weeks
 
 - [ ] Database Backups
   - Automated daily backups
