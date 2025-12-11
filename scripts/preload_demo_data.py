@@ -2,9 +2,6 @@
 """
 Preload Demo Data Script for SIMS
 
-WARNING: The demo credentials defined here are for development and demo
-purposes only. Never reuse these passwords in production environments.
-
 This script creates comprehensive test data including:
 - Admin, Supervisor, and PG student users
 - Assignments between supervisors and students
@@ -36,6 +33,8 @@ from django.contrib.auth import get_user_model
 from django.db import transaction
 from sims.rotations.models import Hospital, Department, Rotation
 from sims.certificates.models import CertificateType, Certificate
+from sims.logbook.models import LogbookEntry, Procedure
+from sims.cases.models import CaseCategory, ClinicalCase
 
 User = get_user_model()
 
@@ -107,12 +106,12 @@ def create_demo_users():
         username=admin_data['username'],
         defaults=admin_data
     )
-    admin.set_password(admin_data['password'])
-    admin.save()
     if created:
+        admin.set_password(admin_data['password'])
+        admin.save()
         print(f"✓ Created admin: {admin.username}")
     else:
-        print(f"  Admin already exists: {admin.username} (password reset for demo)")
+        print(f"  Admin already exists: {admin.username}")
     
     # Create supervisors
     supervisors = []
@@ -121,12 +120,12 @@ def create_demo_users():
             username=sup_data['username'],
             defaults=sup_data
         )
-        supervisor.set_password(sup_data['password'])
-        supervisor.save()
         if created:
+            supervisor.set_password(sup_data['password'])
+            supervisor.save()
             print(f"✓ Created supervisor: {supervisor.username}")
         else:
-            print(f"  Supervisor already exists: {supervisor.username} (password reset for demo)")
+            print(f"  Supervisor already exists: {supervisor.username}")
         supervisors.append(supervisor)
     
     # Create PG students and assign to supervisors
@@ -140,12 +139,12 @@ def create_demo_users():
             username=pg_data['username'],
             defaults=pg_data
         )
-        student.set_password(pg_data['password'])
-        student.save()
         if created:
+            student.set_password(pg_data['password'])
+            student.save()
             print(f"✓ Created PG student: {student.username} (supervised by {supervisor.username})")
         else:
-            print(f"  PG student already exists: {student.username} (password reset for demo)")
+            print(f"  PG student already exists: {student.username}")
         students.append(student)
     
     return admin, supervisors, students
@@ -340,7 +339,6 @@ def create_logbook_entries(students, supervisors, rotations):
     print("\nCreating logbook entries...")
     print("  Note: Logbook entries require complex field mappings")
     print("  Users can create entries through the web interface for demo")
-    print("  Skipping auto-generation to avoid invalid many-to-many data")
     return []
 
 
@@ -355,7 +353,6 @@ def create_clinical_cases(students, supervisors):
     print("\nCreating clinical cases...")
     print("  Note: Clinical cases require complex field mappings and validation")
     print("  Users can create cases through the web interface for demo")
-    print("  Skipping auto-generation to keep demo data realistic")
     return []
 
 

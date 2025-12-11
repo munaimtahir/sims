@@ -27,13 +27,10 @@ WorkingDirectory=/home/sims/app
 Environment="PATH=/home/sims/env/bin"
 Environment="DJANGO_SETTINGS_MODULE=sims_project.settings"
 
-# Load environment variables from .env file (optional)
-EnvironmentFile=-/home/sims/app/.env
+# Load environment variables from .env file
+EnvironmentFile=/home/sims/app/.env
 
 # Gunicorn execution
-# Ensure log directory exists before starting
-ExecStartPre=/bin/mkdir -p /home/sims/app/logs
-# Recommended: set workers using (2 * CPU cores) + 1 as a starting point
 ExecStart=/home/sims/env/bin/gunicorn \
           --workers 3 \
           --bind unix:/home/sims/app/sims.sock \

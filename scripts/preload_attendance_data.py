@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Preload attendance data for demo environments.
+Preload Attendance Data Script for SIMS
 
 This script creates sample attendance data for demonstration:
 - Creates attendance records for PG students
@@ -20,8 +20,6 @@ import django
 from datetime import date, timedelta
 from pathlib import Path
 import random
-
-DEFAULT_ATTENDANCE_RATE = float(os.environ.get("DEMO_ATTENDANCE_RATE", 0.85))
 
 # Setup Django environment
 if __name__ == "__main__":
@@ -104,8 +102,8 @@ def create_attendance_data():
                 sessions_created += 1
             
             # Create attendance record with realistic attendance pattern
-            # 75-95% attendance randomly (configurable via DEMO_ATTENDANCE_RATE)
-            is_present = random.random() < DEFAULT_ATTENDANCE_RATE
+            # 75-95% attendance randomly
+            is_present = random.random() < 0.85  # 85% attendance rate
             
             record_data = {
                 'session': session,

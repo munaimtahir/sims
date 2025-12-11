@@ -250,126 +250,107 @@
             notificationsUnread: '/api/notifications/unread/',
             notificationsMarkRead: '/api/notifications/mark-read/'
         };
-        const NOTIFICATION_REFRESH_INTERVAL_MS = 60000; // Adjust as needed for demos
-
+        
         // Notification functions
-        async function loadNotifications() {
+        function loadNotifications() {
             {% if user.is_authenticated %}
-            try {
-                const response = await fetch(API_ENDPOINTS.notifications + '?page_size=5');
-                const data = await response.json();
-                const notificationsList = document.getElementById('notificationsList');
-                const notificationBadge = document.getElementById('notificationBadge');
-
-                if (data.results && data.results.length > 0) {
-                    // Show unread count
-                    const unreadCount = data.results.filter(n => !n.read_at).length;
-                    if (unreadCount > 0) {
-                        notificationBadge.textContent = unreadCount;
-                        notificationBadge.style.display = 'inline-block';
+            fetch(API_ENDPOINTS.notifications + '?page_size=5')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationsList = document.getElementById('notificationsList');
+                    const notificationBadge = document.getElementById('notificationBadge');
+                    
+                    if (data.results && data.results.length > 0) {
+                        // Show unread count
+                        const unreadCount = data.results.filter(n => !n.read_at).length;
+                        if (unreadCount > 0) {
+                            notificationBadge.textContent = unreadCount;
+                            notificationBadge.style.display = 'inline-block';
+                        } else {
+                            notificationBadge.style.display = 'none';
+                        }
+                        
+                        // Build notifications list
+                        let html = '';
+                        data.results.forEach(notification => {
+                            const isUnread = !notification.read_at;
+                            const bgClass = isUnread ? 'bg-light' : '';
+                            const timeAgo = getTimeAgo(notification.created_at);
+                            
+                            html += `
+                                <div class="dropdown-item ${bgClass} py-2" style="white-space: normal;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <strong class="d-block">${notification.title}</strong>
+                                            <small class="text-muted">${notification.body}</small>
+                                            <div class="mt-1">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock"></i> ${timeAgo}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        ${isUnread ? '<span class="badge bg-primary ms-2">New</span>' : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        notificationsList.innerHTML = html;
                     } else {
                         notificationBadge.style.display = 'none';
-                    }
-
-                    // Build notifications list
-                    let html = '';
-                    data.results.forEach(notification => {
-                        const isUnread = !notification.read_at;
-                        const bgClass = isUnread ? 'bg-light' : '';
-                        const timeAgo = getTimeAgo(notification.created_at);
-
-                        html += `
-                            <div class="dropdown-item ${bgClass} py-2" style="white-space: normal;">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="flex-grow-1">
-                                        <strong class="d-block">${notification.title}</strong>
-                                        <small class="text-muted">${notification.body}</small>
-                                        <div class="mt-1">
-                                            <small class="text-muted">
-                                                <i class="fas fa-clock"></i> ${timeAgo}
-                                            </small>
-                                        </div>
-                                    </div>
-                                    ${isUnread ? '<span class="badge bg-primary ms-2">New</span>' : ''}
-                                </div>
+                        notificationsList.innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                                <p class="mb-0">No new notifications</p>
                             </div>
                         `;
-                    });
-
-                    notificationsList.innerHTML = html;
-                } else {
-                    notificationBadge.style.display = 'none';
-                    notificationsList.innerHTML = `
-                        <div class="text-center text-muted p-3">
-                            <i class="fas fa-bell-slash fa-2x mb-2"></i>
-                            <p class="mb-0">No new notifications</p>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error loading notifications:', error);
-                // Show error in notifications list with retry option
-                const notificationsList = document.getElementById('notificationsList');
-                if (notificationsList) {
-                    notificationsList.innerHTML = `
-                        <div class="text-center text-muted p-3">
-                            <i class="fas fa-exclamation-triangle fa-2x mb-2 text-warning"></i>
-                            <p class="mb-0">Unable to load notifications</p>
-                            <button id="retryNotificationsBtn" class="btn btn-sm btn-outline-primary mt-2">
-                                <i class="fas fa-redo"></i> Retry
-                            </button>
-                        </div>
-                    `;
-                    const retryBtn = document.getElementById('retryNotificationsBtn');
-                    if (retryBtn) {
-                        retryBtn.addEventListener('click', function() {
-                            loadNotifications();
-                        });
                     }
-                }
-            }
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                    // Show error in notifications list
+                    const notificationsList = document.getElementById('notificationsList');
+                    if (notificationsList) {
+                        notificationsList.innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                <i class="fas fa-exclamation-triangle fa-2x mb-2 text-warning"></i>
+                                <p class="mb-0">Unable to load notifications</p>
+                            </div>
+                        `;
+                    }
+                });
             {% endif %}
         }
-
-        async function markAllAsRead() {
+        
+        function markAllAsRead() {
             {% if user.is_authenticated %}
-            try {
-                const unreadResponse = await fetch(API_ENDPOINTS.notificationsUnread);
-                const unreadData = await unreadResponse.json();
-
-                if (unreadData.unread > 0) {
-                    const notificationsResponse = await fetch(API_ENDPOINTS.notifications + '?page_size=100');
-                    const notificationsData = await notificationsResponse.json();
-                    const unreadIds = (notificationsData.results || [])
-                        .filter(n => !n.read_at)
-                        .map(n => n.id);
-
-                    if (unreadIds.length > 0) {
-                        const csrfToken = getCookie('csrftoken');
-                        if (!csrfToken) {
-                            console.error('CSRF token not found; cannot mark notifications as read.');
-                            return;
-                        }
-
-                        const markResponse = await fetch(API_ENDPOINTS.notificationsMarkRead, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRFToken': csrfToken
-                            },
-                            body: JSON.stringify({notification_ids: unreadIds})
-                        });
-
-                        if (!markResponse.ok) {
-                            throw new Error(`Failed to mark notifications as read (status ${markResponse.status})`);
-                        }
-
-                        loadNotifications();
+            fetch(API_ENDPOINTS.notificationsUnread)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.unread > 0) {
+                        // Get all unread notification IDs
+                        fetch(API_ENDPOINTS.notifications + '?page_size=100')
+                            .then(response => response.json())
+                            .then(data => {
+                                const unreadIds = data.results
+                                    .filter(n => !n.read_at)
+                                    .map(n => n.id);
+                                
+                                if (unreadIds.length > 0) {
+                                    // Mark as read
+                                    fetch(API_ENDPOINTS.notificationsMarkRead, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken')
+                                        },
+                                        body: JSON.stringify({notification_ids: unreadIds})
+                                    })
+                                    .then(() => loadNotifications());
+                                }
+                            });
                     }
-                }
-            } catch (error) {
-                console.error('Error marking notifications as read:', error);
-            }
+                });
             {% endif %}
         }
         
@@ -427,9 +408,9 @@
             
             // Load notifications on page load
             loadNotifications();
-
+            
             // Refresh notifications every 60 seconds
-            setInterval(loadNotifications, NOTIFICATION_REFRESH_INTERVAL_MS);
+            setInterval(loadNotifications, 60000);
         });
     </script>
     

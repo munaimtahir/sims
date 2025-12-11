@@ -155,7 +155,7 @@ python manage.py createsuperuser
 python manage.py collectstatic --noinput
 
 # Load demo data (optional)
-python scripts/preload_demo_data.py
+python manage.py loaddata demo_data
 ```
 
 ## PostgreSQL Configuration (Optional)

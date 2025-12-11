@@ -24,6 +24,8 @@ if __name__ == "__main__":
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from sims.notifications.models import Notification
+from sims.logbook.models import LogbookEntry
+from sims.cases.models import ClinicalCase
 
 User = get_user_model()
 

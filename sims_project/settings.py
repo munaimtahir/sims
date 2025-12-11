@@ -27,10 +27,7 @@ try:
         load_dotenv(dotenv_path=env_path)
 except ImportError:
     # python-dotenv not installed, environment variables must be set manually
-    print(
-        "Warning: python-dotenv is not installed. "
-        "Environment variables must be provided via the shell or process manager."
-    )
+    pass
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
