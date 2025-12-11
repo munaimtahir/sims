@@ -64,7 +64,13 @@ Legacy files are preserved in `/archive/` at the repository root:
 - `/archive/scripts/` – Legacy utility and diagnostic scripts
 - `/archive/tests/` – Old diagnostic and verification test scripts
 
-These files are **not maintained** and may not work with current code. See `CHANGELOG_RESTRUCTURE.md` for the complete list.
+These files are **not maintained** and may not work with current code. However, they can be useful for:
+- Understanding the project's evolution and decision history
+- Referencing old deployment configurations for specific servers
+- Learning about past bug fixes and their solutions
+- Recovering legacy utility scripts if needed
+
+See `CHANGELOG_RESTRUCTURE.md` for the complete list of archived files.
 
 ## Verification Checklist
 
