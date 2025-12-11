@@ -19,6 +19,16 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
 
+# Load environment variables from .env file if it exists
+try:
+    from dotenv import load_dotenv
+    env_path = Path(__file__).resolve().parent.parent / '.env'
+    if env_path.exists():
+        load_dotenv(dotenv_path=env_path)
+except ImportError:
+    # python-dotenv not installed, environment variables must be set manually
+    pass
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
