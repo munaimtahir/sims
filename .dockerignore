@@ -46,6 +46,9 @@ Thumbs.db
 *.md
 docs/
 
+# Archive (legacy files)
+archive/
+
 # Development
 logs/
 *.bak
