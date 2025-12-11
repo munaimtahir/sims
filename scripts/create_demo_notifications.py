@@ -49,7 +49,13 @@ def create_demo_notifications():
     
     # Create notifications for students (from supervisors)
     for student in students:
-        supervisor = student.supervisor if hasattr(student, 'supervisor') and student.supervisor else supervisors.first()
+        try:
+            User._meta.get_field('supervisor')
+            supervisor = getattr(student, 'supervisor', None)
+            if not supervisor:
+                supervisor = supervisors.first()
+        except Exception:
+            supervisor = supervisors.first()
         
         # Notification 1: Logbook entry approved
         notification_data = {

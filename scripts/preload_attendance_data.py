@@ -42,6 +42,7 @@ def create_attendance_data():
     print("=" * 70)
     print("Creating Sample Attendance Data")
     print("=" * 70)
+    print(f"Using demo attendance rate: {DEFAULT_ATTENDANCE_RATE * 100:.0f}%")
     
     # Get PG students
     students = User.objects.filter(role='pg', is_archived=False)

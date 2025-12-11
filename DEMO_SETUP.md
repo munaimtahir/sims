@@ -425,8 +425,7 @@ After successful demo, for production deployment:
 
 For issues or questions:
 - Check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)
-- Open an issue on GitHub
-- Contact: admin@sims.com
+- Open an issue on [GitHub Issues](https://github.com/munaimtahir/sims/issues)
 
 ---
 
