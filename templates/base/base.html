@@ -143,6 +143,32 @@
                 
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
+                        <!-- Notifications -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" id="notificationsDropdown">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge" style="display: none;">
+                                    0
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" style="min-width: 300px; max-width: 400px;">
+                                <li class="dropdown-header d-flex justify-content-between align-items-center">
+                                    <span><strong>Notifications</strong></span>
+                                    <button class="btn btn-sm btn-link text-decoration-none" onclick="markAllAsRead()">Mark all read</button>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <div id="notificationsList" style="max-height: 400px; overflow-y: auto;">
+                                        <div class="text-center text-muted p-3">
+                                            <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                                            <p class="mb-0">No new notifications</p>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <!-- User Menu -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                                 <i class="fas fa-user me-1"></i>{{ user.get_full_name|default:user.username }}
@@ -218,6 +244,126 @@
     
     <!-- Custom JavaScript -->
     <script>
+        // Notification functions
+        function loadNotifications() {
+            {% if user.is_authenticated %}
+            fetch('/api/notifications/?page_size=5')
+                .then(response => response.json())
+                .then(data => {
+                    const notificationsList = document.getElementById('notificationsList');
+                    const notificationBadge = document.getElementById('notificationBadge');
+                    
+                    if (data.results && data.results.length > 0) {
+                        // Show unread count
+                        const unreadCount = data.results.filter(n => !n.read_at).length;
+                        if (unreadCount > 0) {
+                            notificationBadge.textContent = unreadCount;
+                            notificationBadge.style.display = 'inline-block';
+                        } else {
+                            notificationBadge.style.display = 'none';
+                        }
+                        
+                        // Build notifications list
+                        let html = '';
+                        data.results.forEach(notification => {
+                            const isUnread = !notification.read_at;
+                            const bgClass = isUnread ? 'bg-light' : '';
+                            const timeAgo = getTimeAgo(notification.created_at);
+                            
+                            html += `
+                                <div class="dropdown-item ${bgClass} py-2" style="white-space: normal;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="flex-grow-1">
+                                            <strong class="d-block">${notification.title}</strong>
+                                            <small class="text-muted">${notification.body}</small>
+                                            <div class="mt-1">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-clock"></i> ${timeAgo}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        ${isUnread ? '<span class="badge bg-primary ms-2">New</span>' : ''}
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        notificationsList.innerHTML = html;
+                    } else {
+                        notificationBadge.style.display = 'none';
+                        notificationsList.innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                <i class="fas fa-bell-slash fa-2x mb-2"></i>
+                                <p class="mb-0">No new notifications</p>
+                            </div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading notifications:', error);
+                });
+            {% endif %}
+        }
+        
+        function markAllAsRead() {
+            {% if user.is_authenticated %}
+            fetch('/api/notifications/unread/')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.unread > 0) {
+                        // Get all unread notification IDs
+                        fetch('/api/notifications/?page_size=100')
+                            .then(response => response.json())
+                            .then(data => {
+                                const unreadIds = data.results
+                                    .filter(n => !n.read_at)
+                                    .map(n => n.id);
+                                
+                                if (unreadIds.length > 0) {
+                                    // Mark as read
+                                    fetch('/api/notifications/mark-read/', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRFToken': getCookie('csrftoken')
+                                        },
+                                        body: JSON.stringify({notification_ids: unreadIds})
+                                    })
+                                    .then(() => loadNotifications());
+                                }
+                            });
+                    }
+                });
+            {% endif %}
+        }
+        
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const seconds = Math.floor((now - date) / 1000);
+            
+            if (seconds < 60) return 'Just now';
+            if (seconds < 3600) return Math.floor(seconds / 60) + ' minutes ago';
+            if (seconds < 86400) return Math.floor(seconds / 3600) + ' hours ago';
+            if (seconds < 604800) return Math.floor(seconds / 86400) + ' days ago';
+            return date.toLocaleDateString();
+        }
+        
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
         $(document).ready(function() {
             // Initialize Select2
             $('.select2').select2({
@@ -242,6 +388,12 @@
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
+            
+            // Load notifications on page load
+            loadNotifications();
+            
+            // Refresh notifications every 60 seconds
+            setInterval(loadNotifications, 60000);
         });
     </script>
     
