@@ -47,7 +47,7 @@ sudo rm -f /var/www/sims_project/sims.sock
 sudo cp nginx_sims.conf /etc/nginx/sites-available/sims
 sudo ln -sf /etc/nginx/sites-available/sims /etc/nginx/sites-enabled/
 sudo rm -f /etc/nginx/sites-enabled/default
-sudo cp sims.service /etc/systemd/system/
+sudo cp sims_no_venv.service /etc/systemd/system/sims.service
 sudo systemctl daemon-reload
 sudo systemctl enable sims
 
