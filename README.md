@@ -101,35 +101,73 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+### 3. Configure Environment Variables
+
+Create a `.env` file in the project root (copy from `.env.example` if available):
+
+```bash
+# Required settings
+SECRET_KEY=your-secret-key-here
+DEBUG=False
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+# Database (use DATABASE_URL or individual settings)
+DATABASE_URL=postgresql://user:password@localhost:5432/sims_db
+# OR
+DB_NAME=sims_db
+DB_USER=sims_user
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# Celery
+CELERY_BROKER_URL=redis://localhost:6379/1
+CELERY_RESULT_BACKEND=redis://localhost:6379/1
+
+# JWT Settings
+JWT_ACCESS_TOKEN_MINUTES=60
+JWT_REFRESH_TOKEN_DAYS=7
+
+# CORS (comma-separated)
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+```
+
+**Note:** See `.env.example` for a complete list of available environment variables.
+
+### 4. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Run Database Migrations
+### 5. Run Database Migrations
 
 ```bash
 python manage.py migrate
 ```
 
-### 5. Create Superuser (Optional)
+### 6. Create Superuser (Optional)
 
 ```bash
 python manage.py createsuperuser
 ```
 
-Or use the default credentials:
+**⚠️ LOCAL DEVELOPMENT ONLY:** For local testing, you can use these demo credentials:
 - Username: `admin`
 - Password: `admin123`
 
-### 6. Start Development Server
+**🚨 SECURITY WARNING:** These credentials are for local development only. NEVER use default credentials in production. Always create a strong password for production deployments.
+
+### 7. Start Development Server
 
 ```bash
 python manage.py runserver
 ```
 
-### 7. Access the Application
+### 8. Access the Application
 
 - **Main Application**: http://127.0.0.1:8000
 - **Admin Interface**: http://127.0.0.1:8000/admin
@@ -271,39 +309,178 @@ pytest
 - Aim for good test coverage of critical functionality
 - Test both success and error cases
 
+## 🔄 Celery Worker & Beat Setup
+
+SIMS uses Celery for background task processing and scheduled tasks.
+
+### Prerequisites
+
+- Redis server running (required for Celery broker)
+- Django migrations run (including `django_celery_beat` migrations)
+
+### Running Celery Worker
+
+```bash
+# Start Celery worker
+celery -A sims_project worker -l info
+
+# With concurrency control
+celery -A sims_project worker -l info --concurrency=2
+```
+
+### Running Celery Beat (Scheduler)
+
+```bash
+# Start Celery beat with DatabaseScheduler
+celery -A sims_project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+```
+
+### Running Both (Development)
+
+For development, you can run both in separate terminals, or use a process manager like `supervisord`.
+
+### Database Migrations for Celery Beat
+
+```bash
+# Run migrations to create django_celery_beat tables
+python manage.py migrate django_celery_beat
+```
+
+### Configuration
+
+Celery configuration is in `sims_project/celery.py` and uses settings from `sims_project/settings.py`:
+
+- `CELERY_BROKER_URL`: Redis broker URL (default: `redis://localhost:6379/1`)
+- `CELERY_RESULT_BACKEND`: Result backend URL (default: `redis://localhost:6379/1`)
+
+Periodic tasks are configured in `sims_project/celery.py` and can be managed via Django admin after running migrations.
+
+## 🐳 Docker Deployment
+
+SIMS includes a complete Docker Compose setup for production-ready deployment.
+
+### Prerequisites
+
+- Docker and Docker Compose installed
+- `.env` file configured with all required environment variables
+
+### Quick Start
+
+```bash
+# Build all services
+docker compose build
+
+# Start all services
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop all services
+docker compose down
+```
+
+### Services
+
+The Docker Compose setup includes:
+
+- **db**: PostgreSQL database
+- **redis**: Redis cache and message broker
+- **web**: Django application (Gunicorn)
+- **worker**: Celery worker for background tasks
+- **beat**: Celery beat scheduler
+- **nginx**: Reverse proxy and static file server
+
+### Environment Variables
+
+**⚠️ SECURITY WARNING:** Before running in production, ensure you have set:
+
+- `SECRET_KEY`: A secure Django secret key (REQUIRED)
+- `DB_PASSWORD`: Strong database password (REQUIRED)
+- `ALLOWED_HOSTS`: Comma-separated list of allowed hostnames
+- Other production settings as needed
+
+Create a `.env` file in the project root with these values. See `.env.example` for reference.
+
+### Health Checks
+
+All services include health checks. Check service status:
+
+```bash
+docker compose ps
+```
+
+### Volumes
+
+- `postgres_data`: PostgreSQL data persistence
+- `redis_data`: Redis data persistence
+- `static_volume`: Collected static files
+- `media_volume`: User-uploaded media files
+
+### Ports
+
+- `81`: Nginx (HTTP)
+- `443`: Nginx (HTTPS)
+- `8000`: Django (internal, proxied through nginx)
+
 ## 🚀 Deployment
 
 ### Development Deployment
 
 The application is ready for development/testing deployment using the built-in Django development server.
 
+### Frontend Environment Setup
+
+For the Next.js frontend, create `frontend/.env.local`:
+
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+See `frontend/.env.local.example` for reference.
+
 ### Production Deployment
 
 For production deployment, consider:
 
 1. **Environment Configuration**
-   - Set `DEBUG = False` in settings
-   - Use environment variables for sensitive data
-   - Configure `ALLOWED_HOSTS`
+   - Set `DEBUG = False` in environment variables
+   - Use environment variables for all sensitive data
+   - Configure `ALLOWED_HOSTS` with your domain(s)
+   - Set `SECRET_KEY` to a secure random value
 
 2. **Database**
-   - Use PostgreSQL or MySQL for production
-   - Configure proper database backup
+   - Use PostgreSQL for production
+   - Configure proper database backup strategy
+   - Set strong database passwords
 
 3. **Static Files**
    - Collect static files: `python manage.py collectstatic`
    - Serve via nginx or CDN
+   - Configure media file storage
 
 4. **Web Server**
-   - Use Gunicorn or uWSGI
-   - Configure nginx as reverse proxy
-   - Set up SSL/TLS certificates
+   - Use Gunicorn or uWSGI (included in Docker setup)
+   - Configure nginx as reverse proxy (included in Docker setup)
+   - Set up SSL/TLS certificates for HTTPS
 
-5. **Security**
-   - Enable security middleware
-   - Configure HTTPS
-   - Set up proper logging
-   - Implement backup strategy
+5. **Security Checklist**
+   - ✅ `SECRET_KEY` set from environment (REQUIRED)
+   - ✅ `DEBUG = False` in production
+   - ✅ `ALLOWED_HOSTS` configured with your domain
+   - ✅ Strong database passwords
+   - ✅ HTTPS/SSL configured
+   - ✅ Security headers enabled (`SECURE_SSL_REDIRECT`, `SESSION_COOKIE_SECURE`, etc.)
+   - ✅ CORS origins restricted to your frontend domain
+   - ✅ No default credentials in production
+   - ✅ Regular security updates
+   - ✅ Database backups configured
+   - ✅ Logging configured
+
+6. **Celery**
+   - Celery worker running for background tasks
+   - Celery beat running for scheduled tasks
+   - Redis configured as broker and result backend
 
 See [docs/SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md](docs/SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md) for detailed deployment instructions.
 

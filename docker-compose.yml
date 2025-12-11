@@ -1,5 +1,16 @@
 # Docker Compose configuration for SIMS
 # Production-ready multi-service setup
+#
+# SECURITY WARNING: This configuration uses environment variables for sensitive data.
+# You MUST set the following environment variables before running in production:
+#   - SECRET_KEY: A secure Django secret key
+#   - DB_PASSWORD: A strong database password
+#   - DB_USER: Database username (default: sims_user)
+#   - DB_NAME: Database name (default: sims_db)
+#   - ALLOWED_HOSTS: Comma-separated list of allowed hostnames
+#
+# Create a .env file in the project root with these values.
+# NEVER commit .env to version control.
 
 version: '3.9'
 
@@ -9,9 +20,10 @@ services:
     image: postgres:15-alpine
     container_name: sims_db
     environment:
+      # WARNING: Set DB_PASSWORD in .env file - never use default in production
       POSTGRES_DB: ${DB_NAME:-sims_db}
       POSTGRES_USER: ${DB_USER:-sims_user}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-change_me_in_production}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -51,9 +63,11 @@ services:
              gunicorn sims_project.wsgi:application --bind 0.0.0.0:8000 --workers 4 --timeout 60"
     environment:
       - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY:-change_me_in_production}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1,139.162.9.224}
-      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD:-change_me_in_production}@db:5432/${DB_NAME:-sims_db}
+      # WARNING: SECRET_KEY is REQUIRED - set it in .env file
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      # WARNING: DB_PASSWORD is REQUIRED - set it in .env file
+      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD}@db:5432/${DB_NAME:-sims_db}
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
@@ -91,8 +105,10 @@ services:
     command: celery -A sims_project worker -l info --concurrency=2
     environment:
       - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY:-change_me_in_production}
-      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD:-change_me_in_production}@db:5432/${DB_NAME:-sims_db}
+      # WARNING: SECRET_KEY is REQUIRED - set it in .env file
+      - SECRET_KEY=${SECRET_KEY}
+      # WARNING: DB_PASSWORD is REQUIRED - set it in .env file
+      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD}@db:5432/${DB_NAME:-sims_db}
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/1
@@ -115,8 +131,10 @@ services:
     command: celery -A sims_project beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - DEBUG=${DEBUG:-False}
-      - SECRET_KEY=${SECRET_KEY:-change_me_in_production}
-      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD:-change_me_in_production}@db:5432/${DB_NAME:-sims_db}
+      # WARNING: SECRET_KEY is REQUIRED - set it in .env file
+      - SECRET_KEY=${SECRET_KEY}
+      # WARNING: DB_PASSWORD is REQUIRED - set it in .env file
+      - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD}@db:5432/${DB_NAME:-sims_db}
       - REDIS_URL=redis://redis:6379/0
       - CELERY_BROKER_URL=redis://redis:6379/1
       - CELERY_RESULT_BACKEND=redis://redis:6379/1

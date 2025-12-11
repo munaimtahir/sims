@@ -158,8 +158,10 @@ python scripts/preload_demo_data.py
 
 This script creates:
 
-1. **Users** (with credentials):
+1. **Users** (with credentials - **LOCAL DEVELOPMENT ONLY**):
    - Admin: `admin` / `admin123`
+   
+   **🚨 SECURITY WARNING:** These are demo credentials for local development and testing only. NEVER use these credentials in production. Always change all passwords before deploying to any production environment.
    - Supervisor 1: `dr_smith` / `supervisor123`
    - Supervisor 2: `dr_jones` / `supervisor123`
    - PG Student 1: `pg_ahmed` / `student123`

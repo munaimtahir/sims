@@ -36,15 +36,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY", "django-insecure-your-secret-key-change-in-production"
-)
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise RuntimeError("SECRET_KEY environment variable is required")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
+DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,testserver,139.162.9.224"
+    "ALLOWED_HOSTS", "localhost,127.0.0.1"
 ).split(",")
 
 # Application definition
@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     "django_filters",  # For Advanced filtering
     "widget_tweaks",  # For form widget customization
     "simple_history",  # For audit history
+    "django_celery_beat",  # For Celery beat periodic task scheduling
     # SIMS apps
     "sims.users",
     "sims.academics",
@@ -473,7 +474,7 @@ IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.TempFolderStorage"
 # Environment-specific settings
 if DEBUG:
     # Development settings
-    INTERNAL_IPS = ["127.0.0.1", "localhost", "139.162.9.224"]
+    INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
     # Debug toolbar (if installed)
     try:
@@ -499,7 +500,7 @@ else:
     # Use environment variables for sensitive data
     SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
     ALLOWED_HOSTS = os.environ.get(
-        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,139.162.9.224"
+        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"
     ).split(",")
 
     # Database from environment (SQLite for now, PostgreSQL for full production)
@@ -613,7 +614,6 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://139.162.9.224:81",
     ] if DEBUG else []
 
 CORS_ALLOW_CREDENTIALS = True
