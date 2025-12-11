@@ -19,7 +19,7 @@ This document describes all environment variables and feature flags available in
 
 ### ALLOWED_HOSTS
 **Type:** Comma-separated string  
-**Default:** `localhost,127.0.0.1,0.0.0.0,testserver,172.236.152.35`  
+**Default:** `localhost,127.0.0.1,0.0.0.0,testserver,139.162.9.224`  
 **Production:** Set to your actual domains  
 **Example:** `ALLOWED_HOSTS=example.com,www.example.com`
 

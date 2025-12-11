@@ -2,7 +2,7 @@
 # Pre-Deployment Fix Script
 # Resolves package lock and prepares server for SIMS deployment
 
-echo "🔧 Pre-Deployment Fix for SIMS Server 172.236.152.35"
+echo "🔧 Pre-Deployment Fix for SIMS Server 139.162.9.224"
 echo "=================================================="
 
 echo "📋 Step 1: Checking package lock status..."

@@ -1,8 +1,8 @@
 #!/bin/bash
-# SIMS Deployment Script for Nginx Server 172.236.152.35 (ROOT VERSION)
+# SIMS Deployment Script for Nginx Server 139.162.9.224 (ROOT VERSION)
 # Run this script on your server to deploy the SIMS project
 
-echo "🚀 SIMS Deployment Script for Nginx Server 172.236.152.35 (ROOT)"
+echo "🚀 SIMS Deployment Script for Nginx Server 139.162.9.224 (ROOT)"
 echo "=================================================================="
 
 # Check if running as root
@@ -41,7 +41,7 @@ echo "🔐 Setting environment variables..."
 # Set environment variables for production
 export SECRET_KEY="$(python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')"
 export DEBUG="False"
-export ALLOWED_HOSTS="172.236.152.35,localhost,127.0.0.1"
+export ALLOWED_HOSTS="139.162.9.224,localhost,127.0.0.1"
 
 echo "📦 Installing dependencies..."
 # Activate virtual environment and install requirements
@@ -165,9 +165,9 @@ else
 fi
 echo ""
 echo "🌐 Access your SIMS system at:"
-echo "   Homepage: http://172.236.152.35/"
-echo "   Login:    http://172.236.152.35/users/login/"
-echo "   Admin:    http://172.236.152.35/admin/"
+echo "   Homepage: http://139.162.9.224:81/"
+echo "   Login:    http://139.162.9.224:81/users/login/"
+echo "   Admin:    http://139.162.9.224:81/admin/"
 echo ""
 echo "🔧 Service management commands:"
 echo "   systemctl status sims     # Check SIMS status"

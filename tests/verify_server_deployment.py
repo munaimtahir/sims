@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-SIMS Server Deployment Verification for 172.236.152.35
+SIMS Server Deployment Verification for 139.162.9.224
 Verifies that the SIMS system is properly configured for the target server
 """
 
@@ -21,7 +21,7 @@ def test_server_settings():
     
     # Check ALLOWED_HOSTS
     allowed_hosts = settings.ALLOWED_HOSTS
-    server_ip = '172.236.152.35'
+    server_ip = '139.162.9.224'
     
     if server_ip in allowed_hosts:
         print(f"   ✅ Server IP {server_ip} is in ALLOWED_HOSTS")
@@ -122,21 +122,21 @@ def test_migration_status():
 
 def generate_deployment_commands():
     """Generate deployment commands for the server"""
-    print("\n📋 Deployment Commands for Server 172.236.152.35:")
+    print("\n📋 Deployment Commands for Server 139.162.9.224:")
     print("=" * 55)
     
     commands = [
         "# 1. Upload project files to server",
-        "scp -r . user@172.236.152.35:/var/www/sims_project/",
+        "scp -r . user@139.162.9.224:/var/www/sims_project/",
         "",
         "# 2. SSH to server and set up environment",
-        "ssh user@172.236.152.35",
+        "ssh user@139.162.9.224",
         "cd /var/www/sims_project",
         "",
         "# 3. Set environment variables",
         'export SECRET_KEY="$(python3 -c \'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\')"',
         'export DEBUG="False"',
-        'export ALLOWED_HOSTS="172.236.152.35,localhost,127.0.0.1"',
+        'export ALLOWED_HOSTS="139.162.9.224,localhost,127.0.0.1"',
         "",
         "# 4. Set up virtual environment",
         "python3 -m venv venv",
@@ -150,7 +150,7 @@ def generate_deployment_commands():
         "",
         "# 6. Test deployment",
         "python manage.py check --deploy",
-        "python manage.py runserver 172.236.152.35:8000",
+        "python manage.py runserver 139.162.9.224:8000",
         "",
         "# 7. Configure Apache (copy apache_sims.conf to /etc/apache2/sites-available/)",
         "sudo cp apache_sims.conf /etc/apache2/sites-available/sims.conf",
@@ -164,7 +164,7 @@ def generate_deployment_commands():
 def main():
     """Run all verification tests"""
     print("🚀 SIMS Server Deployment Verification")
-    print("🌐 Target Server: 172.236.152.35")
+    print("🌐 Target Server: 139.162.9.224")
     print("=" * 50)
     
     tests = [
@@ -200,7 +200,7 @@ def main():
     else:
         print("⚠️ Some tests failed. Please review the issues above.")
     
-    print("\n📄 See SERVER_DEPLOYMENT_GUIDE_172.236.152.35.md for detailed instructions")
+    print("\n📄 See SERVER_DEPLOYMENT_GUIDE_139.162.9.224.md for detailed instructions")
 
 if __name__ == '__main__':
     main()

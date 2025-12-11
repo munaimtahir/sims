@@ -1,8 +1,8 @@
 #!/bin/bash
-# Server Setup Verification Script for 172.236.152.35
+# Server Setup Verification Script for 139.162.9.224
 # Run this BEFORE running the deployment script
 
-echo "🔍 SIMS Server Setup Verification for 172.236.152.35"
+echo "🔍 SIMS Server Setup Verification for 139.162.9.224"
 echo "======================================================="
 
 # Check if we're on Ubuntu/Debian
@@ -17,7 +17,7 @@ echo "✅ Ubuntu/Debian system detected"
 if [ ! -d "/var/www/sims_project" ]; then
     echo "❌ Project directory /var/www/sims_project not found"
     echo "📋 Please upload your project files first:"
-    echo "   scp -r . user@172.236.152.35:/var/www/sims_project/"
+    echo "   scp -r . user@139.162.9.224:/var/www/sims_project/"
     exit 1
 fi
 
@@ -59,12 +59,12 @@ else
 fi
 
 # Check if ports are available
-if ss -tulpn | grep -q ":80 "; then
-    echo "⚠️  Port 80 is already in use"
+if ss -tulpn | grep -q ":81 "; then
+    echo "⚠️  Port 81 is already in use"
     echo "📋 You may need to stop the existing service"
-    ss -tulpn | grep ":80 "
+    ss -tulpn | grep ":81 "
 else
-    echo "✅ Port 80 is available"
+    echo "✅ Port 81 is available"
 fi
 
 echo ""

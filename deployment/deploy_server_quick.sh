@@ -15,7 +15,7 @@ mkdir -p static staticfiles media logs backups
 echo "🔐 Setting environment variables..."
 export SECRET_KEY="$(python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')"
 export DEBUG="False"
-export ALLOWED_HOSTS="172.236.152.35,localhost,127.0.0.1"
+export ALLOWED_HOSTS="139.162.9.224,localhost,127.0.0.1"
 
 echo "📦 Installing dependencies (using existing venv)..."
 source venv/bin/activate

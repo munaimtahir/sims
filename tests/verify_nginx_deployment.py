@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Nginx Deployment Verification for SIMS on 172.236.152.35
+Nginx Deployment Verification for SIMS on 139.162.9.224
 Verifies all configuration files are ready for Nginx deployment
 """
 
@@ -47,7 +47,7 @@ def test_nginx_config_content():
     content = nginx_conf.read_text()
     
     checks = [
-        ('server_name 172.236.152.35', 'Server IP configured'),
+        ('server_name 139.162.9.224', 'Server IP configured'),
         ('location /static/', 'Static files location configured'),
         ('location /media/', 'Media files location configured'),
         ('proxy_pass http://sims_app', 'Gunicorn upstream configured'),
@@ -109,7 +109,7 @@ def test_systemd_service():
         ('WorkingDirectory=/var/www/sims_project', 'Working directory'),
         ('User=www-data', 'Service user'),
         ('WantedBy=multi-user.target', 'Auto-start configuration'),
-        ('ALLOWED_HOSTS=172.236.152.35', 'Server IP in environment'),
+        ('ALLOWED_HOSTS=139.162.9.224', 'Server IP in environment'),
     ]
     
     all_good = True
@@ -147,7 +147,7 @@ def test_django_settings():
     from django.conf import settings
     
     checks = [
-        ('172.236.152.35' in settings.ALLOWED_HOSTS, 'Server IP in ALLOWED_HOSTS'),
+        ('139.162.9.224' in settings.ALLOWED_HOSTS, 'Server IP in ALLOWED_HOSTS'),
         (hasattr(settings, 'STATIC_ROOT'), 'STATIC_ROOT configured'),
         (hasattr(settings, 'MEDIA_ROOT'), 'MEDIA_ROOT configured'),
         (settings.STATIC_URL == '/static/', 'STATIC_URL configured'),
@@ -166,15 +166,15 @@ def test_django_settings():
 
 def generate_deployment_summary():
     """Generate deployment command summary"""
-    print("\n📋 Nginx Deployment Commands for 172.236.152.35:")
+    print("\n📋 Nginx Deployment Commands for 139.162.9.224:")
     print("=" * 55)
     
     commands = [
         "# 1. Upload files to server",
-        "scp -r . user@172.236.152.35:/var/www/sims_project/",
+        "scp -r . user@139.162.9.224:/var/www/sims_project/",
         "",
         "# 2. SSH to server",
-        "ssh user@172.236.152.35",
+        "ssh user@139.162.9.224",
         "cd /var/www/sims_project",
         "",
         "# 3. Run automated deployment",
@@ -186,7 +186,7 @@ def generate_deployment_summary():
         "sudo systemctl status nginx",
         "",
         "# 5. Test the website",
-        "curl http://172.236.152.35/",
+        "curl http://139.162.9.224:81/",
         "",
         "# 6. Check logs if needed",
         "sudo tail -f /var/log/nginx/sims_error.log",
@@ -199,7 +199,7 @@ def generate_deployment_summary():
 def main():
     """Run all Nginx deployment verification tests"""
     print("🌐 SIMS Nginx Deployment Verification")
-    print("🖥️  Target Server: 172.236.152.35")
+    print("🖥️  Target Server: 139.162.9.224")
     print("=" * 50)
     
     tests = [
@@ -235,7 +235,7 @@ def main():
         print("   Admin:    http://172.236.152.35/admin/")
         
         print("\n📄 Documentation:")
-        print("   - NGINX_DEPLOYMENT_172.236.152.35.md")
+        print("   - NGINX_DEPLOYMENT_139.162.9.224.md")
         print("   - nginx_sims.conf")
         print("   - gunicorn.conf.py")
         print("   - sims.service")

@@ -44,7 +44,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,testserver,172.236.152.35,139.162.9.224"
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,testserver,139.162.9.224"
 ).split(",")
 
 # Application definition
@@ -499,7 +499,7 @@ else:
     # Use environment variables for sensitive data
     SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
     ALLOWED_HOSTS = os.environ.get(
-        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,172.236.152.35,139.162.9.224"
+        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,139.162.9.224"
     ).split(",")
 
     # Database from environment (SQLite for now, PostgreSQL for full production)

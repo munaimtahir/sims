@@ -134,7 +134,7 @@ services:
     image: nginx:alpine
     container_name: sims_nginx
     ports:
-      - "81:80"
+      - "81:81"
       - "443:443"
     volumes:
       - ./deployment/nginx.conf:/etc/nginx/nginx.conf:ro

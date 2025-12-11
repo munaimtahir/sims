@@ -2,7 +2,7 @@
 # SIMS Deployment Script WITHOUT Virtual Environment (Fixes venv hanging issue)
 # Run this script on your server to deploy the SIMS project
 
-echo "🚀 SIMS Deployment Script (System-wide Python) for 172.236.152.35"
+echo "🚀 SIMS Deployment Script (System-wide Python) for 139.162.9.224"
 echo "=================================================================="
 
 # Set working directory
@@ -21,7 +21,7 @@ mkdir -p static staticfiles media logs backups
 echo "🔐 Setting environment variables..."
 export SECRET_KEY="django-insecure-temp-key-for-deployment"
 export DEBUG="False"
-export ALLOWED_HOSTS="172.236.152.35,localhost,127.0.0.1"
+export ALLOWED_HOSTS="139.162.9.224,localhost,127.0.0.1"
 
 echo "🗄️ Setting up database..."
 python3 manage.py migrate
@@ -66,7 +66,7 @@ if sudo systemctl is-active --quiet sims; then
         echo "✅ Nginx started"
         echo ""
         echo "✅ Deployment complete!"
-        echo "🌐 Access SIMS at: http://172.236.152.35/"
+        echo "🌐 Access SIMS at: http://139.162.9.224:81/"
         echo ""
         echo "👤 Create admin user with:"
         echo "   cd /var/www/sims_project"
