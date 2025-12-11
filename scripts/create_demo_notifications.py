@@ -100,6 +100,9 @@ def create_demo_notifications():
     for supervisor in supervisors:
         assigned_students = User.objects.filter(supervisor=supervisor, role='pg', is_archived=False)
         
+        if not assigned_students.exists():
+            continue
+            
         for student in assigned_students:
             # Notification 1: New logbook entry to review
             notification_data = {

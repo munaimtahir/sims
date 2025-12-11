@@ -329,18 +329,30 @@ def create_certificates(admin, students):
 
 
 def create_logbook_entries(students, supervisors, rotations):
-    """Create logbook entries for students"""
+    """
+    Create logbook entries for students
+    
+    Note: Logbook entries have complex field requirements and many-to-many relationships.
+    For the demo, users can create entries through the web interface which provides
+    proper validation and field selection.
+    """
     print("\nCreating logbook entries...")
-    print("  (Logbook entries require complex field mappings - skipping for demo)")
-    print("  Users can create entries through the web interface")
+    print("  Note: Logbook entries require complex field mappings")
+    print("  Users can create entries through the web interface for demo")
     return []
 
 
 def create_clinical_cases(students, supervisors):
-    """Create sample clinical cases"""
+    """
+    Create sample clinical cases
+    
+    Note: Clinical cases have many required fields with specific validation rules.
+    For the demo, users can create cases through the web interface which provides
+    proper validation and guided data entry.
+    """
     print("\nCreating clinical cases...")
-    print("  (Clinical cases require complex field mappings - skipping for demo)")
-    print("  Users can create cases through the web interface")
+    print("  Note: Clinical cases require complex field mappings and validation")
+    print("  Users can create cases through the web interface for demo")
     return []
 
 

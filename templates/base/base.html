@@ -244,10 +244,17 @@
     
     <!-- Custom JavaScript -->
     <script>
+        // API endpoints (centralized configuration)
+        const API_ENDPOINTS = {
+            notifications: '/api/notifications/',
+            notificationsUnread: '/api/notifications/unread/',
+            notificationsMarkRead: '/api/notifications/mark-read/'
+        };
+        
         // Notification functions
         function loadNotifications() {
             {% if user.is_authenticated %}
-            fetch('/api/notifications/?page_size=5')
+            fetch(API_ENDPOINTS.notifications + '?page_size=5')
                 .then(response => response.json())
                 .then(data => {
                     const notificationsList = document.getElementById('notificationsList');
@@ -301,18 +308,28 @@
                 })
                 .catch(error => {
                     console.error('Error loading notifications:', error);
+                    // Show error in notifications list
+                    const notificationsList = document.getElementById('notificationsList');
+                    if (notificationsList) {
+                        notificationsList.innerHTML = `
+                            <div class="text-center text-muted p-3">
+                                <i class="fas fa-exclamation-triangle fa-2x mb-2 text-warning"></i>
+                                <p class="mb-0">Unable to load notifications</p>
+                            </div>
+                        `;
+                    }
                 });
             {% endif %}
         }
         
         function markAllAsRead() {
             {% if user.is_authenticated %}
-            fetch('/api/notifications/unread/')
+            fetch(API_ENDPOINTS.notificationsUnread)
                 .then(response => response.json())
                 .then(data => {
                     if (data.unread > 0) {
                         // Get all unread notification IDs
-                        fetch('/api/notifications/?page_size=100')
+                        fetch(API_ENDPOINTS.notifications + '?page_size=100')
                             .then(response => response.json())
                             .then(data => {
                                 const unreadIds = data.results
@@ -321,7 +338,7 @@
                                 
                                 if (unreadIds.length > 0) {
                                     // Mark as read
-                                    fetch('/api/notifications/mark-read/', {
+                                    fetch(API_ENDPOINTS.notificationsMarkRead, {
                                         method: 'POST',
                                         headers: {
                                             'Content-Type': 'application/json',
