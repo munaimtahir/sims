@@ -141,18 +141,25 @@ python manage.py runserver
 sims/
 ├── manage.py                   # Django management script
 ├── README.md                   # Project overview and documentation
+├── CHANGELOG.md                # Project changelog
 ├── requirements.txt            # Python dependencies
 ├── requirements-dev.txt        # Development dependencies
 ├── pytest.ini                  # Pytest configuration
 ├── pyproject.toml              # Black/pytest configuration
 ├── conftest.py                 # Pytest fixtures and configuration
 ├── .github/workflows/          # CI/CD workflows
+├── archive/                    # 🗄️ Legacy files (preserved, not maintained)
+│   ├── docs/                   # Old development docs & deployment guides
+│   ├── scripts/                # Legacy utility scripts
+│   └── tests/                  # Old diagnostic test scripts
 ├── deployment/                 # Deployment configuration and scripts
-├── docs/                       # Project documentation and reports
+├── docs/                       # 📚 Current project documentation
 │   ├── archive/                # Historical development documents
-│   └── reports/                # Feature and testing reports
+│   ├── reports/                # Feature and testing reports
+│   └── CHANGELOG_RESTRUCTURE.md # Repository cleanup documentation
+├── frontend/                   # Next.js frontend application
 ├── logs/                       # Runtime and diagnostic logs
-├── scripts/                    # Utility scripts and helper tools
+├── scripts/                    # Active utility scripts
 ├── sims_project/               # Django project configuration
 │   ├── settings.py             # Django settings module
 │   ├── urls.py                 # Root URL patterns
@@ -175,13 +182,15 @@ sims/
 │   ├── css/                    # Compiled CSS
 │   ├── images/                 # Shared imagery and icons
 │   └── js/                     # JavaScript bundles
-├── staticfiles/                # Collected static files for deployment
 ├── templates/                  # Django template files
-└── tests/                      # Test files and test utilities
+└── tests/                      # Test suite and utilities
     ├── factories/              # Test data factories
     ├── feature_verification/   # Feature verification tests
-    └── manual/                 # Manual test utilities
+    ├── manual/                 # Manual test utilities
+    └── resources/              # Test resources
 ```
+
+> **Note**: The `/archive/` directory contains legacy files preserved for reference. These files are not maintained and may not work with the current codebase. See [docs/CHANGELOG_RESTRUCTURE.md](docs/CHANGELOG_RESTRUCTURE.md) for details on what was archived.
 
 ## 👥 User Roles
 
