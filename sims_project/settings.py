@@ -44,7 +44,7 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,testserver,172.236.152.35"
+    "ALLOWED_HOSTS", "localhost,127.0.0.1,0.0.0.0,testserver,172.236.152.35,139.162.9.224"
 ).split(",")
 
 # Application definition
@@ -473,7 +473,7 @@ IMPORT_EXPORT_TMP_STORAGE_CLASS = "import_export.tmp_storages.TempFolderStorage"
 # Environment-specific settings
 if DEBUG:
     # Development settings
-    INTERNAL_IPS = ["127.0.0.1", "localhost"]
+    INTERNAL_IPS = ["127.0.0.1", "localhost", "139.162.9.224"]
 
     # Debug toolbar (if installed)
     try:
@@ -499,7 +499,7 @@ else:
     # Use environment variables for sensitive data
     SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", SECRET_KEY)
     ALLOWED_HOSTS = os.environ.get(
-        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,172.236.152.35"
+        "DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,172.236.152.35,139.162.9.224"
     ).split(",")
 
     # Database from environment (SQLite for now, PostgreSQL for full production)
@@ -613,6 +613,7 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://139.162.9.224:81",
     ] if DEBUG else []
 
 CORS_ALLOW_CREDENTIALS = True

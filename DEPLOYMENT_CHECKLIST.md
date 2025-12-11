@@ -1,293 +1,250 @@
-# SIMS Deployment Checklist
+# ✅ VPS Deployment Checklist - 139.162.9.224:81
 
-This document provides a comprehensive checklist for deploying SIMS to production.
+## Configuration Status: ✅ COMPLETE
 
-## ✅ Pre-Deployment Checklist
+All configuration files have been updated for VPS deployment at `http://139.162.9.224:81/`
 
-### Environment Configuration
-- [ ] Copy `.env.example` to `.env`
-- [ ] Set `DEBUG=False` in `.env`
-- [ ] Generate strong `SECRET_KEY` (min 50 characters)
-- [ ] Configure `ALLOWED_HOSTS` with production domain(s)
-- [ ] Set up `DATABASE_URL` for PostgreSQL
-- [ ] Configure email backend (SMTP credentials)
-- [ ] Set up Redis URL (optional, for caching)
+## 📋 Pre-Deployment Verification
 
-### Database Setup
-- [ ] Install PostgreSQL 12+
-- [ ] Create production database
-- [ ] Create database user with strong password
-- [ ] Grant appropriate privileges
-- [ ] Test database connection
-- [ ] Run migrations: `python manage.py migrate`
-- [ ] Create superuser: `python manage.py createsuperuser`
+### ✅ Configuration Files Updated
+- [x] `sims_project/settings.py` - ALLOWED_HOSTS, CORS, INTERNAL_IPS
+- [x] `docker-compose.yml` - Port 81 mapping, environment variables
+- [x] `deployment/nginx.conf` - Server name updated
+- [x] `deployment/nginx_sims.conf` - Server name and port updated
+- [x] `.env.example` - IP address configuration
+- [x] `deployment/server_config.env` - Server IP updated
+- [x] `frontend/lib/api/client.ts` - Auto-detection for VPS IP
 
-### Static & Media Files
-- [ ] Create media directory: `mkdir -p media`
-- [ ] Set proper permissions: `chmod 755 media`
-- [ ] Collect static files: `python manage.py collectstatic --noinput`
-- [ ] Verify static files location
-- [ ] Test file uploads through admin interface
-
-### Dependencies
-- [ ] Install Python 3.11+
-- [ ] Create virtual environment
-- [ ] Install requirements: `pip install -r requirements.txt`
-- [ ] Install system dependencies (PostgreSQL client, etc.)
-- [ ] Install Gunicorn
-- [ ] Install Nginx
-
-### Security
-- [ ] Enable HTTPS (SSL/TLS certificates)
-- [ ] Set `SECURE_SSL_REDIRECT=True`
-- [ ] Set `SESSION_COOKIE_SECURE=True`
-- [ ] Set `CSRF_COOKIE_SECURE=True`
-- [ ] Configure HSTS headers
-- [ ] Review security middleware settings
-- [ ] Run security check: `python manage.py check --deploy`
+### ✅ Documentation Created
+- [x] `VPS_DEPLOYMENT_GUIDE_139.162.9.224.md` - Complete deployment guide
+- [x] `VPS_CONFIG_139.162.9.224.md` - Quick reference guide
+- [x] `DEPLOYMENT_CHECKLIST.md` - This checklist
 
 ## 🚀 Deployment Steps
 
-### 1. Server Setup (Ubuntu/Debian)
-
+### Step 1: Prepare VPS
 ```bash
+# SSH into VPS
+ssh user@139.162.9.224
+
 # Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install dependencies
-sudo apt install -y python3.11 python3.11-venv python3-pip postgresql nginx git
+# Install Docker (if not installed)
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
 
-# Create deployment user
-sudo useradd -m -s /bin/bash sims
-sudo su - sims
-
-# Create directories
-mkdir -p /home/sims/app
-mkdir -p /home/sims/logs
+# Install Docker Compose (if not installed)
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
 ```
 
-### 2. Application Deployment
-
+### Step 2: Upload Project
 ```bash
-# Clone repository
-cd /home/sims
-git clone https://github.com/munaimtahir/sims.git app
-cd app
+# From local machine
+scp -r . user@139.162.9.224:/opt/sims_project/
 
-# Create virtual environment
-python3.11 -m venv /home/sims/env
-source /home/sims/env/bin/activate
+# Or use git
+ssh user@139.162.9.224
+cd /opt
+git clone <your-repo-url> sims_project
+cd sims_project
+```
 
-# Install dependencies
-pip install -r requirements.txt
+### Step 3: Configure Environment
+```bash
+cd /opt/sims_project
 
-# Copy and configure environment
+# Copy environment template
 cp .env.example .env
-nano .env  # Edit with production values
 
-# Run migrations
-python manage.py migrate
-
-# Collect static files
-python manage.py collectstatic --noinput
-
-# Create superuser
-python manage.py createsuperuser
+# Edit environment file
+nano .env
 ```
 
-### 3. Gunicorn Setup
-
+**Required .env settings:**
 ```bash
-# Copy service file
-sudo cp deployment/sims.service /etc/systemd/system/
+DEBUG=False
+SECRET_KEY=<generate-strong-secret-key>
+ALLOWED_HOSTS=139.162.9.224,localhost,127.0.0.1
+CORS_ALLOWED_ORIGINS=http://139.162.9.224:81
 
-# Edit service file with correct paths
-sudo nano /etc/systemd/system/sims.service
+# Database (Docker will handle this)
+DB_NAME=sims_db
+DB_USER=sims_user
+DB_PASSWORD=<secure-password>
 
-# Reload systemd
-sudo systemctl daemon-reload
+# Redis (Docker will handle this)
+REDIS_URL=redis://redis:6379/0
+CELERY_BROKER_URL=redis://redis:6379/1
+CELERY_RESULT_BACKEND=redis://redis:6379/1
+```
 
-# Enable and start service
-sudo systemctl enable sims
-sudo systemctl start sims
+**Generate Secret Key:**
+```bash
+python3 -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+```
+
+### Step 4: Configure Firewall
+```bash
+# Allow port 81
+sudo ufw allow 81/tcp
+sudo ufw reload
+
+# Or for firewalld
+sudo firewall-cmd --permanent --add-port=81/tcp
+sudo firewall-cmd --reload
+```
+
+### Step 5: Deploy with Docker Compose
+```bash
+cd /opt/sims_project
+
+# Build and start containers
+docker-compose up -d
 
 # Check status
-sudo systemctl status sims
+docker-compose ps
+
+# View logs
+docker-compose logs -f
 ```
 
-### 4. Nginx Setup
-
+### Step 6: Initialize Database
 ```bash
-# Copy Nginx configuration
-sudo cp deployment/nginx_sims.conf /etc/nginx/sites-available/sims
+# Run migrations
+docker-compose exec web python manage.py migrate
 
-# Edit configuration with your domain
-sudo nano /etc/nginx/sites-available/sims
+# Create superuser
+docker-compose exec web python manage.py createsuperuser
 
-# Create symbolic link
-sudo ln -s /etc/nginx/sites-available/sims /etc/nginx/sites-enabled/
-
-# Test configuration
-sudo nginx -t
-
-# Reload Nginx
-sudo systemctl reload nginx
+# Collect static files
+docker-compose exec web python manage.py collectstatic --noinput
 ```
 
-### 5. SSL/TLS Setup (Let's Encrypt)
-
+### Step 7: Verify Deployment
 ```bash
-# Install Certbot
-sudo apt install -y certbot python3-certbot-nginx
+# Test health endpoint
+curl http://139.162.9.224:81/healthz/
 
-# Obtain certificate
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+# Test homepage
+curl http://139.162.9.224:81/
 
-# Test auto-renewal
-sudo certbot renew --dry-run
+# Check container logs
+docker-compose logs web
+docker-compose logs nginx
 ```
 
-## 🧪 Post-Deployment Testing
+## 🌐 Access URLs
 
-### Functional Testing
-- [ ] Access site via HTTPS
-- [ ] Test admin login
-- [ ] Test supervisor login
-- [ ] Test PG student login
-- [ ] Create test rotation
-- [ ] Upload test certificate
-- [ ] Submit test logbook entry
-- [ ] Submit test clinical case
-- [ ] Test file uploads
-- [ ] Test notifications
-- [ ] Test analytics dashboard
+After successful deployment, access:
 
-### Performance Testing
-- [ ] Check page load times
-- [ ] Verify static files load correctly
-- [ ] Test with multiple concurrent users
-- [ ] Monitor server resources (CPU, RAM)
-- [ ] Check database connection pooling
+- **Homepage:** http://139.162.9.224:81/
+- **Login:** http://139.162.9.224:81/users/login/
+- **Admin:** http://139.162.9.224:81/admin/
+- **API:** http://139.162.9.224:81/api/
+- **Health:** http://139.162.9.224:81/healthz/
 
-### Security Testing
-- [ ] Verify HTTPS redirect
-- [ ] Check security headers
-- [ ] Test CSRF protection
-- [ ] Verify session security
-- [ ] Test file upload restrictions
-- [ ] Review firewall rules
+## 🔍 Troubleshooting
 
-## 📊 Monitoring Setup
-
-### Application Monitoring
-- [ ] Set up error tracking (Sentry, optional)
-- [ ] Configure application logging
-- [ ] Set up log rotation
-- [ ] Monitor disk space
-- [ ] Monitor database size
-
-### Server Monitoring
-- [ ] Set up uptime monitoring
-- [ ] Configure CPU/RAM alerts
-- [ ] Monitor Nginx access logs
-- [ ] Monitor Gunicorn error logs
-- [ ] Set up backup monitoring
-
-## 🔄 Maintenance Tasks
-
-### Daily
-- [ ] Check application logs
-- [ ] Monitor server resources
-- [ ] Check backup completion
-
-### Weekly
-- [ ] Review error logs
-- [ ] Check disk space usage
-- [ ] Review security alerts
-- [ ] Update dependencies (if needed)
-
-### Monthly
-- [ ] Database backup verification
-- [ ] Security updates
-- [ ] Performance review
-- [ ] SSL certificate check
-
-## 🆘 Troubleshooting
-
-### Common Issues
-
-**Service won't start**
+### Check Container Status
 ```bash
-# Check logs
-sudo journalctl -u sims -n 50
-sudo systemctl status sims
-
-# Check permissions
-ls -la /home/sims/app
-ls -la /home/sims/app/sims.sock
+docker-compose ps
+docker-compose logs -f web
+docker-compose logs -f nginx
 ```
 
-**502 Bad Gateway**
+### Verify Configuration
 ```bash
-# Check Gunicorn is running
-sudo systemctl status sims
-
-# Check socket file
-ls -la /home/sims/app/sims.sock
-
-# Check Nginx error log
-sudo tail -f /var/log/nginx/sims_error.log
+# Check Django settings
+docker-compose exec web python manage.py shell
+>>> from django.conf import settings
+>>> print(settings.ALLOWED_HOSTS)
+>>> print(settings.CORS_ALLOWED_ORIGINS)
 ```
 
-**Static files not loading**
+### Test Database Connection
 ```bash
-# Recollect static files
-cd /home/sims/app
-source /home/sims/env/bin/activate
-python manage.py collectstatic --noinput
-
-# Check Nginx configuration
-sudo nginx -t
-sudo systemctl reload nginx
+docker-compose exec web python manage.py dbshell
 ```
 
-**Database connection errors**
+### Check Port Accessibility
 ```bash
-# Test database connection
-sudo -u postgres psql
-\c sims_db
-\q
+# From VPS
+sudo netstat -tlnp | grep 81
 
-# Check PostgreSQL service
-sudo systemctl status postgresql
-
-# Verify .env database settings
-cat /home/sims/app/.env | grep DATABASE
+# From external machine
+curl -v http://139.162.9.224:81/healthz/
 ```
 
-## 📚 Additional Resources
+## 📊 Post-Deployment Monitoring
 
-- [POSTGRESQL_SETUP.md](docs/POSTGRESQL_SETUP.md) - PostgreSQL setup guide
-- [DEMO_SETUP.md](DEMO_SETUP.md) - Demo setup and walkthrough
-- [README.md](README.md) - Project overview
-- [deployment/](deployment/) - Deployment configuration files
+### View Logs
+```bash
+# Application logs
+docker-compose logs -f web
 
-## ✅ Deployment Verification
+# Nginx logs
+docker-compose logs -f nginx
 
-Once all steps are complete, verify:
+# Database logs
+docker-compose logs -f db
+```
 
-1. ✅ Site accessible via HTTPS
-2. ✅ All static files loading
-3. ✅ Media uploads working
-4. ✅ Database connection stable
-5. ✅ Email notifications working (if configured)
-6. ✅ Background tasks running (if using Celery)
-7. ✅ Logs being written correctly
-8. ✅ Backups scheduled and working
-9. ✅ Monitoring alerts configured
-10. ✅ Security headers in place
+### Monitor Resources
+```bash
+# Container stats
+docker stats
+
+# Disk usage
+df -h
+docker system df
+```
+
+## 🔄 Maintenance Commands
+
+### Update Application
+```bash
+cd /opt/sims_project
+git pull
+docker-compose down
+docker-compose build
+docker-compose up -d
+docker-compose exec web python manage.py migrate
+```
+
+### Backup Database
+```bash
+docker-compose exec db pg_dump -U sims_user sims_db > backup_$(date +%Y%m%d_%H%M%S).sql
+```
+
+### Restart Services
+```bash
+docker-compose restart
+# Or restart specific service
+docker-compose restart web
+docker-compose restart nginx
+```
+
+## ✅ Final Verification Checklist
+
+- [ ] All containers running (`docker-compose ps`)
+- [ ] Health endpoint responding (`curl http://139.162.9.224:81/healthz/`)
+- [ ] Homepage accessible (`curl http://139.162.9.224:81/`)
+- [ ] Login page loads correctly
+- [ ] Admin panel accessible
+- [ ] Static files loading
+- [ ] No errors in logs
+- [ ] Database migrations applied
+- [ ] Superuser created
+- [ ] Firewall configured correctly
+
+## 🎉 Deployment Complete!
+
+Once all checks pass, your SIMS application is successfully deployed at:
+**http://139.162.9.224:81/**
 
 ---
 
-**Last Updated**: December 2025  
-**Version**: 1.0
+**Need Help?** Refer to `VPS_DEPLOYMENT_GUIDE_139.162.9.224.md` for detailed instructions.
