@@ -118,6 +118,8 @@ services:
     depends_on:
       - db
       - redis
+    healthcheck:
+      disable: true
     restart: unless-stopped
     networks:
       - sims_network
@@ -143,6 +145,8 @@ services:
     depends_on:
       - db
       - redis
+    healthcheck:
+      disable: true
     restart: unless-stopped
     networks:
       - sims_network
@@ -162,7 +166,7 @@ services:
     depends_on:
       - web
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:81/healthz/"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:81/healthz/"]
       interval: 30s
       timeout: 10s
       retries: 3
