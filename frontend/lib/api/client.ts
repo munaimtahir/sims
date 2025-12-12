@@ -23,8 +23,12 @@ function getApiUrl(): string {
     const hostname = window.location.hostname;
     const port = window.location.port;
 
-    // VPS deployment (139.162.9.224 or port 81)
-    if (hostname === '139.162.9.224' || port === '81') {
+    // VPS deployment (139.162.9.224, 172.237.95.120 or port 81)
+    if (hostname === '139.162.9.224' || hostname === '172.237.95.120' || port === '81') {
+      // Return API URL based on detected hostname
+      if (hostname === '172.237.95.120') {
+        return `http://172.237.95.120:81`;
+      }
       return `http://139.162.9.224:81`;
     }
 

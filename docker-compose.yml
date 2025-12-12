@@ -65,7 +65,7 @@ services:
       - DEBUG=${DEBUG:-False}
       # WARNING: SECRET_KEY is REQUIRED - set it in .env file
       - SECRET_KEY=${SECRET_KEY}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-localhost,127.0.0.1}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-139.162.9.224,172.237.95.120,localhost,127.0.0.1}
       # WARNING: DB_PASSWORD is REQUIRED - set it in .env file
       - DATABASE_URL=postgresql://${DB_USER:-sims_user}:${DB_PASSWORD}@db:5432/${DB_NAME:-sims_db}
       - REDIS_URL=redis://redis:6379/0
