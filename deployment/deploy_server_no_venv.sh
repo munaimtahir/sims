@@ -7,7 +7,7 @@ echo "=================================================================="
 
 # Set working directory
 echo "📁 Navigating to project directory..."
-cd /var/www/sims_project || { echo "❌ Project directory not found"; exit 1; }
+cd /opt/sims_project || { echo "❌ Project directory not found"; exit 1; }
 
 echo "📦 Installing Python packages system-wide..."
 # Install packages directly with system pip (bypass venv issue)
@@ -30,18 +30,18 @@ echo "📁 Collecting static files..."
 python3 manage.py collectstatic --noinput
 
 echo "🔧 Setting file permissions..."
-sudo chown -R www-data:www-data /var/www/sims_project
-sudo chmod -R 755 /var/www/sims_project
-sudo chmod -R 775 /var/www/sims_project/media
-sudo chmod -R 775 /var/www/sims_project/logs
-sudo chmod 664 /var/www/sims_project/db.sqlite3
+sudo chown -R www-data:www-data /opt/sims_project
+sudo chmod -R 755 /opt/sims_project
+sudo chmod -R 775 /opt/sims_project/media
+sudo chmod -R 775 /opt/sims_project/logs
+sudo chmod 664 /opt/sims_project/db.sqlite3
 
 echo "⚙️ Setting up services..."
 # Stop conflicting services
 sudo systemctl stop apache2 2>/dev/null || true
 sudo systemctl stop nginx 2>/dev/null || true
 sudo systemctl stop sims 2>/dev/null || true
-sudo rm -f /var/www/sims_project/sims.sock
+sudo rm -f /opt/sims_project/sims.sock
 
 # Copy configuration files
 sudo cp nginx_sims.conf /etc/nginx/sites-available/sims
@@ -69,7 +69,7 @@ if sudo systemctl is-active --quiet sims; then
         echo "🌐 Access SIMS at: http://139.162.9.224:81/"
         echo ""
         echo "👤 Create admin user with:"
-        echo "   cd /var/www/sims_project"
+        echo "   cd /opt/sims_project"
         echo "   python3 manage.py createsuperuser"
     else
         echo "❌ Nginx failed"

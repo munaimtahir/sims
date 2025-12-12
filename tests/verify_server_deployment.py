@@ -127,11 +127,13 @@ def generate_deployment_commands():
     
     commands = [
         "# 1. Upload project files to server",
-        "scp -r . user@139.162.9.224:/var/www/sims_project/",
+        "sudo mkdir -p /opt",
+        "sudo git clone https://github.com/munaimtahir/sims.git /opt/sims_project",
+        "sudo chown -R $USER:$USER /opt/sims_project",
         "",
         "# 2. SSH to server and set up environment",
         "ssh user@139.162.9.224",
-        "cd /var/www/sims_project",
+        "cd /opt/sims_project",
         "",
         "# 3. Set environment variables",
         'export SECRET_KEY="$(python3 -c \'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())\')"',

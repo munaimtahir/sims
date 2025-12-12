@@ -7,7 +7,7 @@ echo "================================"
 
 # Set working directory
 echo "📁 Navigating to project directory..."
-cd /var/www/sims_project || { echo "❌ Project directory not found"; exit 1; }
+cd /opt/sims_project || { echo "❌ Project directory not found"; exit 1; }
 
 echo "📁 Setting up directories..."
 mkdir -p static staticfiles media logs backups
@@ -29,11 +29,11 @@ echo "📁 Collecting static files..."
 python manage.py collectstatic --noinput
 
 echo "🔧 Setting file permissions..."
-sudo chown -R www-data:www-data /var/www/sims_project
-sudo chmod -R 755 /var/www/sims_project
-sudo chmod -R 775 /var/www/sims_project/media
-sudo chmod -R 775 /var/www/sims_project/logs
-sudo chmod 664 /var/www/sims_project/db.sqlite3
+sudo chown -R www-data:www-data /opt/sims_project
+sudo chmod -R 755 /opt/sims_project
+sudo chmod -R 775 /opt/sims_project/media
+sudo chmod -R 775 /opt/sims_project/logs
+sudo chmod 664 /opt/sims_project/db.sqlite3
 
 echo "⚙️ Setting up services..."
 # Stop conflicting services
@@ -42,7 +42,7 @@ sudo systemctl stop nginx 2>/dev/null || true
 sudo systemctl stop sims 2>/dev/null || true
 
 # Clean up
-sudo rm -f /var/www/sims_project/sims.sock
+sudo rm -f /opt/sims_project/sims.sock
 
 # Copy configuration files
 sudo cp nginx_sims.conf /etc/nginx/sites-available/sims

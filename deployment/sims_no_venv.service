@@ -9,14 +9,14 @@ After=network.target
 [Service]
 User=www-data
 Group=www-data
-WorkingDirectory=/var/www/sims_project
+WorkingDirectory=/opt/sims_project
 Environment="PATH=/usr/bin:/bin"
 Environment="SECRET_KEY=django-insecure-temp-key-for-deployment"
 Environment="DEBUG=False"
 Environment="ALLOWED_HOSTS=139.162.9.224,localhost,127.0.0.1"
 Environment="DJANGO_SETTINGS_MODULE=sims_project.settings"
 ExecStart=/usr/bin/gunicorn \
-          --bind unix:/var/www/sims_project/sims.sock \
+          --bind unix:/opt/sims_project/sims.sock \
           --workers 3 \
           --user www-data \
           --group www-data \

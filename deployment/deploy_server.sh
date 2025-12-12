@@ -18,7 +18,7 @@ sudo apt install -y nginx python3-venv python3-pip python3-dev build-essential
 
 # Set working directory
 echo "📁 Navigating to project directory..."
-cd /var/www/sims_project || { echo "❌ Project directory not found. Please upload your project files first."; exit 1; }
+cd /opt/sims_project || { echo "❌ Project directory not found. Please upload your project files first."; exit 1; }
 
 echo "📁 Setting up directories..."
 # Create necessary directories
@@ -61,11 +61,11 @@ python manage.py createsuperuser
 
 echo "🔧 Setting file permissions..."
 # Set proper permissions
-sudo chown -R www-data:www-data /var/www/sims_project
-sudo chmod -R 755 /var/www/sims_project
-sudo chmod -R 775 /var/www/sims_project/media
-sudo chmod -R 775 /var/www/sims_project/logs
-sudo chmod 664 /var/www/sims_project/db.sqlite3
+sudo chown -R www-data:www-data /opt/sims_project
+sudo chmod -R 755 /opt/sims_project
+sudo chmod -R 775 /opt/sims_project/media
+sudo chmod -R 775 /opt/sims_project/logs
+sudo chmod 664 /opt/sims_project/db.sqlite3
 
 echo "⚙️ Setting up Nginx and Gunicorn..."
 # Check what's using port 80
@@ -90,7 +90,7 @@ fi
 sudo systemctl stop sims 2>/dev/null || true
 
 # Remove any existing socket files
-sudo rm -f /var/www/sims_project/sims.sock
+sudo rm -f /opt/sims_project/sims.sock
 
 # Copy Nginx configuration
 sudo cp nginx_sims.conf /etc/nginx/sites-available/sims
@@ -143,9 +143,9 @@ echo "✅ Deployment complete!"
 echo ""
 echo "🔍 Final checks..."
 # Check socket file
-if [ -S "/var/www/sims_project/sims.sock" ]; then
+if [ -S "/opt/sims_project/sims.sock" ]; then
     echo "✅ Gunicorn socket created successfully"
-    ls -la /var/www/sims_project/sims.sock
+    ls -la /opt/sims_project/sims.sock
 else
     echo "⚠️  Socket file not found, checking service status..."
     sudo systemctl status sims --no-pager

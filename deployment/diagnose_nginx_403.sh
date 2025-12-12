@@ -26,13 +26,13 @@ echo ""
 echo "2. 📁 FILE PERMISSIONS CHECK"
 echo "----------------------------------------"
 echo "Project directory ownership:"
-ls -la /var/www/ | grep sims_project
+ls -la /opt/ | grep sims_project
 echo ""
 echo "Project directory contents:"
-ls -la /var/www/sims_project/
+ls -la /opt/sims_project/
 echo ""
 echo "Static files directory:"
-ls -la /var/www/sims_project/ | grep static
+ls -la /opt/sims_project/ | grep static
 echo ""
 
 # 3. Check Nginx configuration
@@ -74,7 +74,7 @@ echo ""
 # 6. Check Django setup
 echo "6. 🐍 DJANGO SETUP CHECK"
 echo "----------------------------------------"
-cd /var/www/sims_project
+cd /opt/sims_project
 echo "Current directory: $(pwd)"
 echo "Django manage.py check:"
 if [ -f "venv/bin/activate" ]; then
@@ -89,8 +89,8 @@ echo ""
 echo "7. 🔌 SOCKET FILE CHECK"
 echo "----------------------------------------"
 echo "Looking for Gunicorn socket:"
-ls -la /var/www/sims_project/ | grep sock
-ls -la /var/www/sims_project/*.sock 2>/dev/null || echo "No socket file found"
+ls -la /opt/sims_project/ | grep sock
+ls -la /opt/sims_project/*.sock 2>/dev/null || echo "No socket file found"
 echo ""
 
 # 8. Check firewall
@@ -107,8 +107,8 @@ echo ""
 echo "9. 🔧 QUICK FIX SUGGESTIONS"
 echo "----------------------------------------"
 echo "To fix common 403 issues, try these commands:"
-echo "sudo chown -R www-data:www-data /var/www/sims_project"
-echo "sudo chmod -R 755 /var/www/sims_project"
+echo "sudo chown -R www-data:www-data /opt/sims_project"
+echo "sudo chmod -R 755 /opt/sims_project"
 echo "sudo systemctl restart sims"
 echo "sudo systemctl restart nginx"
 echo ""
