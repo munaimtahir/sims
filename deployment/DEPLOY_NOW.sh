@@ -16,15 +16,16 @@ fi
 
 # Step 1: Navigate to project directory
 echo "📁 Step 1: Setting up project directory..."
-if [ ! -d "/var/www/sims_project" ]; then
-    echo "❌ Project directory /var/www/sims_project not found!"
+if [ ! -d "/opt/sims_project" ]; then
+    echo "❌ Project directory /opt/sims_project not found!"
     echo "Please clone the repository first:"
-    echo "  cd /var/www"
-    echo "  git clone https://github.com/munaimtahir/sims.git sims_project"
+    echo "  sudo mkdir -p /opt"
+    echo "  sudo git clone https://github.com/munaimtahir/sims.git /opt/sims_project"
+    echo "  sudo chown -R \$USER:\$USER /opt/sims_project"
     exit 1
 fi
 
-cd /var/www/sims_project
+cd /opt/sims_project
 
 # Step 2: Update system packages
 echo ""
@@ -64,10 +65,10 @@ python3 manage.py collectstatic --noinput
 # Step 8: Set file permissions
 echo ""
 echo "🔧 Step 8: Setting file permissions..."
-chown -R www-data:www-data /var/www/sims_project
-chmod -R 755 /var/www/sims_project
-chmod -R 775 /var/www/sims_project/media
-chmod -R 775 /var/www/sims_project/logs
+chown -R www-data:www-data /opt/sims_project
+chmod -R 755 /opt/sims_project
+chmod -R 775 /opt/sims_project/media
+chmod -R 775 /opt/sims_project/logs
 [ -f db.sqlite3 ] && chmod 664 db.sqlite3 || true
 
 # Step 9: Configure Nginx
@@ -79,7 +80,7 @@ systemctl stop nginx 2>/dev/null || true
 systemctl stop sims 2>/dev/null || true
 
 # Remove old socket file
-rm -f /var/www/sims_project/sims.sock
+rm -f /opt/sims_project/sims.sock
 
 # Copy nginx configuration
 cp deployment/nginx_sims.conf /etc/nginx/sites-available/sims
@@ -147,7 +148,7 @@ echo "🔍 Step 14: Verifying deployment..."
 sleep 2
 
 # Check socket file
-if [ -S "/var/www/sims_project/sims.sock" ]; then
+if [ -S "/opt/sims_project/sims.sock" ]; then
     echo "✅ Gunicorn socket file exists"
 else
     echo "⚠️  Socket file not found, but service is running"
@@ -171,7 +172,7 @@ echo "   Login:    http://139.162.9.224:81/users/login/"
 echo "   Admin:    http://139.162.9.224:81/admin/"
 echo ""
 echo "👤 Create admin user:"
-echo "   cd /var/www/sims_project"
+echo "   cd /opt/sims_project"
 echo "   export ALLOWED_HOSTS='139.162.9.224,localhost,127.0.0.1'"
 echo "   python3 manage.py createsuperuser"
 echo ""

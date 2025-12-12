@@ -51,7 +51,7 @@ def test_nginx_config_content():
         ('location /static/', 'Static files location configured'),
         ('location /media/', 'Media files location configured'),
         ('proxy_pass http://sims_app', 'Gunicorn upstream configured'),
-        ('unix:/var/www/sims_project/sims.sock', 'Unix socket configured'),
+        ('unix:/opt/sims_project/sims.sock', 'Unix socket configured'),
     ]
     
     all_good = True
@@ -171,11 +171,13 @@ def generate_deployment_summary():
     
     commands = [
         "# 1. Upload files to server",
-        "scp -r . user@139.162.9.224:/var/www/sims_project/",
+        "sudo mkdir -p /opt",
+        "sudo git clone https://github.com/munaimtahir/sims.git /opt/sims_project",
+        "sudo chown -R $USER:$USER /opt/sims_project",
         "",
         "# 2. SSH to server",
         "ssh user@139.162.9.224",
-        "cd /var/www/sims_project",
+        "cd /opt/sims_project",
         "",
         "# 3. Run automated deployment",
         "chmod +x deploy_server.sh",

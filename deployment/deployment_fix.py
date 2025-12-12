@@ -114,7 +114,7 @@ Create a `.env` file in your project root:
 SECRET_KEY=your-super-secret-key-here
 DEBUG=False
 ALLOWED_HOSTS=your-domain.com,www.your-domain.com,your-server-ip
-DATABASE_URL=sqlite:///var/www/sims_project/db.sqlite3
+DATABASE_URL=sqlite:///opt/sims_project/db.sqlite3
 ```
 
 ### 3. Database Migration
@@ -146,25 +146,25 @@ The settings.py file now supports environment variables:
 ```apache
 <VirtualHost *:80>
     ServerName your-domain.com
-    DocumentRoot /var/www/sims_project
+    DocumentRoot /opt/sims_project
     
-    WSGIDaemonProcess sims python-path=/var/www/sims_project python-home=/var/www/sims_project/venv
+    WSGIDaemonProcess sims python-path=/opt/sims_project python-home=/opt/sims_project/venv
     WSGIProcessGroup sims
-    WSGIScriptAlias / /var/www/sims_project/sims_project/wsgi.py
+    WSGIScriptAlias / /opt/sims_project/sims_project/wsgi.py
     
-    <Directory /var/www/sims_project/sims_project>
+    <Directory /opt/sims_project/sims_project>
         <Files wsgi.py>
             Require all granted
         </Files>
     </Directory>
     
-    Alias /static /var/www/sims_project/staticfiles
-    <Directory /var/www/sims_project/staticfiles>
+    Alias /static /opt/sims_project/staticfiles
+    <Directory /opt/sims_project/staticfiles>
         Require all granted
     </Directory>
     
-    Alias /media /var/www/sims_project/media
-    <Directory /var/www/sims_project/media>
+    Alias /media /opt/sims_project/media
+    <Directory /opt/sims_project/media>
         Require all granted
     </Directory>
 </VirtualHost>
@@ -179,16 +179,16 @@ server {
     location = /favicon.ico { access_log off; log_not_found off; }
     
     location /static/ {
-        root /var/www/sims_project;
+        root /opt/sims_project;
     }
     
     location /media/ {
-        root /var/www/sims_project;
+        root /opt/sims_project;
     }
     
     location / {
         include proxy_params;
-        proxy_pass http://unix:/var/www/sims_project/sims_project.sock;
+        proxy_pass http://unix:/opt/sims_project/sims_project.sock;
     }
 }
 ```

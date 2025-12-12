@@ -65,7 +65,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(','
 ## 🚀 Server Deployment Instructions
 
 ### 1. Upload Files to Server
-Transfer the entire project to your server directory (e.g., `/var/www/sims_project/`)
+Transfer the entire project to your server directory (e.g., `/opt/sims_project/`)
 
 ### 2. Set Environment Variables
 Create a `.env` file or set these environment variables:
@@ -77,7 +77,7 @@ export ALLOWED_HOSTS="your-domain.com,www.your-domain.com,your-server-ip"
 
 ### 3. Install Dependencies
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt

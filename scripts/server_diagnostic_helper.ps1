@@ -88,8 +88,8 @@ switch ($choice) {
         Write-Host "This will fix common permission issues" -ForegroundColor Cyan
         
         $commands = @(
-            "sudo chown -R www-data:www-data /var/www/sims_project",
-            "sudo chmod -R 755 /var/www/sims_project",
+            "sudo chown -R www-data:www-data /opt/sims_project",
+            "sudo chmod -R 755 /opt/sims_project",
             "sudo systemctl restart sims",
             "sudo systemctl restart nginx",
             "sudo systemctl status nginx --no-pager",

@@ -1,10 +1,10 @@
 # Gunicorn configuration for SIMS
-# Save as: /var/www/sims_project/gunicorn.conf.py
+# Save as: /opt/sims_project/gunicorn.conf.py
 
 import multiprocessing
 
 # Server socket
-bind = "unix:/var/www/sims_project/sims.sock"
+bind = "unix:/opt/sims_project/sims.sock"
 backlog = 2048
 
 # Worker processes
@@ -19,8 +19,8 @@ max_requests = 1000
 max_requests_jitter = 50
 
 # Logging
-accesslog = "/var/www/sims_project/logs/gunicorn_access.log"
-errorlog = "/var/www/sims_project/logs/gunicorn_error.log"
+accesslog = "/opt/sims_project/logs/gunicorn_access.log"
+errorlog = "/opt/sims_project/logs/gunicorn_error.log"
 loglevel = "info"
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
@@ -29,7 +29,7 @@ proc_name = "sims_gunicorn"
 
 # Server mechanics
 daemon = False
-pidfile = "/var/www/sims_project/sims.pid"
+pidfile = "/opt/sims_project/sims.pid"
 user = "www-data"
 group = "www-data"
 tmp_upload_dir = None

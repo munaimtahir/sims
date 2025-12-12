@@ -40,15 +40,15 @@ cd sims_project
 **Option B: Using SCP (from your local machine)**
 ```bash
 # From your local machine:
-scp -r /home/sims/apps/sims user@139.162.9.224:/var/www/sims_project
+scp -r /home/sims/apps/sims user@139.162.9.224:/opt/sims_project
 ```
 
 ### Step 3: Set Up Project Directory
 
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 sudo mkdir -p static staticfiles media logs backups
-sudo chown -R $USER:$USER /var/www/sims_project
+sudo chown -R $USER:$USER /opt/sims_project
 ```
 
 ### Step 4: Configure Environment Variables
@@ -56,7 +56,7 @@ sudo chown -R $USER:$USER /var/www/sims_project
 Create a `.env` file or set environment variables:
 
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 cat > .env << EOF
 SECRET_KEY=$(python3 -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())')
 DEBUG=False
@@ -76,7 +76,7 @@ export ALLOWED_HOSTS="139.162.9.224,localhost,127.0.0.1"
 
 **Option A: Using Virtual Environment (Recommended)**
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 python3 -m venv venv
 source venv/bin/activate
 pip install --upgrade pip
@@ -87,7 +87,7 @@ deactivate
 
 **Option B: System-wide Installation**
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 sudo pip3 install --break-system-packages -r requirements.txt
 sudo pip3 install --break-system-packages gunicorn
 ```
@@ -95,7 +95,7 @@ sudo pip3 install --break-system-packages gunicorn
 ### Step 6: Run Database Migrations
 
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 source venv/bin/activate  # If using venv
 python manage.py migrate
 python manage.py collectstatic --noinput
@@ -106,14 +106,14 @@ deactivate  # If using venv
 
 1. **Copy nginx configuration:**
    ```bash
-   sudo cp /var/www/sims_project/deployment/nginx_sims.conf /etc/nginx/sites-available/sims
+   sudo cp /opt/sims_project/deployment/nginx_sims.conf /etc/nginx/sites-available/sims
    sudo ln -sf /etc/nginx/sites-available/sims /etc/nginx/sites-enabled/
    sudo rm -f /etc/nginx/sites-enabled/default
    ```
 
 2. **Update nginx config paths if needed:**
    - Ensure paths in `nginx_sims.conf` match your setup
-   - Default paths assume `/var/www/sims_project/`
+   - Default paths assume `/opt/sims_project/`
 
 3. **Test nginx configuration:**
    ```bash
@@ -130,9 +130,9 @@ deactivate  # If using venv
 
 1. **Copy service file:**
    ```bash
-   sudo cp /var/www/sims_project/deployment/sims_no_venv.service /etc/systemd/system/sims.service
+   sudo cp /opt/sims_project/deployment/sims_no_venv.service /etc/systemd/system/sims.service
    # OR if using venv:
-   sudo cp /var/www/sims_project/deployment/sims.service /etc/systemd/system/sims.service
+   sudo cp /opt/sims_project/deployment/sims.service /etc/systemd/system/sims.service
    ```
 
 2. **Update service file paths if needed:**
@@ -148,11 +148,11 @@ deactivate  # If using venv
 ### Step 9: Set File Permissions
 
 ```bash
-sudo chown -R www-data:www-data /var/www/sims_project
-sudo chmod -R 755 /var/www/sims_project
-sudo chmod -R 775 /var/www/sims_project/media
-sudo chmod -R 775 /var/www/sims_project/logs
-sudo chmod 664 /var/www/sims_project/db.sqlite3  # If using SQLite
+sudo chown -R www-data:www-data /opt/sims_project
+sudo chmod -R 755 /opt/sims_project
+sudo chmod -R 775 /opt/sims_project/media
+sudo chmod -R 775 /opt/sims_project/logs
+sudo chmod 664 /opt/sims_project/db.sqlite3  # If using SQLite
 ```
 
 ### Step 10: Start Services
@@ -179,7 +179,7 @@ sudo chmod 664 /var/www/sims_project/db.sqlite3  # If using SQLite
 
 2. **Check if socket file exists:**
    ```bash
-   ls -la /var/www/sims_project/sims.sock
+   ls -la /opt/sims_project/sims.sock
    ```
 
 3. **Test from server:**
@@ -197,7 +197,7 @@ sudo chmod 664 /var/www/sims_project/db.sqlite3  # If using SQLite
 ### Step 12: Create Admin User
 
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 source venv/bin/activate  # If using venv
 python manage.py createsuperuser
 deactivate  # If using venv
@@ -208,7 +208,7 @@ deactivate  # If using venv
 Alternatively, you can use the automated deployment script:
 
 ```bash
-cd /var/www/sims_project
+cd /opt/sims_project
 chmod +x deployment/deploy_server_no_venv.sh
 sudo bash deployment/deploy_server_no_venv.sh
 ```
@@ -241,8 +241,8 @@ sudo systemctl status sims
 
 ### Permission issues
 ```bash
-sudo chown -R www-data:www-data /var/www/sims_project
-sudo chmod -R 755 /var/www/sims_project
+sudo chown -R www-data:www-data /opt/sims_project
+sudo chmod -R 755 /opt/sims_project
 ```
 
 ## Maintenance Commands
@@ -257,7 +257,7 @@ sudo journalctl -u sims -f
 sudo tail -f /var/log/nginx/sims_access.log
 
 # Update code (if using git)
-cd /var/www/sims_project
+cd /opt/sims_project
 git pull
 source venv/bin/activate  # If using venv
 python manage.py migrate

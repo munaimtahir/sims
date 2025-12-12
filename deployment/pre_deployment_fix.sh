@@ -45,7 +45,7 @@ sudo apt install -y python3-venv python3-pip python3-dev build-essential
 
 echo ""
 echo "📋 Step 4: Pre-creating virtual environment..."
-cd /var/www/sims_project || { echo "❌ Project directory not found"; exit 1; }
+cd /opt/sims_project || { echo "❌ Project directory not found"; exit 1; }
 
 if [ ! -d "venv" ]; then
     echo "🐍 Creating virtual environment..."

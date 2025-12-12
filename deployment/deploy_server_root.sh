@@ -21,7 +21,7 @@ apt install -y nginx python3-venv python3-pip python3-dev build-essential
 
 # Set working directory
 echo "📁 Navigating to project directory..."
-cd /var/www/sims_project || { echo "❌ Project directory not found. Please upload your project files first."; exit 1; }
+cd /opt/sims_project || { echo "❌ Project directory not found. Please upload your project files first."; exit 1; }
 
 echo "📁 Setting up directories..."
 # Create necessary directories
@@ -66,18 +66,18 @@ echo "🔧 Setting file permissions..."
 # Set proper permissions (adjusted for root)
 if [[ $EUID -eq 0 ]]; then
     # Running as root - set ownership to www-data
-    chown -R www-data:www-data /var/www/sims_project
-    chmod -R 755 /var/www/sims_project
-    chmod -R 775 /var/www/sims_project/media
-    chmod -R 775 /var/www/sims_project/logs
-    chmod 664 /var/www/sims_project/db.sqlite3
+    chown -R www-data:www-data /opt/sims_project
+    chmod -R 755 /opt/sims_project
+    chmod -R 775 /opt/sims_project/media
+    chmod -R 775 /opt/sims_project/logs
+    chmod 664 /opt/sims_project/db.sqlite3
 else
     # Running as regular user - use sudo
-    $SUDO_CMD chown -R www-data:www-data /var/www/sims_project
-    $SUDO_CMD chmod -R 755 /var/www/sims_project
-    $SUDO_CMD chmod -R 775 /var/www/sims_project/media
-    $SUDO_CMD chmod -R 775 /var/www/sims_project/logs
-    $SUDO_CMD chmod 664 /var/www/sims_project/db.sqlite3
+    $SUDO_CMD chown -R www-data:www-data /opt/sims_project
+    $SUDO_CMD chmod -R 755 /opt/sims_project
+    $SUDO_CMD chmod -R 775 /opt/sims_project/media
+    $SUDO_CMD chmod -R 775 /opt/sims_project/logs
+    $SUDO_CMD chmod 664 /opt/sims_project/db.sqlite3
 fi
 
 echo "⚙️ Setting up Nginx and Gunicorn..."
@@ -103,7 +103,7 @@ fi
 systemctl stop sims 2>/dev/null || true
 
 # Remove any existing socket files
-rm -f /var/www/sims_project/sims.sock
+rm -f /opt/sims_project/sims.sock
 
 # Copy Nginx configuration
 cp nginx_sims.conf /etc/nginx/sites-available/sims
@@ -156,9 +156,9 @@ echo "✅ Deployment complete!"
 echo ""
 echo "🔍 Final checks..."
 # Check socket file
-if [ -S "/var/www/sims_project/sims.sock" ]; then
+if [ -S "/opt/sims_project/sims.sock" ]; then
     echo "✅ Gunicorn socket created successfully"
-    ls -la /var/www/sims_project/sims.sock
+    ls -la /opt/sims_project/sims.sock
 else
     echo "⚠️  Socket file not found, checking service status..."
     systemctl status sims --no-pager

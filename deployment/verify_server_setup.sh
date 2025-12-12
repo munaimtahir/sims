@@ -14,17 +14,19 @@ fi
 echo "✅ Ubuntu/Debian system detected"
 
 # Check if project directory exists and has correct structure
-if [ ! -d "/var/www/sims_project" ]; then
-    echo "❌ Project directory /var/www/sims_project not found"
-    echo "📋 Please upload your project files first:"
-    echo "   scp -r . user@139.162.9.224:/var/www/sims_project/"
+if [ ! -d "/opt/sims_project" ]; then
+    echo "❌ Project directory /opt/sims_project not found"
+    echo "📋 Please clone the repository first:"
+    echo "   sudo mkdir -p /opt"
+    echo "   sudo git clone https://github.com/munaimtahir/sims.git /opt/sims_project"
+    echo "   sudo chown -R \$USER:\$USER /opt/sims_project"
     exit 1
 fi
 
 echo "✅ Project directory exists"
 
 # Check if manage.py exists
-if [ ! -f "/var/www/sims_project/manage.py" ]; then
+if [ ! -f "/opt/sims_project/manage.py" ]; then
     echo "❌ Django manage.py not found in project directory"
     echo "📋 Please ensure all Django files are uploaded"
     exit 1
@@ -34,15 +36,15 @@ echo "✅ Django project files found"
 
 # Check required files for deployment
 required_files=(
-    "nginx_sims.conf"
-    "gunicorn.conf.py" 
-    "sims.service"
+    "deployment/nginx_sims.conf"
+    "deployment/gunicorn.conf.py" 
+    "deployment/sims.service"
     "requirements.txt"
-    "deploy_server.sh"
+    "deployment/deploy_server.sh"
 )
 
 for file in "${required_files[@]}"; do
-    if [ ! -f "/var/www/sims_project/$file" ]; then
+    if [ ! -f "/opt/sims_project/$file" ]; then
         echo "❌ Required file missing: $file"
         exit 1
     else
