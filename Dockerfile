@@ -29,7 +29,7 @@ FROM python:3.11-slim
 # Set environment variables
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    PATH=/root/.local/bin:$PATH
+    PATH=/home/sims/.local/bin:$PATH
 
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -42,7 +42,7 @@ RUN useradd -m -u 1000 sims && \
     chown -R sims:sims /app
 
 # Copy Python dependencies from builder
-COPY --from=builder --chown=sims:sims /root/.local /root/.local
+COPY --from=builder --chown=sims:sims /root/.local /home/sims/.local
 
 # Set working directory
 WORKDIR /app
