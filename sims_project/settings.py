@@ -43,9 +43,16 @@ if not SECRET_KEY:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", "False").lower() in ("true", "1", "yes")
 
-ALLOWED_HOSTS = os.environ.get(
-    "ALLOWED_HOSTS", "localhost,127.0.0.1"
-).split(",")
+# ALLOWED_HOSTS - Support both localhost and VPS deployments
+# For localhost: localhost,127.0.0.1
+# For VPS: 139.162.9.224,localhost,127.0.0.1
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS", "localhost,127.0.0.1"
+    ).split(",")
+    if host.strip()
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -606,15 +613,23 @@ SIMPLE_JWT = {
 ATTENDANCE_THRESHOLD = float(os.environ.get("ATTENDANCE_THRESHOLD", "75.0"))
 
 # CORS Configuration for frontend - explicit origins only
+# Supports both localhost and VPS deployments
 cors_origins_env = os.environ.get("CORS_ALLOWED_ORIGINS", "")
 if cors_origins_env:
     CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_origins_env.split(",") if origin.strip()]
 else:
-    # Default for development only
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ] if DEBUG else []
+    # Default origins based on DEBUG mode
+    if DEBUG:
+        # Localhost development defaults
+        CORS_ALLOWED_ORIGINS = [
+            "http://localhost:8000",
+            "http://127.0.0.1:8000",
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+        ]
+    else:
+        # Production/VPS - must be explicitly set
+        CORS_ALLOWED_ORIGINS = []
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [

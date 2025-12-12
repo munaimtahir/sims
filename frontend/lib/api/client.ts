@@ -1,12 +1,49 @@
 /**
  * Base API client configuration using axios
+ * Auto-detects localhost vs VPS deployment
  */
 
 import axios from 'axios';
 
-const API_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  (typeof window !== 'undefined' ? 'http://localhost:8000' : 'http://localhost:8000');
+/**
+ * Get API URL based on environment
+ * Priority:
+ * 1. NEXT_PUBLIC_API_URL environment variable
+ * 2. Auto-detect from window.location (localhost vs VPS)
+ * 3. Default to localhost:8000
+ */
+function getApiUrl(): string {
+  // Use explicit environment variable if set
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+
+  // Auto-detect from browser location (client-side only)
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    const port = window.location.port;
+
+    // VPS deployment (139.162.9.224 or port 81)
+    if (hostname === '139.162.9.224' || port === '81') {
+      return `http://139.162.9.224:81`;
+    }
+
+    // Localhost deployment
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      // If frontend is on 3000, backend is on 8000
+      if (port === '3000' || !port) {
+        return 'http://localhost:8000';
+      }
+      // If frontend is on same port or different, use 8000
+      return 'http://localhost:8000';
+    }
+  }
+
+  // Default fallback (server-side or unknown)
+  return 'http://localhost:8000';
+}
+
+const API_URL = getApiUrl();
 
 export const apiClient = axios.create({
   baseURL: API_URL,

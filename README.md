@@ -173,6 +173,74 @@ python manage.py runserver
 - **Admin Interface**: http://127.0.0.1:8000/admin
 - **Login**: Use admin credentials
 
+## 🖥️ Deployment Options
+
+SIMS supports deployment on both **localhost** (for development and local demonstrations) and **VPS** (for production).
+
+### Localhost Deployment
+
+For local development and demonstrations on your Windows machine:
+
+**Quick Start:**
+```powershell
+# Automated setup
+.\scripts\setup_localhost_windows.ps1
+
+# Deploy with Docker
+.\deployment\deploy_localhost.ps1
+
+# Or manual deployment
+Copy-Item .env.localhost .env
+python manage.py migrate
+python manage.py runserver
+```
+
+**Access:** http://localhost:8000/
+
+See [LOCALHOST_DEPLOYMENT_GUIDE.md](LOCALHOST_DEPLOYMENT_GUIDE.md) for detailed instructions.
+
+### VPS Deployment
+
+For production deployment on VPS (139.162.9.224:81):
+
+**Quick Start:**
+```bash
+# Switch to VPS configuration
+./deployment/switch_to_vps.sh
+
+# Deploy
+docker compose up -d --build
+docker compose exec web python manage.py migrate
+```
+
+**Access:** http://139.162.9.224:81/
+
+See [VPS_DEPLOYMENT_GUIDE_139.162.9.224.md](VPS_DEPLOYMENT_GUIDE_139.162.9.224.md) for detailed instructions.
+
+### Switching Between Environments
+
+To switch between localhost and VPS:
+
+```powershell
+# Switch to localhost
+.\deployment\switch_to_localhost.ps1  # or .sh on Linux/Mac
+
+# Switch to VPS
+.\deployment\switch_to_vps.sh
+```
+
+See [DEPLOYMENT_ENVIRONMENTS.md](DEPLOYMENT_ENVIRONMENTS.md) for a complete comparison and detailed switching guide.
+
+### Environment Configuration Files
+
+- **Localhost:** `.env.localhost` → copy to `.env`
+- **VPS:** `.env.vps` → copy to `.env`
+- **Template:** `.env.example` (reference only)
+
+**Frontend Configuration:**
+- **Localhost:** `frontend/.env.localhost` → copy to `frontend/.env.local`
+- **VPS:** `frontend/.env.vps` → copy to `frontend/.env.local`
+
 ## 📁 Project Structure
 
 ```
@@ -425,21 +493,57 @@ docker compose ps
 
 ## 🚀 Deployment
 
-### Development Deployment
+### Localhost Deployment (Development)
 
-The application is ready for development/testing deployment using the built-in Django development server.
+For local development and demonstrations:
+
+1. **Quick Setup:**
+   ```powershell
+   .\scripts\setup_localhost_windows.ps1
+   ```
+
+2. **Deploy:**
+   ```powershell
+   .\deployment\deploy_localhost.ps1
+   ```
+
+3. **Access:** http://localhost:8000/
+
+See [LOCALHOST_DEPLOYMENT_GUIDE.md](LOCALHOST_DEPLOYMENT_GUIDE.md) for complete instructions.
+
+### VPS Deployment (Production)
+
+For production deployment on VPS:
+
+1. **Switch configuration:**
+   ```bash
+   ./deployment/switch_to_vps.sh
+   ```
+
+2. **Deploy:**
+   ```bash
+   docker compose up -d --build
+   ```
+
+3. **Access:** http://139.162.9.224:81/
+
+See [VPS_DEPLOYMENT_GUIDE_139.162.9.224.md](VPS_DEPLOYMENT_GUIDE_139.162.9.224.md) for complete instructions.
 
 ### Frontend Environment Setup
 
-For the Next.js frontend, create `frontend/.env.local`:
-
-```bash
-NEXT_PUBLIC_API_URL=http://localhost:8000
+**For localhost:**
+```powershell
+Copy-Item frontend\.env.localhost frontend\.env.local
 ```
 
-See `frontend/.env.local.example` for reference.
+**For VPS:**
+```powershell
+Copy-Item frontend\.env.vps frontend\.env.local
+```
 
-### Production Deployment
+See [DEPLOYMENT_ENVIRONMENTS.md](DEPLOYMENT_ENVIRONMENTS.md) for environment comparison.
+
+### Production Deployment Checklist
 
 For production deployment, consider:
 
